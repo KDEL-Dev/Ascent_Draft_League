@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Zen+Dots&display=swap');
+
+body
+{
+    margin: 0;
+}
+
+/* Navbar/Main Page Split */
+
+.pageLayout
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.navBar
+{
+    width: 350px;
+    height: 100vh;
+    background-image: linear-gradient(to bottom, black 50%,#094D33);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.pageContent
+{
+    width: 100%;
+    height: 100vh;
+    background-color: #101010;
+}
+
+/* Navigation Menu */
+
+.navLogo
+{
+    width: 250px;
+}
+
+.navMainBtnCont
+{
+    font-family: jura;
+    color: white;
+    list-style: none;
+    font-size: 1.5em;
+}
+
+.navMainBtns
+{
+    margin-bottom: 20px;
+}
+
+.navSettingsCont
+{
+    font-family: jura;
+
+    margin-bottom: 20px;
+}
+
+.profileSettingsBtn
+{
+    width: 200px;
+    height: 50px;
+
+    background-color: black;
+    color: white;
+    border: white solid 1px;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adminSettingsBtn
+{
+    margin-top: 10px;
+    width: 200px;
+    height: 50px;
+
+    color: white;
+    background-color: black;
+    border: white solid 1px;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* Overview Page */
+
+.headerCont
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.seasonCont
+{
+    display: flex;
+    justify-content: end;
+}
+
+.seasonBtn
+{
+    margin: 20px 20px 0;
+
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    width: 250px;
+    height: 50px;
+    font-size: 1.5em;
+    font-family: "Zen dots";
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pageNameCont
+{
+    margin: 20px;
+
+    height: 80px;
+    background-color: black;
+    border-radius: 10px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pageTitle
+{
+    color: white;
+    font-family: "jura";
+    font-size: 2.5em;
+}
+
+/* Main Page Content */
+
+main
+{
+    margin-top: 30px;
+}
+
+.newsCont
+{
+    margin: 0 20px;
+    background-color: black;
+    border-radius: 10px;
+    min-height: 200px;
+
+}
+
+.newsTitle
+{
+    color: white;
+    font-family: "zen dots";
+    font-size: 1.5em;
+
+    display: flex;
+    justify-content: center;
+}
+
+.newsContent
+{
+    color: white;
+    min-height: 200px;
+    font-family: "jura";
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
