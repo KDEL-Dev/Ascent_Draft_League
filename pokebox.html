@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/styles/styles.css">
-    <script src="script.js"></script>
+    
 
-    <title>Pokebox</title>
+    <title>pokebox</title>
 </head>
 <body>
     <div class="pageLayout">
@@ -40,35 +40,48 @@
                     <div class="seasonBtn">Season 1</div>
                 </div>
                 <div class="pageNameCont">
-                    <div class="pageTitle"> Overview</div>
+                    <div class="pageTitle"> Draft</div>
                 </div>
             </header>
             <div class="pageLayout">
                 <main>
-                    <section class="newsCont">
-                        <div class="sectionTitle">News/Updates</div>
-                        <article class="newsContent"> No new updates for this league</article>
-                    </section>
-                    <section class="playerDashCont">
-                        <div class="sectionTitle">Player Dashboard</div>
-                        <article class="playerDashContent"> No new updates for this league</article>
-                    </section>
-                </main>
-                <aside>
-                    <section id="miniStandingsCont">
-                        <div id="sectionTitle">Standings</div>
-                        <div id="miniStandings">Will update when league starts</div>
-                    </section>
-                    <section>
-                        <div id="killLeaderBoardCont">
-                            <div id="sectionTitle">Kill Leader</div>
-                            <div id="killLeader">Will update when league starts</div>
+                    <section id="metaCont">
+                        <div class="ouPool">
+                            <div class="tierPoolTitle" id="ouPoolTierColor">
+                                <h2>OU Tier</h2>
+                            </div>
+                            <ul class="listOfMetaPkmn" id="listOfOuPkmn"></ul>
                         </div>
                     </section>
-                </aside>
+                    <section id="metaCont">
+                        <div class="uuPool">
+                            <div class="tierPoolTitle" id="uuPoolTierColor">
+                                <h2>UU Tier</h2>
+                            </div>
+                            <ul class="listOfMetaPkmn" id="listOfUuPkmn"></ul>
+                        </div>
+                    </section>
+                    <section id="metaCont">
+                        <div class="ruPool">
+                            <div class="tierPoolTitle" id="ruPoolTierColor">
+                                <h2>RU Tier</h2>
+                            </div>
+                            <ul class="listOfMetaPkmn" id="listOfRuPkmn"></ul>
+                        </div>
+                    </section>
+                    <section id="metaCont">
+                        <div class="nuPool">
+                            <div class="tierPoolTitle" id="nuPoolTierColor">
+                                <h2>NU Tier</h2>
+                            </div>
+                            <ul class="listOfMetaPkmn" id="listOfNuPkmn"></ul>
+                        </div>
+                    </section>
+                </main>
             </div>
         </div>
     </div>
-    
 </body>
+
+<script src="script.js"></script>
 </html>
