@@ -1,21 +1,24 @@
-// fetch("https://pokeapi.co/api/v2/pokemon/yungoos")
-//     .then(response => response.json())
-//     .then(data => console.log(data))
-//     .catch(error => console.error(error));
+//TEAMS
 
+let teams = [];
 
+function createTeams(num)
+{
+    teams = [];
 
-//This grabs the whole list of pokemon from the JSON
-// async function getCurrentMeta(){
-//     let response = await fetch('https://play.pokemonshowdown.com/data/pokedex.json');
-//     let result = await response.json();
+    for(let i = 1; i <= num; i++)
+    {
+        teams.push({
+            id:i,
+            name: "Team "+ i,
+            roster: []
+        })
+    }
+}
 
-//     console.log(result)
-// }
+createTeams(2);
 
-// getCurrentMeta()
-
-
+//FETCH POKEMON FROM SHOWDOWN
 
 async function getShowdownDex(){
     const response = await fetch('./showdownData/pokedex.json');
@@ -72,6 +75,12 @@ function displayOu(ouList)
     {
         let li = document.createElement("li");
         li.textContent = ouList[i].name;
+
+        li.addEventListener("click", function(){ //This is to make each pkmn clickable and it needs to be looped
+            chooseTeam(ouList[i])
+        })
+
+
         ouPkmn.appendChild(li);
     }
 }
@@ -118,8 +127,22 @@ function displayNu(nuList)
     }
 }
 
-
-
-
 getShowdownDex();
 
+function chooseTeam(pkmn)
+{
+    let teamNumber = prompt("Draft wo which team? Enter team number:")
+
+    teamNumber = parseInt(teamNumber);
+
+    if(!isNaN(teamNumber) && teams[ teamNumber - 1])
+    {
+        teams[teamNumber - 1].roster.push(pkmn)
+
+        console.log(teams)
+    }
+    else
+    {
+        alert('invalid team number');
+    }
+}

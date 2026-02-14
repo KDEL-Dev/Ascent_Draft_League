@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Zen+Dots&display=swap');
 
+/* Below prevents my content from becoming bigger than container. Had an issue with roster page specifically where contents of each team box was bigger than container itself */
+*  
+{
+    box-sizing: border-box;
+}
+
 body
 {
     margin: 0;
@@ -203,6 +209,8 @@ main
     align-items: center;;
 }
 
+
+
 #miniStandingsCont
 {
     margin: 30px 20px;
@@ -326,4 +334,100 @@ main
     color: black;
     background-color: white;
     cursor: pointer;
+}
+
+/* Roster */
+
+.contentCont
+{
+    margin: 0 20px;
+    padding: 40px;
+
+    background-color: black;
+    border-radius: 10px;
+    min-height: 1050px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.teamCont
+{
+    margin: 20px;
+
+    width: 400px;
+    height: 650px;
+    border: solid 1px white;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.teamName
+{
+    color: white;
+    font-family: "jura";
+    font-size: 1.5em;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+}
+
+.rosterPkmn
+{
+    padding: 0;
+    margin: 0;
+
+    width: 100%;
+}
+
+.rosterPkmn li
+{
+    color: white;
+    list-style: none;
+    font-family: "jura";
+    font-size: 1.75em;
+    border-top: white solid 1px;
+}
+
+.pkmnNameTier
+{
+    height: 50px;
+    padding: 0 20px ;
+    /* background-image: linear-gradient(to right,black 20%,red); */
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pkmnNameTier div:last-child
+{
+    width: 50px;
+    border-left: white 1px solid;
+    padding-left: 10px;
+    font-weight: bold;
+}
+
+/* Admin Page */
+
+#teamManagement
+{
+    padding: 20px;
+
+    border: white 1px solid;
+    height: 400px;
+    color: white;
+    font-size: 2em;
+    font-family: "jura";
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
