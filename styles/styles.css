@@ -267,6 +267,21 @@ main
     align-items: center;
 }
 
+footer
+{
+    margin:0 20px;
+
+    border-top: rgba(255, 255, 255, 20%) 1px solid;
+    height: 30px;
+    color: white;
+    font-family: "jura";
+    
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Pokebox/Draft */
 
 #metaCont
@@ -340,7 +355,8 @@ main
 
 .contentCont
 {
-    margin: 0 20px;
+    margin: 0 20px 20px 20px;
+    
     padding: 40px;
 
     background-color: black;
