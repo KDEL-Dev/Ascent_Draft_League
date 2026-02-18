@@ -146,3 +146,28 @@ function chooseTeam(pkmn)
         alert('invalid team number');
     }
 }
+
+//redo below when not sick
+
+async function chooseTeam(pkmn) {
+    let teamNumber = prompt("Draft to which team? Enter team number:");
+    teamNumber = parseInt(teamNumber);
+
+    if (!isNaN(teamNumber) && teams[teamNumber - 1]) {
+        const response = await fetch('draftPokemon.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                teamId: teams[teamNumber - 1].id,
+                pokemonId: pkmn.id
+            })
+        });
+
+        const result = await response.json();
+        if (result.status === "success") alert(pkmn.name + " drafted!");
+        else if (result.status === "already drafted") alert("Already drafted!");
+        else alert("Error drafting!");
+    }
+}
