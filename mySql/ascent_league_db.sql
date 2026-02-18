@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 17, 2026 at 07:18 PM
+-- Generation Time: Feb 18, 2026 at 02:47 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -24,6 +24,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `activeusers`
+--
+
+CREATE TABLE `activeusers` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `wins` int(11) DEFAULT '0',
+  `losses` int(11) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `currentpkmnmeta`
 --
 
@@ -36,6 +49,19 @@ CREATE TABLE `currentpkmnmeta` (
   `type2` varchar(20) DEFAULT NULL,
   `generation` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `drafts`
+--
+
+CREATE TABLE `drafts` (
+  `id` int(11) NOT NULL,
+  `team_id` int(11) NOT NULL,
+  `pokemon_id` int(11) NOT NULL,
+  `drafted_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1055,6 +1081,18 @@ INSERT INTO `draft_league_stats_legacyseasons` (`id`, `team_a`, `team_b`, `win`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rosterpkmn`
+--
+
+CREATE TABLE `rosterpkmn` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `activeusers` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1071,11 +1109,33 @@ CREATE TABLE `users` (
 --
 
 --
+-- Indexes for table `activeusers`
+--
+ALTER TABLE `activeusers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `currentpkmnmeta`
 --
 ALTER TABLE `currentpkmnmeta`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `showdown_id` (`showdown_id`);
+
+--
+-- Indexes for table `drafts`
+--
+ALTER TABLE `drafts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pokemon_id` (`pokemon_id`),
+  ADD KEY `team_id` (`team_id`);
+
+--
+-- Indexes for table `rosterpkmn`
+--
+ALTER TABLE `rosterpkmn`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_team_active_user` (`activeusers`);
 
 --
 -- Indexes for table `users`
@@ -1090,9 +1150,27 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `activeusers`
+--
+ALTER TABLE `activeusers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `currentpkmnmeta`
 --
 ALTER TABLE `currentpkmnmeta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `drafts`
+--
+ALTER TABLE `drafts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rosterpkmn`
+--
+ALTER TABLE `rosterpkmn`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -1100,6 +1178,29 @@ ALTER TABLE `currentpkmnmeta`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `activeusers`
+--
+ALTER TABLE `activeusers`
+  ADD CONSTRAINT `activeusers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `drafts`
+--
+ALTER TABLE `drafts`
+  ADD CONSTRAINT `drafts_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `rosterpkmn` (`id`),
+  ADD CONSTRAINT `drafts_ibfk_2` FOREIGN KEY (`pokemon_id`) REFERENCES `currentpkmnmeta` (`id`);
+
+--
+-- Constraints for table `rosterpkmn`
+--
+ALTER TABLE `rosterpkmn`
+  ADD CONSTRAINT `fk_team_active_user` FOREIGN KEY (`activeusers`) REFERENCES `activeusers` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
