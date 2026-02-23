@@ -1,39 +1,29 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) 
+    {
+        header("Location: login.html");
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="styles/styles.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="assets/styles/styles.css">
+    <script src="assets/js/script.js"></script>
 
     <title>Pokebox</title>
 </head>
 <body>
     <div class="pageLayout">
-        <div class="navBar">
-            <div class="topNav">
-                <div>
-                    <img class="navLogo" src="img/Ascent-White.svg" alt="site logo">
-                </div>
-                <ul class="navMainBtnCont">
-                    <li class="navMainBtns"><a href="index.html">Overview</a></li>
-                    <li class="navMainBtns"><a href="rosters.html">Roster</a></li>
-                    <li class="navMainBtns"><a href="pokebox.php">Draft</a></li>
-                    <li class="navMainBtns">Standings</li>
-                    <li class="navMainBtns">Statistics</li>
-                    <li class="navMainBtns">Matchups</li>
-                    <li class="navMainBtns">Playoffs</li>
-                    <li class="navMainBtns">League Information</li>
-                    <li class="navMainBtns">Draft Recap</li>
-                    
-                </ul>
-            </div>
-            <div class="navSettingsCont">
-                <div class="profileSettingsBtn">Profile</div>
-                <div class="adminSettingsBtn"><a href="admin.html">Admin Settings</a></div>
-            </div>
-        </div>
+        
+        <?php include 'includes/navbar.php';?>
+
         <div class="pageContent">
             <header class="headerCont">
                 <div class="seasonCont">
@@ -71,9 +61,9 @@
                     </section>
                 </aside>
             </div>
-            <footer>
-                Copyright Kadelle Liburd 2026
-            </footer>
+
+            <?php include 'includes/footer.php'; ?>
+            
         </div>
     </div>
     
