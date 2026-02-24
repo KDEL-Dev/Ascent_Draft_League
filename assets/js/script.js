@@ -176,61 +176,58 @@ document.addEventListener("DOMContentLoaded", function(){
     //Randomize Draft Order
 
 
-    let draftTeams = []
-    draftOrderList = document.getElementById("draftOrderList")
+    document.addEventListener("DOMContentLoaded", async function () {
+    const draftOrderList = document.getElementById("draftOrderList");
+    const randomizeBtn = document.getElementById("randomizeBtn");
 
-    //fister yates template
-
-    //I believe arr is array in this template
-    /*
-        function shuffleArray(arr) {
-        
-        const a = [...arr];
-        for (let i = a.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1)); 
-            [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
-    }
-    */
-
-    fetch("api/get_gamerTags.php")
-        .then(response => response.json())
-        .then(data => {
-            draftTeams = data;
-            console.log("From PHP:", draftTeams);
-        });
-
-    //arr is just array. I incorrectly was putting draftTeams in the input but I shouldnt have done that because then I would have "2" draftTeams variables
-    function shuffleArray(arr) {
-    //the '...' is a spread operator and without it when my array is placed in the loop, nothing will be sorted because it thinks it is one whole string instead of seperate items
-    const a = [...arr];
-
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); 
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-    }
-
-    randomizeBtn = document.getElementById('randomizeBtn')
-
-    randomizeBtn.addEventListener('click',function(){
-
-        //Need to catch new list in order to display it
-        const shuffledList = shuffleArray(draftTeams)
-
+    // Function to render a list of gamerTags
+    function renderDraftOrder(list) {
         draftOrderList.innerHTML = "";
-
-        shuffledList.forEach(function(gamerTag) {
-            const li = document.createElement("li")
+        list.forEach(gamerTag => {
+            const li = document.createElement("li");
             li.textContent = gamerTag;
+            draftOrderList.appendChild(li);
+        });
+    }
 
-            //appendChild is just taking what we did above and placing it inside  of my draftOrderList section
-            draftOrderList.appendChild(li)
-        })
+    // Fetch current draft order on page load
+    async function loadDraftOrder() {
+        try {
+            const response = await fetch("api/get_current_draft.php");
+            const data = await response.json();
+            if (data.error) {
+                console.error("Draft error:", data.error);
+            } else {
+                renderDraftOrder(data);
+            }
+        } catch (err) {
+            console.error("Failed to load draft order:", err);
+        }
+    }
 
-    }) 
+    // Randomize draft order button
+    randomizeBtn.addEventListener("click", async function () 
+    {
+        try 
+        {
+            const response = await fetch("api/randomize_draft.php");
+            const shuffledList = await response.json();
+            if (shuffledList.error) {
+                console.error("Draft error:", shuffledList.error);
+                return;
+            }
+            renderDraftOrder(shuffledList);
+            console.log("Draft picks saved to DB and displayed:", shuffledList);
+        } 
+        catch (err) 
+        {
+            console.error("Failed to randomize draft:", err);
+        }
+    });
+
+    // Load current draft order when page loads
+        await loadDraftOrder();
+    });
 
 
 })

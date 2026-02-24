@@ -8,7 +8,7 @@
         <div class="navBar">
             <div class="topNav">
                 <div>
-                    <img class="navLogo" src="img/Ascent-White.svg" alt="site logo">
+                    <a href="index.php"><img class="navLogo" src="img/Ascent-White.svg" alt="site logo">
                 </div>
                 <ul class="navMainBtnCont">
                     <li class="navMainBtns"><a href="index.php">Overview</a></li>
