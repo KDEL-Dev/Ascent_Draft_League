@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 18, 2026 at 02:47 PM
+-- Generation Time: Feb 26, 2026 at 05:48 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -24,53 +24,90 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `activeusers`
+-- Table structure for table `active_users`
 --
 
-CREATE TABLE `activeusers` (
+CREATE TABLE `active_users` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `draft_pick` int(11) DEFAULT NULL,
   `wins` int(11) DEFAULT '0',
   `losses` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `active_users`
+--
+
+INSERT INTO `active_users` (`id`, `user_id`, `draft_pick`, `wins`, `losses`) VALUES
+(3, 1, 2, 0, 0),
+(4, 2, 1, 0, 0),
+(6, 3, 3, 0, 0);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `currentpkmnmeta`
+-- Table structure for table `drafted_pkmn`
 --
 
-CREATE TABLE `currentpkmnmeta` (
+CREATE TABLE `drafted_pkmn` (
   `id` int(11) NOT NULL,
-  `showdown_id` varchar(100) DEFAULT NULL,
+  `season_id` int(11) NOT NULL,
+  `active_user` int(11) NOT NULL,
+  `showdown_pkmn` int(11) NOT NULL,
+  `pick_number` int(11) NOT NULL,
+  `drafted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `drafted_pkmn`
+--
+
+INSERT INTO `drafted_pkmn` (`id`, `season_id`, `active_user`, `showdown_pkmn`, `pick_number`, `drafted_at`) VALUES
+(1, 1, 4, 2, 1, '2026-02-19 13:17:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `draft_info`
+--
+
+CREATE TABLE `draft_info` (
+  `id` int(11) NOT NULL,
+  `season_id` int(11) NOT NULL,
+  `current_pick` int(11) DEFAULT '1',
+  `total_picks` int(11) NOT NULL,
+  `direction` enum('up','down') DEFAULT 'up',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `draft_info`
+--
+
+INSERT INTO `draft_info` (`id`, `season_id`, `current_pick`, `total_picks`, `direction`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 0, 'up', '2026-02-23 21:47:29', '2026-02-23 21:47:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leagues`
+--
+
+CREATE TABLE `leagues` (
+  `league_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `Tier` varchar(10) DEFAULT NULL,
-  `type1` varchar(20) DEFAULT NULL,
-  `type2` varchar(20) DEFAULT NULL,
-  `generation` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+  `created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `drafts`
+-- Table structure for table `legacy_stats_playoffs`
 --
 
-CREATE TABLE `drafts` (
-  `id` int(11) NOT NULL,
-  `team_id` int(11) NOT NULL,
-  `pokemon_id` int(11) NOT NULL,
-  `drafted_at` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `draft_league_stats_legacyplayoffs`
---
-
-CREATE TABLE `draft_league_stats_legacyplayoffs` (
+CREATE TABLE `legacy_stats_playoffs` (
   `id` int(2) DEFAULT NULL,
   `team_a` varchar(4) DEFAULT NULL,
   `team_b` varchar(4) DEFAULT NULL,
@@ -80,10 +117,10 @@ CREATE TABLE `draft_league_stats_legacyplayoffs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `draft_league_stats_legacyplayoffs`
+-- Dumping data for table `legacy_stats_playoffs`
 --
 
-INSERT INTO `draft_league_stats_legacyplayoffs` (`id`, `team_a`, `team_b`, `win`, `loss`, `season`) VALUES
+INSERT INTO `legacy_stats_playoffs` (`id`, `team_a`, `team_b`, `win`, `loss`, `season`) VALUES
 (1, 'dzn', 'rx', 'rx', 'dzn', 2),
 (2, 'sgs', 'orng', 'sgs', 'orng', 2),
 (3, 'rx', 'sgs', 'sgs', 'rx', 2),
@@ -173,10 +210,10 @@ INSERT INTO `draft_league_stats_legacyplayoffs` (`id`, `team_a`, `team_b`, `win`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `draft_league_stats_legacyseasons`
+-- Table structure for table `legacy_stats_seasons`
 --
 
-CREATE TABLE `draft_league_stats_legacyseasons` (
+CREATE TABLE `legacy_stats_seasons` (
   `id` int(3) DEFAULT NULL,
   `team_a` varchar(4) DEFAULT NULL,
   `team_b` varchar(5) DEFAULT NULL,
@@ -186,10 +223,10 @@ CREATE TABLE `draft_league_stats_legacyseasons` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `draft_league_stats_legacyseasons`
+-- Dumping data for table `legacy_stats_seasons`
 --
 
-INSERT INTO `draft_league_stats_legacyseasons` (`id`, `team_a`, `team_b`, `win`, `loss`, `season`) VALUES
+INSERT INTO `legacy_stats_seasons` (`id`, `team_a`, `team_b`, `win`, `loss`, `season`) VALUES
 (1, 'krl', 'sgs', 'sgs', 'krl', '1'),
 (2, 'dzn', 'rx', 'rx', 'dzn', '1'),
 (3, 'orng', 'js', 'orng', 'js', '1'),
@@ -1081,14 +1118,65 @@ INSERT INTO `draft_league_stats_legacyseasons` (`id`, `team_a`, `team_b`, `win`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rosterpkmn`
+-- Table structure for table `roster_pkmn`
 --
 
-CREATE TABLE `rosterpkmn` (
+CREATE TABLE `roster_pkmn` (
   `id` int(11) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
-  `activeusers` int(11) NOT NULL
+  `active_user` int(11) NOT NULL,
+  `showdown_pkmn` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `roster_pkmn`
+--
+
+INSERT INTO `roster_pkmn` (`id`, `name`, `active_user`, `showdown_pkmn`, `created_at`) VALUES
+(5, NULL, 3, 1, '2026-02-19 11:32:37'),
+(9, NULL, 4, 2, '2026-02-19 13:24:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seasons`
+--
+
+CREATE TABLE `seasons` (
+  `season_id` int(11) NOT NULL,
+  `league_id` int(11) NOT NULL,
+  `season_number` int(11) NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `playoff_date` datetime DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `is_active` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `showdown_pkmn`
+--
+
+CREATE TABLE `showdown_pkmn` (
+  `id` int(11) NOT NULL,
+  `showdown_id` varchar(100) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `Tier` varchar(10) DEFAULT NULL,
+  `type1` varchar(20) DEFAULT NULL,
+  `type2` varchar(20) DEFAULT NULL,
+  `generation` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `showdown_pkmn`
+--
+
+INSERT INTO `showdown_pkmn` (`id`, `showdown_id`, `name`, `Tier`, `type1`, `type2`, `generation`, `created_at`) VALUES
+(1, 'clefable', 'Clefable', NULL, NULL, NULL, NULL, '2026-02-18 14:11:52'),
+(2, 'tyranitar', 'Tyranitar', NULL, NULL, NULL, NULL, '2026-02-18 14:11:52');
 
 -- --------------------------------------------------------
 
@@ -1105,37 +1193,67 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password`, `gamerTag`, `created_at`) VALUES
+(1, 'user1@example.com', 'password1', 'player1', '2026-02-18 14:09:10'),
+(2, 'user2@example.com', 'password2', 'player2', '2026-02-18 14:09:10'),
+(3, 'user@example.com', 'password3', 'player3', '2026-02-20 16:28:31');
+
+--
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `activeusers`
+-- Indexes for table `active_users`
 --
-ALTER TABLE `activeusers`
+ALTER TABLE `active_users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `currentpkmnmeta`
+-- Indexes for table `drafted_pkmn`
 --
-ALTER TABLE `currentpkmnmeta`
+ALTER TABLE `drafted_pkmn`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_pokemon_per_season` (`season_id`,`showdown_pkmn`),
+  ADD KEY `active_user` (`active_user`),
+  ADD KEY `showdown_pkmn` (`showdown_pkmn`);
+
+--
+-- Indexes for table `draft_info`
+--
+ALTER TABLE `draft_info`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `leagues`
+--
+ALTER TABLE `leagues`
+  ADD PRIMARY KEY (`league_id`);
+
+--
+-- Indexes for table `roster_pkmn`
+--
+ALTER TABLE `roster_pkmn`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `active_user` (`active_user`,`showdown_pkmn`),
+  ADD UNIQUE KEY `unique_pokemon` (`showdown_pkmn`);
+
+--
+-- Indexes for table `seasons`
+--
+ALTER TABLE `seasons`
+  ADD PRIMARY KEY (`season_id`),
+  ADD UNIQUE KEY `league_id` (`league_id`,`season_number`);
+
+--
+-- Indexes for table `showdown_pkmn`
+--
+ALTER TABLE `showdown_pkmn`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `showdown_id` (`showdown_id`);
-
---
--- Indexes for table `drafts`
---
-ALTER TABLE `drafts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `pokemon_id` (`pokemon_id`),
-  ADD KEY `team_id` (`team_id`);
-
---
--- Indexes for table `rosterpkmn`
---
-ALTER TABLE `rosterpkmn`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_team_active_user` (`activeusers`);
 
 --
 -- Indexes for table `users`
@@ -1150,57 +1268,82 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `activeusers`
+-- AUTO_INCREMENT for table `active_users`
 --
-ALTER TABLE `activeusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `active_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `currentpkmnmeta`
+-- AUTO_INCREMENT for table `drafted_pkmn`
 --
-ALTER TABLE `currentpkmnmeta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `drafted_pkmn`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `drafts`
+-- AUTO_INCREMENT for table `draft_info`
 --
-ALTER TABLE `drafts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `draft_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `rosterpkmn`
+-- AUTO_INCREMENT for table `leagues`
 --
-ALTER TABLE `rosterpkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `leagues`
+  MODIFY `league_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `roster_pkmn`
+--
+ALTER TABLE `roster_pkmn`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `seasons`
+--
+ALTER TABLE `seasons`
+  MODIFY `season_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `showdown_pkmn`
+--
+ALTER TABLE `showdown_pkmn`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `activeusers`
+-- Constraints for table `active_users`
 --
-ALTER TABLE `activeusers`
-  ADD CONSTRAINT `activeusers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `active_users`
+  ADD CONSTRAINT `active_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `drafts`
+-- Constraints for table `drafted_pkmn`
 --
-ALTER TABLE `drafts`
-  ADD CONSTRAINT `drafts_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `rosterpkmn` (`id`),
-  ADD CONSTRAINT `drafts_ibfk_2` FOREIGN KEY (`pokemon_id`) REFERENCES `currentpkmnmeta` (`id`);
+ALTER TABLE `drafted_pkmn`
+  ADD CONSTRAINT `drafted_pkmn_ibfk_1` FOREIGN KEY (`active_user`) REFERENCES `active_users` (`id`),
+  ADD CONSTRAINT `drafted_pkmn_ibfk_2` FOREIGN KEY (`showdown_pkmn`) REFERENCES `showdown_pkmn` (`id`);
 
 --
--- Constraints for table `rosterpkmn`
+-- Constraints for table `roster_pkmn`
 --
-ALTER TABLE `rosterpkmn`
-  ADD CONSTRAINT `fk_team_active_user` FOREIGN KEY (`activeusers`) REFERENCES `activeusers` (`id`);
+ALTER TABLE `roster_pkmn`
+  ADD CONSTRAINT `fk_roster_pokemon` FOREIGN KEY (`showdown_pkmn`) REFERENCES `showdown_pkmn` (`id`),
+  ADD CONSTRAINT `fk_roster_user` FOREIGN KEY (`active_user`) REFERENCES `active_users` (`id`);
+
+--
+-- Constraints for table `seasons`
+--
+ALTER TABLE `seasons`
+  ADD CONSTRAINT `seasons_ibfk_1` FOREIGN KEY (`league_id`) REFERENCES `leagues` (`league_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
