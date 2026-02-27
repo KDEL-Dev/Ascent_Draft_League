@@ -21,6 +21,8 @@ body
     flex-direction: row;
 }
 
+
+
 .navBar
 {
     width: 350px;
@@ -364,7 +366,7 @@ footer
     align-items: center;
 }
 
-/* Pokebox/Draft */
+/* Draft */
 
 #draftCont
 {
@@ -463,9 +465,7 @@ footer
     border-left: none;
 
     display: flex;
-    flex-direction: column;
-
-    
+    flex-direction: column; 
 }
 
 
@@ -474,6 +474,11 @@ footer
 {
     text-align: center;
     border-bottom: white 1px solid;
+}
+
+.flexSpacedBetween
+{
+    height: 250px;
 }
 
 #draftOrderList
@@ -504,7 +509,6 @@ footer
 #draftOrderBtnCont
 {
     margin-top: 20px;
-
     display: flex;
     justify-content: center;
 
@@ -512,10 +516,16 @@ footer
 
 #draftOrderBtnCont button
 {
-    width: 80px;
-    margin-right: 30px;
-    margin-left: 30px;
+    width: 100%;
+    min-height: 30px;
 
+    background-color: #094D33;
+    color: white;
+    border: none;
+    border-top: white 1px solid; 
+    cursor: pointer;
+    font-family: "jura"; 
+    font-size: 1.25em;  
 }
 
 .metaCont

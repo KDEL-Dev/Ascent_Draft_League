@@ -13,7 +13,7 @@
                 <ul class="navMainBtnCont">
                     <li class="navMainBtns"><a href="index.php">Overview</a></li>
                     <li class="navMainBtns"><a href="rosters.php">Roster</a></li>
-                    <li class="navMainBtns"><a href="pokebox.php">Draft</a></li>
+                    <li class="navMainBtns"><a href="draft.php">Draft</a></li>
                     <li class="navMainBtns">Standings</li>
                     <li class="navMainBtns">Statistics</li>
                     <li class="navMainBtns">Matchups</li>

@@ -33,6 +33,9 @@ try {
     $order = array_map(fn($u) => $u['gamertag'], $users);
     echo json_encode($order);
 
-} catch (Exception $e) {
+} 
+
+catch (Exception $e) 
+{
     echo json_encode(['error' => $e->getMessage()]);
 }

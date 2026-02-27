@@ -1,12 +1,17 @@
 <!-- Must have this at the start of every page -->
 <?php
+
 session_start();
 
+require_once 'includes/connection.php';
+
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: login.php");
     exit;
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,17 +56,16 @@ if (!isset($_SESSION['user_id'])) {
                                 </section>
                             </section>
                             <section id="draftOrderCont">
-                                <header>Draft Order</header>
-                                <section>
-                                    <ul id="draftOrderList">
-                                    <!-- Content will come from javascript/php --> 
-                                    </ul>
-                                    <section id="draftOrderBtnCont">
-                                        <button id="">Edit</button>
-                                        <button id="randomizeBtn">Randomize</button>
-                                    </section>
-                                </section>
                                 
+                                    <header>Draft Order</header>
+                                        <ul id="draftOrderList">
+                                        <!-- Content will come from javascript/php --> 
+                                        </ul>
+                                        <section id="draftOrderBtnCont">
+                                            <!-- If I need an edit button just uncomment but normally I only randomize picks -->
+                                            <!-- <button id="">Edit</button> -->
+                                            <button id="randomizeBtn">Randomize</button>
+                                        </section>
                             </section>
                         
                         </section>
