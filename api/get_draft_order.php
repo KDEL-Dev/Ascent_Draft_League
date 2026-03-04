@@ -1,45 +1,36 @@
 <?php
-//when checking for error uncomment below
-
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
-
-
-// This tells page to give you draft order as JSON
 header('Content-Type: application/json');
-
-//Connect to database --if I change file location, path may need to change as well
-// require_once 'includes/connection.php';
 require_once __DIR__ . '/../includes/connection.php';
 
-//query
+$seasonId = $_SESSION['season_id'] ?? 1;
+
 $sql = "
-        SELECT users.gamerTag
-        FROM active_users
-        JOIN users ON active_users.user_id = users.id
-        WHERE active_users.draft_pick IS NOT NULL
-        GROUP BY active_users.user_id
-        ORDER BY MIN(active_users.draft_pick) ASC
-        ";
+    SELECT u.gamerTag
+    FROM active_users au
+    JOIN users u ON au.user_id = u.id
+    WHERE au.draft_pick IS NOT NULL
+      AND au.season_id = ? 
+    GROUP BY au.user_id
+    ORDER BY MIN(au.draft_pick) ASC
+";
 
-$result = mysqli_query($conn,$sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $seasonId); // now properly used
+$stmt->execute();
+$result = $stmt->get_result();
 
-if(!$result)
-    {
-        // Just so I remember, $conn is a variable created in connection.php
-        die(json_encode(['error' => mysqli_error($conn)]));
-    }
+if (!$result) {
+    die(json_encode(['error' => $conn->error]));
+}
 
-//Creates empty Array to holder order
-// Variables in php start with $ and not const/var/let
 $order = [];
-
-//Loop to place gamer_tags into array
-while ($row = mysqli_fetch_assoc($result)) {
+while ($row = $result->fetch_assoc()) {
     $order[] = $row['gamerTag'];
 }
 
-//Returns JSON
 echo json_encode($order);
-?>
+
+$stmt->close();
+$conn->close();
+
+// DONT TOUCH THIS WORKS

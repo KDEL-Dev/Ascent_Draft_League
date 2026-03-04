@@ -1,64 +1,77 @@
 <?php
-    session_start();
-    include("includes/connection.php");
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST')
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+include("includes/connection.php");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // --- Use prepared statements to prevent SQL injection ---
+    $stmt = $conn->prepare("SELECT id, gamerTag FROM users WHERE email = ? AND password = ?");
+    $stmt->bind_param("ss", $email, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) 
         {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $row = $result->fetch_assoc();
 
-            $sql = "SELECT*FROM users
-                    WHERE email = '$email'
-                    AND password = '$password'";
-            $result = $conn->query($sql);
-
-            if($result->num_rows === 1)
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['gamerTag'] = $row['gamerTag'];
+            $seasonResult = $conn->query("SELECT season_id FROM seasons WHERE is_active = 1 LIMIT 1");
+            if($seasonRow = $seasonResult->fetch_assoc())
                 {
-                    $row = $result->fetch_assoc();
-
-                    $_SESSION['user_id'] = $row['id'];
-                    $_SESSION['gamerTag'] = $row['gamerTag'];
-
-                    header("Location: index.php");
-                    exit;
+                    $_SESSION['season_id'] = $seasonRow['season_id'];
                 }
             else
                 {
-                    echo "invalid email or password";
+                    $_SESSION['season_id'] = 0;
                 }
-        }
-?>
 
+            header("Location: index.php"); // redirect to your draft page
+            exit;
+        } 
+    else 
+        {
+            $login_error = "Invalid email or password";
+        }
+
+    $stmt->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="styles/styles.css">
-    <script src="script.js"></script>
-
-    <title>Document</title>
+    <title>Login</title>
 </head>
 <body>
     <section id="loginLayout">
         <img id="loginLogo" src="img/Ascent Horizontal Text.png" alt="site logo">
         <form id="loginForm" method="post" action="login.php">
             <label for="email">Email: </label>
-            <input type="email" id="email" class="formInput" name="email">
+            <input type="email" id="email" class="formInput" name="email" required>
             <label for="password">Password: </label>
-            <input type="password" name="password" class="formInput" id="password">
-            <input type="submit" value="login"></input>
+            <input type="password" name="password" class="formInput" id="password" required>
+            <input type="submit" value="Login">
         </form>
-        <button><a href="register.html">register</a></button>
-        
+        <?php if (!empty($login_error)) : ?>
+            <p style="color:red;"><?php echo $login_error; ?></p>
+        <?php endif; ?>
+        <button><a href="register.html">Register</a></button>
     </section>
+
+    <?php include 'includes/footer.php'; ?>
 </body>
-
-<?php include 'includes/footer.php'; ?>
-
 </html>
 
 <?php
-    mysqi_close($conn)
+$conn->close();
 ?>

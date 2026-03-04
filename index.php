@@ -6,6 +6,8 @@ if (!isset($_SESSION['user_id']))
         header("Location: login.html");
         exit;
     }
+
+    $seasonId = $_SESSION['season_id'] ?? 12;
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +29,7 @@ if (!isset($_SESSION['user_id']))
         <div class="pageContent">
             <header class="headerCont">
                 <div class="seasonCont">
-                    <div class="seasonBtn">Season 1</div>
+                    <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
                 </div>
                 <div class="pageNameCont">
                     <div class="pageTitle"> Overview</div>
