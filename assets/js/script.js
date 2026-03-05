@@ -13,9 +13,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             pokedex.forEach(pkmn => {
                 switch (pkmn.tier) {
                     case "OU": ouPokemon.push(pkmn); break;
+                    case "UUBL": ouPokemon.push(pkmn); break;
+
                     case "UU": uuPokemon.push(pkmn); break;
+                    case "RUBL": uuPokemon.push(pkmn); break;
+
                     case "RU": ruPokemon.push(pkmn); break;
+                    case "NUBL": ruPokemon.push(pkmn); break;
+
                     case "NU": nuPokemon.push(pkmn); break;
+                    case "PUBL": nuPokemon.push(pkmn); break;
                 }
             });
 
