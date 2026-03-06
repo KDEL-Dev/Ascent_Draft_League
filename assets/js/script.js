@@ -37,26 +37,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function displayList(list, elementId, clickable = false) {
-        const container = document.getElementById(elementId);
-        if (!container) return;
-        container.innerHTML = "";
+    const container = document.getElementById(elementId);
+    if (!container) return;
+    container.innerHTML = "";
 
-        list.forEach(item => {
-            const li = document.createElement("li");
-            li.textContent = item.name;
+    list.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.name;
 
-            if (clickable) {
-                li.addEventListener("click", () => 
-                {
-                    console.log("Clicked Pokémon:", item);
-                    console.log("Pokémon ID:", item.id);
-                    draftPokemon(item);
-                });
-            }
+        // Highlight if drafted
+        if (item.drafted) {
+            li.classList.add("drafted");
+            li.style.pointerEvents = 'none'; // cannot click already drafted
+        } else if (clickable) {
+            li.addEventListener("click", () => {
+                console.log("Clicked Pokémon:", item);
+                draftPokemon(item);
+                li.classList.add("myPick"); // mark your own pick
+            });
+        }
 
-            container.appendChild(li);
-        });
-    }
+        container.appendChild(li);
+    });
+}
 
     function displayOu(list) { displayList(list, 'listOfOuPkmn', true); }
     function displayUu(list) { displayList(list, 'listOfUuPkmn', true); }
@@ -136,27 +139,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     // DRAFT POKÉMON
     // -------------------
     async function draftPokemon(pkmn) {
-        if (!confirm(`Draft ${pkmn.name}?`)) return;
+    if (!confirm(`Draft ${pkmn.name}?`)) return;
 
-        try {
-            const response = await fetch("/ascent_draft_league/api/draft/draft_pkmn.php", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ showdown_pkmn: pkmn.id })
+    try {
+        const response = await fetch("/ascent_draft_league/api/draft/draft_pkmn.php", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ showdown_pkmn: pkmn.id })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            alert(`${pkmn.name} drafted successfully!`);
+
+            // Add drafted class to the clicked li
+            const liElements = document.querySelectorAll("li");
+            liElements.forEach(li => {
+                if (li.textContent === pkmn.name) {
+                    li.classList.add("drafted");
+                }
             });
 
-            const data = await response.json();
-
-            if (data.status === "success") {
-                alert(`${pkmn.name} drafted successfully!`);
-                await getShowdownDexFromDB(); // Refresh UI
-            } else {
-                alert(data.error || "Draft failed");
-            }
-        } catch (err) {
-            console.error("Draft error:", err);
+            await getShowdownDexFromDB(); // Refresh UI
+        } else {
+            alert(data.error || "Draft failed");
         }
+    } catch (err) {
+        console.error("Draft error:", err);
     }
+}
 
     // -------------------
     // RANDOMIZE DRAFT ORDER

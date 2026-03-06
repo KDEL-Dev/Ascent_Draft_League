@@ -71,146 +71,54 @@ if(!$pokemonId || !$userId || !$seasonId)
 
 
 
-// ----------
+// ----------------
 // TURN ORDER
-// ----------
-
-//Get Current Pick
-
-//Stmt is just statement. Basically my query
+// ----------------
 $draftInfoStmt = $conn->prepare("SELECT current_pick FROM draft_info WHERE season_id = ?");
 $draftInfoStmt->bind_param("i", $seasonId);
 $draftInfoStmt->execute();
+$currentPick = $draftInfoStmt->get_result()->fetch_assoc()['current_pick'] ?? 1;
+$draftInfoStmt->close();
 
-$result = $draftInfoStmt->get_result();
-$draftRow = $result->fetch_assoc();
-$currentPick = $draftRow['current_pick'] ?? 1;
-
-// Get Draft Order
-$orderStmt = $conn->prepare("
-    SELECT user_id
-    FROM active_users
-    WHERE season_id = ?
-    ORDER BY draft_pick ASC
-");
-$orderStmt->bind_param("i",$seasonId);
+// Get draft order for this season
+$orderStmt = $conn->prepare("SELECT user_id FROM active_users WHERE season_id = ? ORDER BY draft_pick ASC");
+$orderStmt->bind_param("i", $seasonId);
 $orderStmt->execute();
 $orderResult = $orderStmt->get_result();
 
 $users = [];
-while ($row = $orderResult->fetch_assoc())
-    {
-        $users[] = $row['user_id'];
-    }
+while ($row = $orderResult->fetch_assoc()) {
+    $users[] = $row['user_id']; // global user ID
+}
+$orderStmt->close();
 
-$playerCount = count($users);
-if($playerCount === 0)
-    {
-        http_response_code(500);
-        echo json_encode(['error' => 'No active users for this season']);
-        exit;
-    }
-
-// snake draft math
-$round = ceil($currentPick / $playerCount);
-$indexInRound = ($currentPick - 1) % $playerCount;
-
-if($round % 2 === 0)
-    {
-        $activeUserIndex = $playerCount - 1 - $indexInRound;
-    }
-else
-    {
-        $activeUserIndex = $indexInRound;
-    }
-
-$activeUserId = $users[$activeUserIndex] ?? null;
-
-// Check to see who's turn it is
-
-if($userId != $activeUserId)
-    {
-        http_response_code(403);
-        echo json_encode(['error' => 'Not Your Turn']);
-        exit;
-    }
-
-//----------------
-// ENFORCE TIER LIMITS
-//----------------
-
-
-function enforceTierLimits($conn, $activeUserId, $seasonId, $pokemonId, $tierLimits)
-{
-    // Get tier
-    $tierStmt = $conn->prepare("
-        SELECT tier 
-        FROM pkmn_tier 
-        WHERE showdown_pkmn_id = ? AND season_id = ?
-        LIMIT 1
-    ");
-    $tierStmt->bind_param("ii", $pokemonId, $seasonId);
-    $tierStmt->execute();
-    $tierResult = $tierStmt->get_result();
-    $tierRow = $tierResult->fetch_assoc();
-    $tierStmt->close();
-
-    if (!$tierRow) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Pokémon tier not found']);
-        exit;
-    }
-
-    $tier = $tierRow['tier'];
-    $mappedTier = mapToLeagueTier($tier);
-
-    // Count drafted Pokémon in this tier
-    $draftedStmt = $conn->prepare("
-        SELECT t.tier 
-        FROM drafted_pkmn dp
-        JOIN pkmn_tier t 
-          ON dp.showdown_pkmn = t.showdown_pkmn_id 
-         AND dp.season_id = t.season_id
-        WHERE dp.active_user = ? 
-          AND dp.season_id = ?
-    ");
-    $draftedStmt->bind_param("ii", $activeUserId, $seasonId);
-    $draftedStmt->execute();
-    $result = $draftedStmt->get_result();
-
-    $alreadyDraftedCount = 0;
-    while ($row = $result->fetch_assoc()) {
-        if (mapToLeagueTier($row['tier']) === $mappedTier) {
-            $alreadyDraftedCount++;
-        }
-    }
-
-    if (!isset($tierLimits[$mappedTier])) return;
-
-    if ($alreadyDraftedCount >= $tierLimits[$mappedTier]) {
-        http_response_code(403);
-        echo json_encode([
-            'error' => "You cannot draft more than {$tierLimits[$mappedTier]} Pokémon from the $mappedTier tier"
-        ]);
-        exit;
-    }
+if (empty($users)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'No active users for this season']);
+    exit;
 }
 
+// Snake draft logic
+$playerCount = count($users);
+$round = ceil($currentPick / $playerCount);
+$indexInRound = ($currentPick - 1) % $playerCount;
+$activeUserGlobalId = ($round % 2 === 0) ? $users[$playerCount - 1 - $indexInRound] : $users[$indexInRound];
 
-// Get season-specific active_user ID
-$activeUserStmt = $conn->prepare("
-    SELECT id
-    FROM active_users
-    WHERE user_id = ? AND season_id = ?
-    LIMIT 1
-");
+if ($userId != $activeUserGlobalId) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Not your turn']);
+    exit;
+}
+
+// ----------------
+// GET ACTIVE_USER.ID
+// ----------------
+$activeUserStmt = $conn->prepare("SELECT id FROM active_users WHERE user_id = ? AND season_id = ? LIMIT 1");
 $activeUserStmt->bind_param("ii", $userId, $seasonId);
 $activeUserStmt->execute();
-$activeUserResult = $activeUserStmt->get_result();
-$activeUserRow = $activeUserResult->fetch_assoc();
-$activeUserStmt->close();
-
+$activeUserRow = $activeUserStmt->get_result()->fetch_assoc();
 $activeUserId = $activeUserRow['id'] ?? null;
+$activeUserStmt->close();
 
 if (!$activeUserId) {
     http_response_code(403);
@@ -218,70 +126,92 @@ if (!$activeUserId) {
     exit;
 }
 
-// ----------
+// ----------------
 // ENFORCE TIER LIMITS
-// ----------
-enforceTierLimits($conn, $activeUserId, $seasonId, $pokemonId, $tierLimits);
+// ----------------
+$tierStmt = $conn->prepare("SELECT tier FROM pkmn_tier WHERE showdown_pkmn_id = ? AND season_id = ? LIMIT 1");
+$tierStmt->bind_param("ii", $pokemonId, $seasonId);
+$tierStmt->execute();
+$tierRow = $tierStmt->get_result()->fetch_assoc();
+$tierStmt->close();
 
-
-// ---------------
-// DUPLICATE CHECK
-// ---------------
-$checkStmt = $conn->prepare("
-    SELECT 1 FROM drafted_pkmn
-    WHERE showdown_pkmn = ? AND season_id = ?
-    LIMIT 1
-");
-$checkStmt->bind_param("ii", $pokemonId, $seasonId);
-$checkStmt->execute();
-$checkResult = $checkStmt->get_result();
-
-if ($checkResult->num_rows > 0) {
-    http_response_code(403);
-    echo json_encode(['error' => 'This Pokémon has already been drafted']);
+if (!$tierRow) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Pokémon tier not found']);
     exit;
 }
 
+$mappedTier = mapToLeagueTier($tierRow['tier']);
 
-// ----------
+// Count how many Pokémon already drafted by this user in this tier
+$countStmt = $conn->prepare("
+    SELECT t.tier
+    FROM drafted_pkmn dp
+    JOIN pkmn_tier t ON dp.showdown_pkmn = t.showdown_pkmn_id AND dp.season_id = t.season_id
+    WHERE dp.active_user = ? AND dp.season_id = ?
+");
+$countStmt->bind_param("ii", $activeUserId, $seasonId);
+$countStmt->execute();
+$countResult = $countStmt->get_result();
+
+$alreadyDraftedCount = 0;
+while ($row = $countResult->fetch_assoc()) {
+    if (mapToLeagueTier($row['tier']) === $mappedTier) {
+        $alreadyDraftedCount++;
+    }
+}
+$countStmt->close();
+
+if (isset($tierLimits[$mappedTier]) && $alreadyDraftedCount >= $tierLimits[$mappedTier]) {
+    http_response_code(403);
+    echo json_encode(['error' => "You cannot draft more than {$tierLimits[$mappedTier]} Pokémon from the $mappedTier tier"]);
+    exit;
+}
+
+// ----------------
+// CHECK DUPLICATE PICK FOR SEASON
+// ----------------
+$duplicateStmt = $conn->prepare("
+    SELECT 1 FROM drafted_pkmn
+    WHERE active_user = ? AND season_id = ? AND showdown_pkmn = ? LIMIT 1
+");
+$duplicateStmt->bind_param("iii", $activeUserId, $seasonId, $pokemonId);
+$duplicateStmt->execute();
+$duplicateResult = $duplicateStmt->get_result();
+$duplicateStmt->close();
+
+if ($duplicateResult->num_rows > 0) {
+    http_response_code(403);
+    echo json_encode(['error' => 'You have already drafted this Pokémon']);
+    exit;
+}
+
+// ----------------
 // INSERT DRAFT PICK
-// ----------
+// ----------------
 $insertStmt = $conn->prepare("
     INSERT INTO drafted_pkmn (active_user, season_id, showdown_pkmn, pick_number)
     VALUES (?, ?, ?, ?)
 ");
 $insertStmt->bind_param("iiii", $activeUserId, $seasonId, $pokemonId, $currentPick);
-
-if(!$insertStmt->execute())
-{
+if (!$insertStmt->execute()) {
     http_response_code(500);
     echo json_encode(['error' => 'Failed to draft Pokémon']);
     exit;
 }
-
 $insertStmt->close();
 
-
-// ----------
-// ADVANCE DRAFT PICK
-// ----------
-$nextPickStmt = $conn->prepare("
-    UPDATE draft_info
-    SET current_pick = current_pick + 1
-    WHERE season_id = ?
-");
+// ----------------
+// ADVANCE PICK
+// ----------------
+$nextPickStmt = $conn->prepare("UPDATE draft_info SET current_pick = current_pick + 1 WHERE season_id = ?");
 $nextPickStmt->bind_param("i", $seasonId);
 $nextPickStmt->execute();
 $nextPickStmt->close();
 
-
-// ----------
-// SUCCESS RESPONSE
-// ----------
-echo json_encode([
-    'status' => 'success',
-    'pokemon_id' => $pokemonId
-]);
+// ----------------
+// SUCCESS
+// ----------------
+echo json_encode(['status' => 'success', 'pokemon_id' => $pokemonId]);
 exit;
-
 ?>

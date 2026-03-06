@@ -67,28 +67,28 @@ $seasonId = $_SESSION['season_id'] ?? 1;
             <!-- ---------------- POKEMON TIERS ---------------- -->
             <section class="metaCont">
                 <div class="ouPool">
-                    <div class="tierPoolTitle"><h2>OU Tier</h2></div>
+                    <div class="tierPoolTitle" id="ouPoolTierColor"><h2>OU Tier</h2></div>
                     <ul class="listOfMetaPkmn" id="listOfOuPkmn"></ul>
                 </div>
             </section>
 
             <section class="metaCont">
                 <div class="uuPool">
-                    <div class="tierPoolTitle"><h2>UU Tier</h2></div>
+                    <div class="tierPoolTitle" id="uuPoolTierColor"><h2>UU Tier</h2></div>
                     <ul class="listOfMetaPkmn" id="listOfUuPkmn"></ul>
                 </div>
             </section>
 
             <section class="metaCont">
                 <div class="ruPool">
-                    <div class="tierPoolTitle"><h2>RU Tier</h2></div>
+                    <div class="tierPoolTitle" id="ruPoolTierColor"><h2>RU Tier</h2></div>
                     <ul class="listOfMetaPkmn" id="listOfRuPkmn"></ul>
                 </div>
             </section>
 
             <section class="metaCont">
                 <div class="nuPool">
-                    <div class="tierPoolTitle"><h2>NU Tier</h2></div>
+                    <div class="tierPoolTitle" id="nuPoolTierColor"><h2>NU Tier</h2></div>
                     <ul class="listOfMetaPkmn" id="listOfNuPkmn"></ul>
                 </div>
             </section>

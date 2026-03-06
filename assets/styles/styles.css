@@ -365,8 +365,9 @@ footer
     justify-content: center;
     align-items: center;
 }
-
-/* Draft */
+/*******************/
+/***** DRAFT *******/
+/*******************/
 
 #draftCont
 {
@@ -594,6 +595,12 @@ footer
     color: black;
     background-color: white;
     cursor: pointer;
+}
+
+.drafted {
+    background-color: #888888; /* green for drafted */
+    color: white;
+    font-weight: bold;
 }
 
 /* Roster */
