@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../includes/connection.php';
 
 try {
-    $seasonId = 12; // Or dynamically from session or query
+    $seasonId = 999; // Or dynamically from session or query
 
    $stmt = $conn->prepare("
     SELECT s.id, s.name, s.type1, s.type2, t.tier

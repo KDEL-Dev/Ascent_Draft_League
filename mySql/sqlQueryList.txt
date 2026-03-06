@@ -1,0 +1,29 @@
+
+To select just the gamertags of users that are active in league:
+
+SELECT gamerTag FROM users JOIN active_users ON active_users.user_id = users.id;
+
+How to reset draft:
+
+TRUNCATE drafted_pkmn;
+
+UPDATE draft_info
+SET current_pick = 1
+WHERE season_id = 999;
+
+View Drafted Pokemon with names:
+
+SELECT 
+    dp.id AS draft_id,
+    dp.season_id,
+    u.gamerTag,
+    s.name AS pokemon_name,
+    t.tier,
+    dp.pick_number,
+    dp.drafted_at
+FROM drafted_pkmn dp
+JOIN active_users au ON dp.active_user = au.id
+JOIN users u ON au.user_id = u.id
+JOIN pkmn_tier t ON dp.showdown_pkmn = t.showdown_pkmn_id AND dp.season_id = t.season_id
+JOIN showdown_pkmn s ON dp.showdown_pkmn = s.id 
+ORDER BY `u`.`gamerTag` ASC LIMIT 0, 50

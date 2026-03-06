@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             displayOu(ouPokemon);
+            
             displayUu(uuPokemon);
             displayRu(ruPokemon);
             displayNu(nuPokemon);
@@ -45,7 +46,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             li.textContent = item.name;
 
             if (clickable) {
-                li.addEventListener("click", () => draftPokemon(item));
+                li.addEventListener("click", () => 
+                {
+                    console.log("Clicked Pokémon:", item);
+                    console.log("Pokémon ID:", item.id);
+                    draftPokemon(item);
+                });
             }
 
             container.appendChild(li);
@@ -133,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!confirm(`Draft ${pkmn.name}?`)) return;
 
         try {
-            const response = await fetch("/ascent_draft_league/api/draft_pkmn.php", {
+            const response = await fetch("/ascent_draft_league/api/draft/draft_pkmn.php", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ showdown_pkmn: pkmn.id })
