@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id']))
         exit;
     }
 
-    $seasonId = $_SESSION['season_id'] ?? 12;
+    $seasonId = $_SESSION['season_id'] ?? null;
 ?>
 
 <!DOCTYPE html>

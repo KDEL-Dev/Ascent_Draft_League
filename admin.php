@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) 
+    {
+        header("Location: login.php");
+        exit;
+    }
+
+    $seasonId = $_SESSION['season_id'] ?? 12;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,36 +19,17 @@
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
 
-    <title>Document</title>
+    <title>Admin Settings</title>
 </head>
 <body>
     <div class="pageLayout">
-        <div class="navBar">
-            <div class="topNav">
-                <div>
-                    <img class="navLogo" src="img/Ascent-White.svg" alt="site logo">
-                </div>
-                <ul class="navMainBtnCont">
-                    <li class="navMainBtns"><a href="index.html">Overview</a></li>
-                    <li class="navMainBtns"><a href="rosters.html">Roster</a></li>
-                    <li class="navMainBtns"><a href="pokebox.html">Draft</a></li>
-                    <li class="navMainBtns">Standings</li>
-                    <li class="navMainBtns">Statistics</li>
-                    <li class="navMainBtns">Matchups</li>
-                    <li class="navMainBtns">Playoffs</li>
-                    <li class="navMainBtns">League Information</li>
-                    <li class="navMainBtns">Draft Recap</li>
-                </ul>
-            </div>
-            <div class="navSettingsCont">
-                <div class="profileSettingsBtn">Profile</div>
-                <div class="adminSettingsBtn"><a href="admin.html">Admin Settings</a></div>
-            </div>
-        </div>
+
+        <?php include 'includes/navbar.php';?>
+
         <div class="pageContent">
             <header class="headerCont">
                 <div class="seasonCont">
-                    <div class="seasonBtn">Season 1</div>
+                    <div class="seasonBtn">Season <?php echo $seasonId; ?></div>
                 </div>
                 <div class="pageNameCont">
                     <div class="pageTitle"> Admin Settings</div>
@@ -52,6 +45,9 @@
                             </div>
                             <div>
                                 <button id="insertPkmnTierBtn">Insert Pokémon Tiers</button>
+                            </div>
+                            <div>
+                                <button id="clearDraftBtn">Reset Draft</button>
                             </div>
                         </div>
                         <div id="teamManagement">

@@ -31,7 +31,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             displayUu(uuPokemon);
             displayRu(ruPokemon);
             displayNu(nuPokemon);
-        } catch (err) {
+        } 
+        catch (err) 
+        {
             console.error("Failed to load Pokémon from DB:", err);
         }
     }
@@ -111,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const myGamerTag = document.body.dataset.gamertag;
         const MAX_POKEMON_PER_USER = data.maxPokemon ?? 6;
 
-        // ✅ Check if user can draft: it's their turn AND they haven't reached the max
+        // Check if user can draft: it's their turn AND they haven't reached the max
         const canDraft = (myGamerTag === data.current_player) && (data.myDraftedCount < MAX_POKEMON_PER_USER);
 
         toggleDraftButtons(canDraft);
@@ -189,7 +191,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 renderDraftOrder(data);
                 alert("Draft order randomized!");
-            } catch (err) {
+            } 
+            catch (err) 
+            {
                 console.error("Randomization error:", err);
             }
         });
@@ -212,4 +216,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadDraftOrder();
 
    
+    // -------------------
+    // CLEAR DRAFT BUTTON
+    // -------------------
+
+    const clearDraftBtn = document.getElementById('clearDraftBtn');
+    clearDraftBtn.addEventListener("click", async () => {
+        if(!confirm("Are you sure you want to reset the draft?")) return;
+
+        try
+        {
+           const response = await fetch('api/draft/clear_draft.php',{
+            method: 'POST'
+           });
+
+           const data = await response.json();
+
+           if(!response.ok)
+           {
+            throw new Error(data.error || "failed to reset draft");
+           }
+
+           alert("Draft reset successfully.");
+           location.reload();
+        }
+        catch (error)
+        {
+            console.error("Draft reset error", error);
+            alert("Error resetting draft")
+        }   
+    });
 });

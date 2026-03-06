@@ -25,6 +25,6 @@
             <div class="navSettingsCont">
                 <div id="profileName">Welcome <?= $_SESSION['gamerTag'] ?? 'Spectator'; ?></div>
                 <div class="profileSettingsBtn"><a href="profile.php">Profile</a></div>
-                <div class="adminSettingsBtn"><a href="admin.html">Admin Settings</a></div>
+                <div class="adminSettingsBtn"><a href="admin.php">Admin Settings</a></div>
             </div>
         </div>

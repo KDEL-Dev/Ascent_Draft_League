@@ -1,11 +1,13 @@
-<!-- Must have this at the start of every page -->
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
-    exit;
-}
+if (!isset($_SESSION['user_id'])) 
+    {
+        header("Location: login.php");
+        exit;
+    }
+
+    $seasonId = $_SESSION['season_id'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +29,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="pageContent">
             <header class="headerCont">
                 <div class="seasonCont">
-                    <div class="seasonBtn">Season 1</div>
+                    <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
                 </div>
                 <div class="pageNameCont">
                     <div class="pageTitle"> Rosters</div>
