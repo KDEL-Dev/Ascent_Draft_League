@@ -38,22 +38,22 @@ if (!isset($_SESSION['user_id']))
             <div class="pageLayout">
                 <main>
                     <section class="contentCont">
-                        <div id="teamManagement">
-                            <div>League Management</div>
+                        <div class="adminSettingsCont">
+                            <div class="adminSettingsHeader">League Management</div>
                             <div>
-                                <button id="insertPokemonBtn">Update Pokemon Database</button>
+                                <button id="insertPokemonBtn" class="adminSettingsBtn">Update Pokemon Database</button>
                             </div>
                             <div>
-                                <button id="insertPkmnTierBtn">Insert Pokémon Tiers</button>
+                                <button id="insertPkmnTierBtn" class="adminSettingsBtn">Insert Pokémon Tiers</button>
                             </div>
                             <div>
-                                <button id="clearDraftBtn">Reset Draft</button>
+                                <button id="clearDraftBtn" class="adminSettingsBtn">Reset Draft / Rosters</button>
                             </div>
                         </div>
-                        <div id="teamManagement">
-                            <div>Team Management</div>
+                        <div class="adminSettingsCont">
+                            <div class="adminSettingsHeader">Team Management</div>
                             <div>
-                                <button>Team Settings</button>
+                                <button class="adminSettingsBtn">Team Settings</button>
                             </div>
                         </div>
                     </section>

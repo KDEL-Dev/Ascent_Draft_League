@@ -18,7 +18,7 @@
                     <li class="navMainBtns">Statistics</li>
                     <li class="navMainBtns">Matchups</li>
                     <li class="navMainBtns">Playoffs</li>
-                    <li class="navMainBtns">League Information</li>
+                    <li class="navMainBtns"><a href="league_information.php">League Information</a></li>
                     <li class="navMainBtns">Draft Recap</li>   
                 </ul>
             </div>

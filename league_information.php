@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id']))
     $seasonId = $_SESSION['season_id'] ?? null;
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,13 +17,12 @@ if (!isset($_SESSION['user_id']))
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/styles/styles.css">
-    <script src="assets/js/script.js"></script>
+    <script src="script.js"></script>
 
-    <title>Profile</title>
+    <title>League Information</title>
 </head>
 <body>
-    
-     <div class="pageLayout">
+    <div class="pageLayout">
 
         <?php include 'includes/navbar.php';?>
 
@@ -34,16 +32,13 @@ if (!isset($_SESSION['user_id']))
                     <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
                 </div>
                 <div class="pageNameCont">
-                    <div class="pageTitle"> Profile</div>
+                    <div class="pageTitle"> League Information</div>
                 </div>
             </header>
             <div>
                 <main>
                     <section class="contentCont">
-                        <div>
-                            
-                            <button><a href="logout.php">Log Out</a></button>
-                        </div>
+                        
                     </section>
                 </main>
             </div>

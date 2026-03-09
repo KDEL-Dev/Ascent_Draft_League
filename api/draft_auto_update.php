@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 session_start();
 require_once __DIR__ . '/../includes/connection.php';
 
-$season_id = $_SESSION['season_id'] ?? 12; // current season
+$season_id = $_SESSION['season_id'] ?? null; // current season
 $user_id = $_SESSION['user_id'] ?? null;
 
 // Maximum Pokémon per user

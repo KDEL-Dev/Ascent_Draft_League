@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const draftOrderList = document.getElementById("draftOrderList");
     async function loadDraftOrder() {
         try {
-            const response = await fetch("/ascent_draft_league/api/get_draft_order.php");
+            const response = await fetch("/ascent_draft_league/api/draft/get_draft_order.php");
             const data = await response.json();
             renderDraftOrder(data);
         } catch (err) {

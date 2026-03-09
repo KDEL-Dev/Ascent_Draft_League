@@ -1,13 +1,62 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
-if (!isset($_SESSION['user_id'])) 
-    {
-        header("Location: login.php");
-        exit;
-    }
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
 
-    $seasonId = $_SESSION['season_id'] ?? null;
+$seasonId = $_SESSION['season_id'] ?? null;
+
+require_once __DIR__ . '/includes/connection.php';
+
+// Simple query using active_user as team identifier
+$stmt = $conn->prepare("
+    SELECT 
+        u.gamerTag,
+        sp.name,
+        pt.tier
+    FROM roster_pkmn rp
+    JOIN showdown_pkmn sp 
+        ON rp.showdown_pkmn = sp.id
+    LEFT JOIN pkmn_tier pt
+        ON pt.showdown_pkmn_id = sp.id
+        AND pt.season_id = rp.season_id
+    JOIN active_users au
+        ON rp.active_user = au.id
+    JOIN users u
+        ON au.user_id = u.id
+    WHERE rp.season_id = ?
+    ORDER BY u.gamerTag, pt.tier
+");
+
+$stmt->bind_param("i", $seasonId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$teams = [];
+while ($row = $result->fetch_assoc()) {
+    $teams[$row['gamerTag']][] = $row; // now the team name is the gamerTag
+}
+
+$tierOrder = ['OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU','PUBL', 'PU','ZUBL','ZU'];
+
+foreach ($teams as $teamName => &$pokemonList) {
+    usort($pokemonList, function($a, $b) use ($tierOrder) {
+        $posA = array_search(strtoupper($a['tier']), $tierOrder);
+        $posB = array_search(strtoupper($b['tier']), $tierOrder);
+
+        $posA = $posA === false ? count($tierOrder) : $posA;
+        $posB = $posB === false ? count($tierOrder) : $posB;
+
+        return $posA - $posB;
+    });
+}
+unset($pokemonList); // break reference
 ?>
 
 <!DOCTYPE html>
@@ -35,67 +84,32 @@ if (!isset($_SESSION['user_id']))
                     <div class="pageTitle"> Rosters</div>
                 </div>
             </header>
-            <div class="pageLayout">
+            <div>
                 <main>
                     <section class="contentCont">
-                        <div class="teamCont">
-                            <div class="teamName">team1</div>
-                            <ul class="rosterPkmn">
-                                <li class="pkmnNameTier">
-                                    <div>pkmn1</div>
-                                    <div>OU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn2</div>
-                                    <div>OU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn3</div>
-                                    <div>OU</div>
-                                 </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn4</div>
-                                    <div>UU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn5</div>
-                                    <div>UU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn6</div>
-                                    <div>UU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn7</div>
-                                    <div>RU</div>
-                                 </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn8</div>
-                                    <div>RU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn9</div>
-                                    <div>RU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn10</div>
-                                    <div>NU</div>
-                                </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn11</div>
-                                    <div>NU</div>
-                                 </li>
-                                <li class="pkmnNameTier">
-                                    <div>pkmn12</div>
-                                    <div>NU</div>
-                                </li>
-                            </ul>
-                        </div>
+
+                        <?php foreach ($teams as $teamName => $pokemonList): ?>
+                            <div class="teamCont">
+                                <div class="teamName"><?= htmlspecialchars($teamName); ?></div>
+                                <ul class="rosterPkmn">
+                                    <?php foreach ($pokemonList as $pkmn): ?>
+                                        <li class="pkmnNameTier">
+                                            <div><?= htmlspecialchars($pkmn['name']); ?></div>
+                                            <div><?= htmlspecialchars($pkmn['tier']); ?></div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endforeach; ?>
+
                     </section>
                 </main>
+                <?php include 'includes/footer.php'; ?>
             </div>
-            <?php include 'includes/footer.php'; ?>
+            
         </div>
+        
     </div>
+    
 </body>
 </html>

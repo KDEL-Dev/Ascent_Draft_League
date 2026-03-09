@@ -43,12 +43,12 @@ $seasonId = $_SESSION['season_id'] ?? 1;
                 <section id="draftInfoCont">
                     <section id="currentPick">
                         <header>Current Pick</header>
-                        <section id="currentPickInfo">Loading...</section>
+                        <section id="currentPickInfo">Stand By</section>
                     </section>
 
                     <section id="previousPick">
                         <header>Previous Pick</header>
-                        <section id="previousPickInfo">-</section>
+                        <section id="previousPickInfo"></section>
                     </section>
 
                     <section id="draftOrderCont">
@@ -58,10 +58,12 @@ $seasonId = $_SESSION['season_id'] ?? 1;
                             <button id="randomizeBtn">Randomize</button>
                         </section>
                     </section>
+                    <section id="draftAdminBtnCont">
+                        <button id="startDraftBtn" class="adminDraftBtns">Start Draft</button>
+                        <button id="endDraftBtn" class="adminDraftBtns">End Draft</button>
+                    </section>
                 </section>
-                <section>
-                    <button id="startDraftBtn">Start Draft</button>
-                </section>
+                
             </section>
 
             <!-- ---------------- POKEMON TIERS ---------------- -->

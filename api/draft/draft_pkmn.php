@@ -98,7 +98,10 @@ if (empty($users)) {
     exit;
 }
 
+// -----------------
 // Snake draft logic
+// -----------------
+
 $playerCount = count($users);
 $round = ceil($currentPick / $playerCount);
 $indexInRound = ($currentPick - 1) % $playerCount;
@@ -186,32 +189,69 @@ if ($duplicateResult->num_rows > 0) {
     exit;
 }
 
-// ----------------
-// INSERT DRAFT PICK
-// ----------------
-$insertStmt = $conn->prepare("
-    INSERT INTO drafted_pkmn (active_user, season_id, showdown_pkmn, pick_number)
-    VALUES (?, ?, ?, ?)
-");
-$insertStmt->bind_param("iiii", $activeUserId, $seasonId, $pokemonId, $currentPick);
-if (!$insertStmt->execute()) {
+$conn->begin_transaction();
+
+try {
+
+    // ----------------
+    // INSERT DRAFT PICK
+    // ----------------
+    $insertStmt = $conn->prepare("
+        INSERT INTO drafted_pkmn (active_user, season_id, showdown_pkmn, pick_number)
+        VALUES (?, ?, ?, ?)
+    ");
+    $insertStmt->bind_param("iiii", $activeUserId, $seasonId, $pokemonId, $currentPick);
+
+    if (!$insertStmt->execute()) {
+        throw new Exception("Failed to insert draft pick");
+    }
+
+    $insertStmt->close();
+
+
+    // ----------------
+    // INSERT INTO ROSTER
+    // ----------------
+    $rosterStmt = $conn->prepare("
+        INSERT INTO roster_pkmn (season_id, active_user, showdown_pkmn)
+        VALUES (?, ?, ?)
+    ");
+    $rosterStmt->bind_param("iii", $seasonId, $activeUserId, $pokemonId);
+
+    if (!$rosterStmt->execute()) {
+        throw new Exception("Failed to insert roster Pokémon");
+    }
+
+    $rosterStmt->close();
+
+
+    // ----------------
+    // ADVANCE PICK
+    // ----------------
+    $nextPickStmt = $conn->prepare("
+        UPDATE draft_info
+        SET current_pick = current_pick + 1
+        WHERE season_id = ?
+    ");
+    $nextPickStmt->bind_param("i", $seasonId);
+
+    if (!$nextPickStmt->execute()) {
+        throw new Exception("Failed to advance draft pick");
+    }
+
+    $nextPickStmt->close();
+
+
+    // everything succeeded
+    $conn->commit();
+
+} catch (Exception $e) {
+
+    // something failed → undo everything
+    $conn->rollback();
+
     http_response_code(500);
-    echo json_encode(['error' => 'Failed to draft Pokémon']);
+    echo json_encode(['error' => $e->getMessage()]);
     exit;
 }
-$insertStmt->close();
-
-// ----------------
-// ADVANCE PICK
-// ----------------
-$nextPickStmt = $conn->prepare("UPDATE draft_info SET current_pick = current_pick + 1 WHERE season_id = ?");
-$nextPickStmt->bind_param("i", $seasonId);
-$nextPickStmt->execute();
-$nextPickStmt->close();
-
-// ----------------
-// SUCCESS
-// ----------------
-echo json_encode(['status' => 'success', 'pokemon_id' => $pokemonId]);
-exit;
 ?>

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/connection.php';
 session_start();
 
 // Get current season from session (default to 1)
-$seasonId = $_SESSION['season_id'] ?? 1;
+$seasonId = $_SESSION['season_id'] ?? null;
 
 // 1. Get all active users for this season
 $sql = "SELECT user_id FROM active_users WHERE season_id = ?";

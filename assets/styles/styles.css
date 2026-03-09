@@ -13,33 +13,45 @@ body
     background-color: #101010;
 }
 
+
+
 /* Navbar/Main Page Split */
 
 .pageLayout
 {
     display: flex;
     flex-direction: row;
+    height: 100vh; /* page layout and navbar set to the same height */
 }
 
 
 
 .navBar
 {
-    width: 350px;
-    min-height: 1050px;
+    width: 300px;
+    /* min-height: 1050px; */
+    height: 100vh; /* added */
     background-image: linear-gradient(to bottom, black 50%,#094D33);
+    overflow-y: auto; /* if content of page exceeds height than this makes area scrollable */
+    
 
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
+    flex-shrink: 0; /* When narrowing window this area will not shrink*/
 }
 
 .pageContent
 {
-    width: 100%;
-    height: 100%;
-    /* background-color: #101010; */
+    /* width: 100%; */
+    /* height: 100%; */
+
+    flex: 1; /* takes up horizontal space */
+    min-height: 100vh; 
+    overflow-x: hidden; /* no horizontal scroll */
+    overflow-y: auto; /* scroll content vertically */
+
 }
 
 /* Navigation Menu */
@@ -94,11 +106,17 @@ body
     background-color: black;
     border: white solid 1px;
     border-radius: 10px;
+    cursor: pointer;
 
     display: flex;
     justify-content: center;
     align-items: center;
+}
 
+.adminSettingsBtn:hover
+{
+    color: black;
+    background-color: white;
 }
 
 #profileName
@@ -447,7 +465,15 @@ footer
 
 #previousPickInfo
 {
-   
+    height: 100%;
+
+    font-family: "jura";
+    font-size: 1.5em;
+
+    display: flex;               
+    justify-content: center;     
+    align-items: center;         
+    
 }
 
 #draftInfoCont
@@ -520,13 +546,19 @@ footer
     width: 100%;
     min-height: 30px;
 
-    background-color: #094D33;
+    background-color: #000000;
     color: white;
     border: none;
     border-top: white 1px solid; 
     cursor: pointer;
     font-family: "jura"; 
     font-size: 1.25em;  
+}
+
+#draftOrderBtnCont button:hover
+{
+    color: black;
+    background-color: white;
 }
 
 .metaCont
@@ -603,6 +635,35 @@ footer
     font-weight: bold;
 }
 
+#draftAdminBtnCont
+{
+    min-width: 175px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.adminDraftBtns
+{
+    margin: 10px;
+    padding: 10px;
+
+    border: solid 1px white;
+    border-radius: 10px;
+    background-color: black;
+    font-size: 1.5em;
+    font-family: "jura";
+    color: white;
+    cursor: pointer;
+}
+
+.adminDraftBtns:hover
+{
+    color: black;
+    background-color: white;
+
+}
+
 /* Roster */
 
 .contentCont
@@ -613,7 +674,7 @@ footer
 
     background-color: black;
     border-radius: 10px;
-    min-height: 1050px;
+    min-height: 100vh;
 
     display: flex;
     flex-direction: row;
@@ -624,7 +685,7 @@ footer
 {
     margin: 20px;
 
-    width: 400px;
+    width: 450px;
     height: 650px;
     border: solid 1px white;
     border-radius: 10px;
@@ -674,19 +735,25 @@ footer
     align-items: center;
 }
 
+
 .pkmnNameTier div:last-child
 {
-    width: 50px;
+    width: 80px;
     border-left: white 1px solid;
     padding-left: 10px;
     font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Admin Page */
 
-#teamManagement
+.adminSettingsCont
 {
     padding: 20px;
+    margin: 0 20px;
 
     border: white 1px solid;
     height: 400px;
@@ -698,4 +765,12 @@ footer
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.adminSettingsHeader
+{
+    margin-bottom: 10px;
+
+    border-bottom: 2px white solid ;
+
 }

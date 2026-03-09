@@ -16,7 +16,10 @@ if(!$seasonId)
         exit;
     }
 
-// Clear draft for currently set season
+// ----------------    
+// CLEAR DRAFT INFO
+// ----------------
+
 $deleteStmt = $conn->prepare("
     DELETE FROM drafted_pkmn
     WHERE season_id = ?
@@ -24,6 +27,21 @@ $deleteStmt = $conn->prepare("
 $deleteStmt->bind_param("i",$seasonId);
 $deleteStmt->execute();
 $deleteStmt->close();
+
+// -----------------
+// CLEAR ROSTER INFO
+// -----------------
+$rosterStmt = $conn->prepare("
+    DELETE FROM roster_pkmn
+    WHERE season_id = ?
+");
+$rosterStmt->bind_param("i", $seasonId);
+$rosterStmt->execute();
+$rosterStmt->close();
+
+// -------------------
+// UPDATE CURRENT PICK
+// -------------------
 
 $updateStmt = $conn->prepare("
     UPDATE draft_info

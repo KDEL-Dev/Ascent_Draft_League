@@ -1,9 +1,11 @@
 <?php
+session_start();
 header('Content-Type: application/json');
-require_once __DIR__ . '/../includes/connection.php';
+require_once __DIR__ . '/../../includes/connection.php';
 
-$seasonId = $_SESSION['season_id'] ?? 1;
+$seasonId = $_SESSION['season_id'] ?? null;
 
+//could of also just pasted this straight into prepare
 $sql = "
     SELECT u.gamerTag
     FROM active_users au
@@ -15,7 +17,7 @@ $sql = "
 ";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $seasonId); // now properly used
+$stmt->bind_param("i", $seasonId); 
 $stmt->execute();
 $result = $stmt->get_result();
 
