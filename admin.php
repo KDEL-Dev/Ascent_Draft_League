@@ -55,6 +55,9 @@ if (!isset($_SESSION['user_id']))
                             <div>
                                 <button class="adminSettingsBtn">Team Settings</button>
                             </div>
+                            <div>
+                                <button class="adminSettingsBtn" id="editRulesBtn">Edit Rules</button>
+                            </div>
                         </div>
                     </section>
                 </main>

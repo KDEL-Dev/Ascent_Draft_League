@@ -215,35 +215,91 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Load draft order immediately
     await loadDraftOrder();
 
-   
     // -------------------
     // CLEAR DRAFT BUTTON
     // -------------------
 
     const clearDraftBtn = document.getElementById('clearDraftBtn');
+if (clearDraftBtn) {
     clearDraftBtn.addEventListener("click", async () => {
         if(!confirm("Are you sure you want to reset the draft?")) return;
 
-        try
-        {
-           const response = await fetch('api/draft/clear_draft.php',{
-            method: 'POST'
-           });
-
+        try {
+           const response = await fetch('api/draft/clear_draft.php', { method: 'POST' });
            const data = await response.json();
 
-           if(!response.ok)
-           {
-            throw new Error(data.error || "failed to reset draft");
+           if(!response.ok) {
+                throw new Error(data.error || "failed to reset draft");
            }
 
            alert("Draft reset successfully.");
            location.reload();
-        }
-        catch (error)
-        {
+        } catch (error) {
             console.error("Draft reset error", error);
             alert("Error resetting draft")
         }   
     });
+}
+
+
+/*****************************************************************
+                        League Information
+ *****************************************************************/
+
+    function loadRulesFormatFromDb()
+    {
+        fetch('/ascent_draft_league/api/league_information/edit_league_information.php')
+        .then(response => response.json())
+        .then(data => {
+           console.log(data)
+            const ruleList = document.getElementById("ruleList");
+            ruleList.innerHTML = "";
+
+            data.forEach(rule => {
+                const li = document.createElement("li");
+                li.textContent = rule;
+                ruleList.appendChild(li);
+            })
+        })
+        .catch(err => console.error("Rules failed to load:", err));
+    }
+
+    loadRulesFormatFromDb();
+
+
+    function loadRulesToEdit()
+    {
+         fetch('/ascent_draft_league/api/league_information/edit_league_information.php')
+        .then(response => response.json())
+        .then(data => {
+        //    console.log(data)
+
+           const container = document.getElementById('rulesInput')
+           data.forEach(rule => {
+
+                const label = document.createElement("label");
+                label.textContent = `Rule" ${index + 1}`;
+
+                const input = document.createElement("input");
+                input.type = "text";
+                input.name = "rules[]";
+                input.value = rule;
+
+                const br = document.createElement("br");
+
+                container.append(label,input,br);
+           })
+            
+            
+        })
+        .catch(err => console.error("Rules failed to load:", err));
+    }
+
+    loadRulesToEdit();
+
+
+
+
+
+
 });

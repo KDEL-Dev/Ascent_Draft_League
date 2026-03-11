@@ -63,7 +63,7 @@ body
 
 .navMainBtnCont
 {
-    font-family: jura;
+    font-family: "jura";
     color: white;
     list-style: none;
     font-size: 1.5em;
@@ -90,10 +90,16 @@ body
     color: white;
     border: white solid 1px;
     border-radius: 10px;
+    cursor: pointer;
 
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.profileSettingsBtn a
+{
+    font-size: 1.25em;
 }
 
 .adminSettingsBtn
@@ -112,6 +118,18 @@ body
     justify-content: center;
     align-items: center;
 }
+
+.adminSettingsBtn a
+{
+    font-size: 1.25em;
+}
+
+.profileSettingsBtn:hover
+{
+    color: black;
+    background-color: white;
+}
+
 
 .adminSettingsBtn:hover
 {
@@ -748,7 +766,128 @@ footer
     align-items: center;
 }
 
-/* Admin Page */
+/**************************************
+            League Information
+ *************************************/
+
+#leagueInfoCont
+{
+    width: 100%;
+    
+    display: flex;
+    /* align-items: center; */
+    
+    flex-direction: column;
+}
+
+#leagueInfoCont h2
+{
+    margin: 10px 0;
+
+    color:  white;
+    font-family: "jura";
+    font-size: 2em;
+    font-weight: 300;
+    text-decoration: underline;
+}
+
+#leagueInfoCont h3
+{
+    margin: 0;
+
+    color:  white;
+    font-family: "jura";
+    font-weight: 500;
+    font-size: 1.5em;
+}
+
+#leagueInfoCont p
+{
+    color:  white;
+    font-family: "jura";
+    font-weight: 300;
+    font-size: 1.25em;
+}
+
+#leagueInfoCont li
+{
+    color:  white;
+    font-family: "jura";
+    font-weight: 300;
+    font-size: 1.25em;
+}
+
+#leagueInfoRow
+{
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.leagueInfoSect
+{
+    border: white 2px solid;
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+
+   
+}
+
+#whatIsCont
+{
+    width: 70%;
+
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    flex-direction: column;
+}
+
+#whatIsCont p
+{
+    text-align: center;
+}
+
+
+
+#importantDatesCont
+{
+    margin-left: 20px;
+    flex: 1;
+
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+}
+
+#formatRulesCont
+{   
+    margin-top: 20px;
+
+    width: 100%;
+    flex: 1;
+
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+#formatRulesCont p
+{
+    text-align: center;
+}
+
+
+
+/**************************************
+            Admin Page 
+ *************************************/
 
 .adminSettingsCont
 {

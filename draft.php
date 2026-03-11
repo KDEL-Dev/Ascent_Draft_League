@@ -15,7 +15,7 @@ $seasonId = $_SESSION['season_id'] ?? 1;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokebox - Draft</title>
+    <title>Ascent - Draft</title>
     <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
 <body data-gamertag="<?php echo $gamerTag; ?>">
