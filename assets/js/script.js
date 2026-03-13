@@ -242,20 +242,68 @@ if (clearDraftBtn) {
 }
 
 
+/****************************************************************
+                        DRAFT RECAP
+*****************************************************************/
+
+const table = document.getElementById("recapTable")
+
+function displayDraftResults()
+{
+    fetch('/ascent_draft_league/api/draft/get_draft_result.php')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(pick => {
+            const tr = document.createElement("tr");
+
+            const tdPick = document.createElement("td");
+            tdPick.textContent = pick.pick_number;
+
+            const tdName = document.createElement("td");
+            tdName.textContent = pick.name;
+
+            const tdTier = document.createElement("td");
+            tdTier.textContent = pick.tier;
+
+            if(pick.tier === "OU")
+            {
+                tdTier.classList.add("ouBadge")
+            }
+
+            const tdTeam = document.createElement("td");
+            tdTeam.textContent = pick.gamerTag;
+
+            tr.appendChild(tdPick);
+            tr.appendChild(tdName);
+            tr.appendChild(tdTier);
+            tr.appendChild(tdTeam);
+
+            table.appendChild(tr)
+        })
+    })
+    .catch(err => console.error("Failed to load draft results:", err));
+}
+
+displayDraftResults();
+
+
 /*****************************************************************
                         League Information
  *****************************************************************/
 
     function loadRulesFormatFromDb()
     {
-        fetch('/ascent_draft_league/api/league_information/edit_league_information.php')
+        fetch('/ascent_draft_league/api/league_information/get_league_information.php')
         .then(response => response.json())
         .then(data => {
-           console.log(data)
+        //    console.log(data)
             const ruleList = document.getElementById("ruleList");
+
+            if(!ruleList) return;
+
             ruleList.innerHTML = "";
 
-            data.forEach(rule => {
+            data.rules.forEach(rule => {
                 const li = document.createElement("li");
                 li.textContent = rule;
                 ruleList.appendChild(li);
@@ -267,39 +315,91 @@ if (clearDraftBtn) {
     loadRulesFormatFromDb();
 
 
-    function loadRulesToEdit()
-    {
-         fetch('/ascent_draft_league/api/league_information/edit_league_information.php')
-        .then(response => response.json())
+
+    // Open Modal
+    const updateLeagueInfoBtn = document.getElementById("updateLeagueInfoBtn");
+    const modal = document.getElementById("editLeagueInfoModal");
+
+    if(updateLeagueInfoBtn){
+        updateLeagueInfoBtn.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+            loadLeagueInfo();
+        });
+    }
+
+    // Close Modal
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+        modal.classList.add("hidden");
+    })
+
+
+    //Load info into Modal
+
+    function loadLeagueInfo() {
+    fetch('/ascent_draft_league/api/league_information/get_league_information.php')
+        .then(res => res.json())
         .then(data => {
-        //    console.log(data)
 
-           const container = document.getElementById('rulesInput')
-           data.forEach(rule => {
+            // Safely set dates
+            document.getElementById("draftDate").value = data.draft_date || "";
+            document.getElementById("seasonStart").value = data.season_start || "";
 
-                const label = document.createElement("label");
-                label.textContent = `Rule" ${index + 1}`;
-
+            // Load rules into modal
+            const container = document.getElementById("rulesContainer");
+            container.innerHTML = "";
+            data.rules.forEach(rule => {
                 const input = document.createElement("input");
                 input.type = "text";
                 input.name = "rules[]";
                 input.value = rule;
+                container.appendChild(input);
+            });
 
-                const br = document.createElement("br");
-
-                container.append(label,input,br);
-           })
-            
-            
         })
         .catch(err => console.error("Rules failed to load:", err));
-    }
+}
 
-    loadRulesToEdit();
+    document.getElementById("leagueInfoForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
 
+    fetch('/ascent_draft_league/api/league_information/update_league_information.php',{
+        method:"POST",
+        body:formData
+    })
+    // .then(res => res.json())
+    // .then(data => {
+    //     if(data.success){
+    //         alert("League info updated!");
+    //         document.getElementById("editLeagueInfoModal").classList.add("hidden");
+    //     } else {
+    //         alert("Update failed: " + (data.error || "Unknown error"));
+    //     }
+    // })
+    // .catch(err => console.error(err));
 
+    fetch('/ascent_draft_league/api/league_information/update_league_information.php', {
+    method: "POST",
+    body: formData
+    })
+    .then(res => res.text()) // temporarily use text
+    .then(text => console.log(text));
+});
 
+    //Add new rules
 
+    document.getElementById("addRuleBtn").addEventListener("click", () => {
+
+        const container = document.getElementById("rulesContainer");
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = "rules[]";
+        input.placeholder = "Enter new rule";
+
+        container.appendChild(input);
+
+    });
 
 
 });

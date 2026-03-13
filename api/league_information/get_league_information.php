@@ -12,7 +12,21 @@ require_once __DIR__ . '/../../includes/connection.php';
 session_start();
 
 // I store this to use later in query
-$seasonId = $_SESSION['season_id'] ?? null;
+if (!$seasonId) {
+    echo json_encode([
+        "draft_date" => "",
+        "season_start" => "",
+        "rules" => []
+    ]);
+    exit;
+}
+
+// Fetch season start and draft date
+$stmt = $conn->prepare("SELECT start_date, draft_date FROM seasons WHERE season_id = ?");
+$stmt->bind_param("i", $seasonId);
+$stmt->execute();
+$res = $stmt->get_result();
+$seasonData = $res->fetch_assoc();
 
 // save my statement that just grabs all the content from format_rules table
 $stmt = $conn->prepare("
@@ -34,7 +48,12 @@ while($row = $result->fetch_assoc())
     }
 
 // Pushes the info out as JSON
-echo json_encode($ruleFormatList);
+echo json_encode(
+    [
+        "draft_date" => $seasonData["draft_date"] ?? "",
+        "season_start" => $seasonData['start_date'] ?? "",
+        "rules" => $ruleFormatList
+    ]);
 
 
 $conn->close();

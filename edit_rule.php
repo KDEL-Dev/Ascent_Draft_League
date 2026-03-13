@@ -27,8 +27,8 @@
                 <main>
                     <section class="contentCont">
                         <section>                            
-                            <form action="POST" id="myEditForm">
-                                <div id="ruleInputs"></div>
+                            <form method="POST" id="ruleEditForm">
+                                <div id="ruleInput"></div>
 
                                 
                                 <input type="submit">submit</button>

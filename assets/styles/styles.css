@@ -682,6 +682,90 @@ footer
 
 }
 
+/******************************* 
+            DRAFT RECAP
+********************************/
+#recapFlexCont
+{
+    width: 100%;
+}
+
+.tableCont
+{
+    display: flex;
+    justify-content: center;
+}
+
+#recapTable table, 
+#recapTable th, 
+#recapTable td
+{
+    padding: 15px;
+
+    font-size: 2em;
+    font-family: "jura";
+    text-align: center;
+}
+
+#recapTable td
+{
+    border-bottom: 1px solid white;
+
+    /* removing default padding that is on table elements */
+    padding: 5px 10px;
+}
+
+#recapTable td:nth-child(3)
+{
+    margin: 5px;
+}
+
+/* Removes the border bottom of last item */
+#recapTable tr:last-child td
+{
+    border-bottom: none;
+}
+
+#recapTable 
+{
+    border: 1px solid white;
+    /* collapse can only work on table elements */
+    border-collapse: collapse;
+}
+
+
+#recapTable th
+{
+    color: white;
+}
+
+#recapTable td
+{
+    color: white;
+}
+
+.thGradientBg
+{
+    background-image: linear-gradient(to right,#07140F, #258662);
+}
+
+
+
+.ouBadge div
+{    
+    height: 100%;
+
+    background-color: red;
+    border-radius: 15px;  
+}
+
+
+
+
+
+
+
+
 /* Roster */
 
 .contentCont
@@ -912,4 +996,24 @@ footer
 
     border-bottom: 2px white solid ;
 
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modalContent{
+    background:white;
+    padding:25px;
+    width:500px;
+    border-radius:8px;
+}
+
+.hidden{
+    display:none;
 }

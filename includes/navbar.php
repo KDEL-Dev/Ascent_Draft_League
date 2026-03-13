@@ -19,7 +19,7 @@
                     <li class="navMainBtns">Matchups</li>
                     <li class="navMainBtns">Playoffs</li>
                     <li class="navMainBtns"><a href="league_information.php">League Information</a></li>
-                    <li class="navMainBtns">Draft Recap</li>   
+                    <li class="navMainBtns"><a href="draft_recap.php">Draft Recap</a></li>   
                 </ul>
             </div>
             <div class="navSettingsCont">
