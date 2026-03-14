@@ -246,10 +246,12 @@ if (clearDraftBtn) {
                         DRAFT RECAP
 *****************************************************************/
 
+
 const table = document.getElementById("recapTable")
 
 function displayDraftResults()
 {
+
     fetch('/ascent_draft_league/api/draft/get_draft_result.php')
     .then(response => response.json())
     .then(data => {
@@ -285,6 +287,39 @@ function displayDraftResults()
 }
 
 displayDraftResults();
+
+
+/*****************************************************************
+                        OVERVIEW PAGE
+ *****************************************************************/
+
+function loadOverviewRoster()
+{
+    fetch('/ascent_draft_league/api/overview/get_active_user_roster.php')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        const homeRoster = document.getElementById('homePkmnList');
+        homeRoster.innerHTML = '';
+
+        data.forEach(pkmn => {
+            const li = document.createElement("li");
+            li.textContent = pkmn;
+            homeRoster.appendChild(li)
+        })
+    })
+    .catch(err => console.error("Rules failed to load:", err));
+}
+
+loadOverviewRoster();
+
+
+
+
+
+
+
+
 
 
 /*****************************************************************

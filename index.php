@@ -43,23 +43,32 @@ if (!isset($_SESSION['user_id']))
                     </section>
                     <section class="playerDashCont">
                         <div class="sectionTitle">Player Dashboard</div>
-                        <article class="playerDashContent"> No new updates for this league</article>
+                        <article class="playerDashContent"> 
+                            <section id="homeRosterCont">
+                                <section id="homeRosterHeader">Team Name</section>
+                                <section id="homeRosterBox">
+                                    <ul id="homePkmnList">
+                                        <!-- Javascript will load results -->
+                                    </ul>
+                                </section>
+                            </section>
+                        </article>
                     </section>
                 </main>
                 <aside>
-                    <!-- <section id="replayCont">
-                        <div id="sectionTitle">Standings</div>
-                        <div id="killLeader">Will update when league starts</div>
-                    </section> -->
+                    <section id="replayCont">
+                        <div id="sectionTitle">Replay</div>
+                        <div id="miniStandings">Will update after first match</div>
+                    </section>
                     <section id="miniStandingsCont">
                         <div id="sectionTitle">Standings</div>
                         <div id="miniStandings">Will update when league starts</div>
                     </section>
-                    <section>
-                        <div id="killLeaderBoardCont">
+                    <section id="killLeaderBoardCont">
+                     
                             <div id="sectionTitle">Kill Leader</div>
                             <div id="killLeader">Will update when league starts</div>
-                        </div>
+                       
                     </section>
                 </aside>
             </div>

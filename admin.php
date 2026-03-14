@@ -53,6 +53,9 @@ if (!isset($_SESSION['user_id']))
                         <div class="adminSettingsCont">
                             <div class="adminSettingsHeader">League Management</div>
                             <div>
+                                <button class="adminSettingsBtn">Update League News </button>
+                            </div>
+                            <div>
                                 <button class="adminSettingsBtn" id="updateLeagueInfoBtn">Update League Information </button>
                             </div>
                         </div>

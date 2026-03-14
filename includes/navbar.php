@@ -16,7 +16,7 @@
                     <li class="navMainBtns"><a href="draft.php">Draft</a></li>
                     <li class="navMainBtns">Standings</li>
                     <li class="navMainBtns">Statistics</li>
-                    <li class="navMainBtns">Matchups</li>
+                    <li class="navMainBtns"><a href="matchup.php">Matchups</a></li>
                     <li class="navMainBtns">Playoffs</li>
                     <li class="navMainBtns"><a href="league_information.php">League Information</a></li>
                     <li class="navMainBtns"><a href="draft_recap.php">Draft Recap</a></li>   

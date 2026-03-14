@@ -270,7 +270,9 @@ body
     font-size: 4.5em;
 }
 
-/* Main Page Content */
+/***********************************
+            Main Page Content 
+ ***********************************/
 
 main
 {
@@ -320,6 +322,8 @@ main
 
 .playerDashContent
 {
+    /* height: 100%; */
+    
     color: white;
     min-height: 400px;
     font-family: "jura";
@@ -329,13 +333,72 @@ main
     align-items: center;;
 }
 
+#homeRosterCont
+{
+    
+    width: 350px;
 
+    border: white solid 1px;
+    border-radius: 10px;
+}
+
+#homeRosterHeader
+{
+    text-align: center;
+    font-size: 2em;
+    
+}
+
+#homeRosterBox ul
+{
+    margin: 0;
+    padding: 15px;
+
+    
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(6,auto);
+
+}
+
+#homeRosterBox li
+{
+    padding: 5px;
+    
+    list-style: none;
+    font-size: 1.25em;
+
+    border: 1px solid white;
+}
+
+#homeRosterBox li:nth-child(-n + 6)
+{
+    border-right: none;
+}
+
+#replayCont
+{
+    margin: 30px 20px;
+    width: 250px;
+    min-height: 150px;
+
+    background-color: black;
+    color: white;
+    font-family: "zen dots";
+    font-size: 1.5em;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
 
 #miniStandingsCont
 {
     margin: 30px 20px;
     width: 250px;
-    height: 550px;
+    min-height: 400px;
 
     background-color: black;
     color: white;
@@ -363,7 +426,8 @@ main
 {
     margin: 30px 20px;
     width: 250px;
-    height: 300px;
+    min-height: 200px;
+    flex: 1;
 
     background-color: black;
     color: white;
@@ -401,6 +465,8 @@ footer
     justify-content: center;
     align-items: center;
 }
+
+
 /*******************/
 /***** DRAFT *******/
 /*******************/
@@ -966,6 +1032,138 @@ footer
 {
     text-align: center;
 }
+
+
+/**************************************
+            MATCHUP PAGE 
+ *************************************/
+
+#matchupCont
+{
+    width: 100%;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.contentBtnCont
+{
+    
+    margin-bottom: 20px;
+    padding-bottom:20px;
+
+    border-bottom: 1px solid white;
+}
+
+.editDeleteMatchCont
+{
+    max-width: 800px;
+    min-height: 320px;
+
+    padding: 10px;
+
+    border: white 1px solid;
+    border-radius: 10px;
+
+    text-align: end;
+}
+
+.editDeleteMatchCont button
+{
+    margin-bottom: 10px;
+}
+
+.matchBox
+{
+    font-size: 1.1em;
+    font-family: "jura";
+
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.matchUpPlayerInfo
+{
+    width: 100%;
+
+    text-align: center;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+.matchUpStats
+{
+    border: 1px solid white;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.matchUpTeamName
+{
+    font-size: 1.5em;
+    border-bottom: 1px solid white;
+}
+
+.matchUpHeader th
+{
+    font-size: .75em;
+}
+
+.matchName
+{
+    text-align: left;
+    padding-left: 10px;
+}
+
+.matchUpPlayerInfo td
+{
+    border-top: 1px solid white;
+    border-right: 1px solid white;
+}
+
+
+
+.vsCont
+{
+    width: 175px;
+
+    font-size: 2.5em;
+    border-top: white 1px solid;
+    border-bottom: white 1px solid;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.matchResultCont
+{
+    font-size: 1.5em;
+    border-top: 1px solid white;
+}
+
+.replayCont
+{
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    font-family: "jura";
+    font-size: 2em;
+}
+
+.replayCont:hover
+{
+    cursor: pointer;
+}
+
 
 
 
