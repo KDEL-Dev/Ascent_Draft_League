@@ -298,7 +298,7 @@ function loadOverviewRoster()
     fetch('/ascent_draft_league/api/overview/get_active_user_roster.php')
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         const homeRoster = document.getElementById('homePkmnList');
         homeRoster.innerHTML = '';
 
@@ -350,7 +350,6 @@ loadOverviewRoster();
     loadRulesFormatFromDb();
 
 
-
     // Open Modal
     const updateLeagueInfoBtn = document.getElementById("updateLeagueInfoBtn");
     const modal = document.getElementById("editLeagueInfoModal");
@@ -361,15 +360,17 @@ loadOverviewRoster();
             loadLeagueInfo();
         });
     }
-
+    
     // Close Modal
-    document.getElementById("closeModalBtn").addEventListener("click", () => {
-        modal.classList.add("hidden");
-    })
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    if (closeModalBtn) {
+            closeModalBtn.addEventListener("click", () => {
+            modal.classList.add("hidden");
+            });
+        }
 
 
     //Load info into Modal
-
     function loadLeagueInfo() {
     fetch('/ascent_draft_league/api/league_information/get_league_information.php')
         .then(res => res.json())
@@ -394,45 +395,295 @@ loadOverviewRoster();
         .catch(err => console.error("Rules failed to load:", err));
 }
 
-    document.getElementById("leagueInfoForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    const formData = new FormData(this);
 
-    fetch('/ascent_draft_league/api/league_information/update_league_information.php',{
-        method:"POST",
-        body:formData
-    })
-    // .then(res => res.json())
-    // .then(data => {
-    //     if(data.success){
-    //         alert("League info updated!");
-    //         document.getElementById("editLeagueInfoModal").classList.add("hidden");
-    //     } else {
-    //         alert("Update failed: " + (data.error || "Unknown error"));
-    //     }
-    // })
-    // .catch(err => console.error(err));
+    const leagueInfoForm = document.getElementById("leagueInfoForm");
+if (leagueInfoForm) {
+    leagueInfoForm.addEventListener("submit", function(e){
+        e.preventDefault();
+        const formData = new FormData(this);
 
-    fetch('/ascent_draft_league/api/league_information/update_league_information.php', {
-    method: "POST",
-    body: formData
-    })
-    .then(res => res.text()) // temporarily use text
-    .then(text => console.log(text));
-});
+        fetch('/ascent_draft_league/api/league_information/update_league_information.php', {
+            method:"POST",
+            body:formData
+        })
+        .then(res => res.text())
+        .then(text => console.log(text));
+    });
+}
+
 
     //Add new rules
 
-    document.getElementById("addRuleBtn").addEventListener("click", () => {
 
-        const container = document.getElementById("rulesContainer");
+    const addRuleBtn = document.getElementById("addRuleBtn")
 
-        const input = document.createElement("input");
-        input.type = "text";
-        input.name = "rules[]";
-        input.placeholder = "Enter new rule";
+        if(addRuleBtn){
+            addRuleBtn.addEventListener("click", () => {
+                const container = document.getElementById("rulesContainer");
 
-        container.appendChild(input);
+                const input = document.createElement("input");
+                input.type = "text";
+                input.name = "rules[]";
+                input.placeholder = "Enter new rule";
+
+                container.appendChild(input);
+        })
+    };
+
+
+
+/*****************************************************************
+                        Matchup Page
+ *****************************************************************/
+
+    async function loadActiveTeams() {
+        
+        const res = await fetch('/ascent_draft_league/api/matchup/get_active_teams.php');
+        const teams = await res.json();
+        // console.log('Teams fetched:', teams); 
+        const teamOne = document.getElementById('teamOneSelect');
+        const teamTwo = document.getElementById('teamTwoSelect');
+        teams.forEach(team => {
+            const option1 = document.createElement('option');
+            option1.value = team.active_user_id;
+            option1.textContent = team.gamerTag;
+            teamOne.appendChild(option1);
+
+            const option2 = document.createElement('option');
+            option2.value = team.active_user_id;
+            option2.textContent = team.gamerTag;
+            teamTwo.appendChild(option2);
+        });
+    }
+
+    loadActiveTeams();
+
+
+
+    document.getElementById('loadSelectedTeamsBtn').addEventListener('click', async () => {
+
+        const team1Id = document.getElementById('teamOneSelect').value;
+        const team2Id = document.getElementById('teamTwoSelect').value;
+
+        if(!team1Id || !team2Id) return alert("Select both teams");
+
+        const res1 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
+        const team1Pkmn = await res1.json();
+
+        const res2 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team2Id}`);
+        const team2Pkmn = await res2.json();
+
+        renderPokemonSelection('team1Container', team1Pkmn, 1);
+        renderPokemonSelection('team2Container', team2Pkmn, 2);
+
+    });
+
+    
+    
+    
+    function renderPokemonSelection(containerId, pokemonList, team) {
+
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        pokemonList.forEach(p => {
+
+            const li = document.createElement('li');
+            li.textContent = p.name;
+            li.dataset.rosterPkmnId = p.roster_pkmn_id;
+
+            li.addEventListener('click', () => {
+
+                const tableId = team === 1 ? "team1MatchTable" : "team2MatchTable";
+                const currentCount = document.querySelectorAll(`#${tableId} tr`).length;
+
+                // If trying to add a new Pokémon but already at 6
+                if (!li.classList.contains('selected') && currentCount >= 6) {
+                    alert("You can only select 6 Pokémon per team.");
+                    return;
+                }
+
+                li.classList.toggle('selected');
+
+                if (li.classList.contains('selected')) {
+                    addPokemonToTable(p, team);
+                } else {
+                    removePokemonFromTable(p.roster_pkmn_id);
+                }
+
+            });
+
+            container.appendChild(li);
+
+        });
+
+    }
+
+    
+
+
+
+
+
+    function addPokemonToTable(pokemon, team) {
+
+        const tableId = team === 1 ? "team1MatchTable" : "team2MatchTable";
+        const table = document.getElementById(tableId);
+
+        if (document.getElementById(`pkmn-${pokemon.roster_pkmn_id}`)) return;
+
+        const tr = document.createElement('tr');
+        tr.id = `pkmn-${pokemon.roster_pkmn_id}`;
+
+        const tdName = document.createElement('td');
+        tdName.textContent = pokemon.name;
+
+        const tdKills = document.createElement('td');
+        const killsInput = document.createElement('input');
+        killsInput.type = "number";
+        killsInput.value = 0;
+        killsInput.classList.add("killsInput");
+
+        const tdDeaths = document.createElement('td');
+        const deathsInput = document.createElement('input');
+        deathsInput.type = "number";
+        deathsInput.value = 0;
+        deathsInput.classList.add("deathsInput");
+
+        tdKills.appendChild(killsInput);
+        tdDeaths.appendChild(deathsInput);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdKills);
+        tr.appendChild(tdDeaths);
+
+        table.appendChild(tr);
+
+        updateTeamCount(team);
+    }
+
+
+
+    function removePokemonFromTable(rosterId){
+
+        const row = document.getElementById(`pkmn-${rosterId}`);
+        if(!row) return;
+
+        const table = row.closest("tbody");
+        const team = table.id === "team1MatchTable" ? 1 : 2;
+
+        row.remove();
+
+        updateTeamCount(team);
+
+    }
+
+
+    function updateTeamCount(team){
+
+        const tableId = team === 1 ? "team1MatchTable" : "team2MatchTable";
+        const countId = team === 1 ? "team1Count" : "team2Count";
+
+        const currentCount = document.querySelectorAll(`#${tableId} tr`).length;
+
+        document.getElementById(countId).textContent =
+            `Team ${team} (${currentCount} / 6 selected)`;
+
+    }
+
+
+
+    // SUBMISSION
+    document.getElementById('add_matchup_form').addEventListener('submit', async e => {
+        e.preventDefault();
+
+        const player1 = document.getElementById('teamOneSelect').value;
+        const player2 = document.getElementById('teamTwoSelect').value;
+
+        // Gather Pokémon stats
+        const stats = [];
+        ['team1MatchTable','team2MatchTable'].forEach(tableId => {
+            document.querySelectorAll(`#${tableId} tr`).forEach(row => {
+                const rosterId = row.id.replace("pkmn-", "");
+                const kills = row.querySelector(".killsInput").value;
+                const deaths = row.querySelector(".deathsInput").value;
+                stats.push({
+                    roster_pkmn_id: rosterId,
+                    kills: parseInt(kills),
+                    deaths: parseInt(deaths),
+                    used: 1
+                });
+            });
+        });
+
+        // Send everything to the single PHP file
+        try {
+            const res = await fetch('/ascent_draft_league/api/matchup/submit_matchup.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ player1, player2, stats })
+            });
+
+            const data = await res.json();
+
+            if (data.status === "success") {
+                alert("Matchup saved!");
+                // Redirect back to matchup.php
+                window.location.href = '/ascent_draft_league/matchup.php';
+            }
+            else
+            {
+                alert("Error: " + data.message);
+            }
+        } 
+        catch(err) 
+        {
+            alert("Network or server error: " + err.message);
+        }
+    });
+    
+    document.addEventListener("DOMContentLoaded", () => {
+
+    // -----------------------------
+    // DELETE MATCHUP USING DELEGATION
+    // -----------------------------
+    document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("deleteMatchBtn")) {
+                const btn = e.target;
+                const matchId = btn.dataset.matchId;
+                if (!matchId) return alert("Matchup ID missing!");
+
+                if (!confirm("Are you sure you want to delete this matchup?")) return;
+
+                try {
+                    const res = await fetch("/ascent_draft_league/api/matchup/delete_matchup.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ matchup_id: matchId })
+                    });
+
+                    const data = await res.json();
+                    if (data.status === "success") {
+                        alert("Matchup deleted!");
+                        // Remove the matchup section
+                        const container = btn.closest(".editDeleteMatchCont");
+                        if (container) container.remove();
+                    } else {
+                        alert("Error: " + (data.message || "Unknown error"));
+                    }
+                } catch (err) {
+                    alert("Network error: " + err.message);
+                }
+            }
+
+            // EDIT BUTTON
+            if (e.target.classList.contains("editMatchBtn")) {
+                const matchId = e.target.dataset.matchId;
+                if (!matchId) return;
+                // Redirect to edit page with query param
+                window.location.href = `/ascent_draft_league/edit_matchup.php?matchup_id=${matchId}`;
+            }
+        });
 
     });
 

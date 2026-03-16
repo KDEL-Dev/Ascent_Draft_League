@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 10, 2026 at 03:39 AM
+-- Generation Time: Mar 16, 2026 at 02:13 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -81,7 +81,8 @@ INSERT INTO `drafted_pkmn` (`id`, `season_id`, `active_user`, `showdown_pkmn`, `
 (95, 999, 9, 7189, 13, '2026-03-07 16:29:08'),
 (96, 999, 10, 7132, 14, '2026-03-07 16:29:14'),
 (97, 999, 10, 7422, 15, '2026-03-07 16:29:15'),
-(98, 999, 9, 7158, 16, '2026-03-08 11:17:02');
+(98, 999, 9, 7158, 16, '2026-03-08 11:17:02'),
+(99, 999, 9, 7500, 17, '2026-03-12 20:26:41');
 
 -- --------------------------------------------------------
 
@@ -105,7 +106,26 @@ CREATE TABLE `draft_info` (
 
 INSERT INTO `draft_info` (`id`, `season_id`, `current_pick`, `total_picks`, `direction`, `created_at`, `updated_at`) VALUES
 (1, 12, 1, 0, 'up', '2026-02-23 21:47:29', '2026-03-03 20:03:38'),
-(2, 999, 17, 2, 'up', '2026-03-03 20:47:36', '2026-03-08 15:17:02');
+(2, 999, 18, 2, 'up', '2026-03-03 20:47:36', '2026-03-13 00:26:41');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `format_rules`
+--
+
+CREATE TABLE `format_rules` (
+  `id` int(11) NOT NULL,
+  `content` text,
+  `season_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `format_rules`
+--
+
+INSERT INTO `format_rules` (`id`, `content`, `season_id`) VALUES
+(21, 'new new rule 1', 999);
 
 -- --------------------------------------------------------
 
@@ -1143,6 +1163,75 @@ INSERT INTO `legacy_stats_seasons` (`id`, `team_a`, `team_b`, `win`, `loss`, `se
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `matchup`
+--
+
+CREATE TABLE `matchup` (
+  `id` int(11) NOT NULL,
+  `season_id` int(11) NOT NULL,
+  `player1_active_user_id` int(11) NOT NULL,
+  `player2_active_user_id` int(11) NOT NULL,
+  `winner_active_user_id` int(11) DEFAULT NULL,
+  `replay_link` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `matchup`
+--
+
+INSERT INTO `matchup` (`id`, `season_id`, `player1_active_user_id`, `player2_active_user_id`, `winner_active_user_id`, `replay_link`, `created_at`) VALUES
+(1, 999, 9, 10, NULL, NULL, '2026-03-15 19:13:39'),
+(2, 999, 10, 9, NULL, NULL, '2026-03-15 19:21:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `match_pokemon_stats`
+--
+
+CREATE TABLE `match_pokemon_stats` (
+  `id` int(11) NOT NULL,
+  `matchup_id` int(11) NOT NULL,
+  `roster_pkmn_id` int(11) NOT NULL,
+  `kills` int(11) DEFAULT '0',
+  `deaths` int(11) DEFAULT '0',
+  `used` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `match_pokemon_stats`
+--
+
+INSERT INTO `match_pokemon_stats` (`id`, `matchup_id`, `roster_pkmn_id`, `kills`, `deaths`, `used`) VALUES
+(1, 1, 49, 0, 1, 1),
+(2, 1, 56, 0, 1, 1),
+(3, 1, 64, 0, 1, 1),
+(4, 1, 52, 1, 1, 1),
+(5, 1, 53, 0, 1, 1),
+(6, 1, 61, 1, 1, 1),
+(7, 1, 55, 0, 1, 1),
+(8, 1, 62, 1, 1, 1),
+(9, 1, 50, 2, 0, 1),
+(10, 1, 51, 1, 0, 1),
+(11, 1, 54, 1, 0, 1),
+(12, 1, 58, 1, 0, 1),
+(13, 2, 63, 1, 1, 1),
+(14, 2, 59, 1, 1, 1),
+(15, 2, 58, 1, 1, 1),
+(16, 2, 54, 1, 1, 1),
+(17, 2, 51, 1, 1, 1),
+(18, 2, 50, 1, 0, 1),
+(19, 2, 65, 1, 1, 1),
+(20, 2, 60, 1, 1, 1),
+(21, 2, 57, 1, 1, 1),
+(22, 2, 61, 1, 1, 1),
+(23, 2, 53, 1, 1, 1),
+(24, 2, 52, 0, 1, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pkmn_tier`
 --
 
@@ -2071,7 +2160,8 @@ INSERT INTO `roster_pkmn` (`id`, `active_user`, `showdown_pkmn`, `season_id`, `i
 (61, 9, 7189, 999, 1, '2026-03-07 16:29:08'),
 (62, 10, 7132, 999, 1, '2026-03-07 16:29:14'),
 (63, 10, 7422, 999, 1, '2026-03-07 16:29:15'),
-(64, 9, 7158, 999, 1, '2026-03-08 11:17:02');
+(64, 9, 7158, 999, 1, '2026-03-08 11:17:02'),
+(65, 9, 7500, 999, 1, '2026-03-12 20:26:41');
 
 -- --------------------------------------------------------
 
@@ -2086,16 +2176,17 @@ CREATE TABLE `seasons` (
   `start_date` datetime DEFAULT NULL,
   `playoff_date` datetime DEFAULT NULL,
   `created` datetime NOT NULL,
-  `is_active` tinyint(1) DEFAULT '0'
+  `is_active` tinyint(1) DEFAULT '0',
+  `draft_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `seasons`
 --
 
-INSERT INTO `seasons` (`season_id`, `league_id`, `season_number`, `start_date`, `playoff_date`, `created`, `is_active`) VALUES
-(12, 1, 12, NULL, NULL, '2026-03-03 13:14:50', 0),
-(999, 1, 999, NULL, NULL, '2026-03-03 19:44:38', 1);
+INSERT INTO `seasons` (`season_id`, `league_id`, `season_number`, `start_date`, `playoff_date`, `created`, `is_active`, `draft_date`) VALUES
+(12, 1, 12, NULL, NULL, '2026-03-03 13:14:50', 0, NULL),
+(999, 1, 999, '2026-03-16 00:00:00', NULL, '2026-03-03 19:44:38', 1, '2026-03-23');
 
 -- --------------------------------------------------------
 
@@ -3047,10 +3138,35 @@ ALTER TABLE `draft_info`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `format_rules`
+--
+ALTER TABLE `format_rules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `season_id` (`season_id`);
+
+--
 -- Indexes for table `leagues`
 --
 ALTER TABLE `leagues`
   ADD PRIMARY KEY (`league_id`);
+
+--
+-- Indexes for table `matchup`
+--
+ALTER TABLE `matchup`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `season_id` (`season_id`),
+  ADD KEY `player1_active_user_id` (`player1_active_user_id`),
+  ADD KEY `player2_active_user_id` (`player2_active_user_id`),
+  ADD KEY `winner_active_user_id` (`winner_active_user_id`);
+
+--
+-- Indexes for table `match_pokemon_stats`
+--
+ALTER TABLE `match_pokemon_stats`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `matchup_id` (`matchup_id`),
+  ADD KEY `roster_pkmn_id` (`roster_pkmn_id`);
 
 --
 -- Indexes for table `pkmn_tier`
@@ -3103,7 +3219,7 @@ ALTER TABLE `active_users`
 -- AUTO_INCREMENT for table `drafted_pkmn`
 --
 ALTER TABLE `drafted_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `draft_info`
@@ -3112,10 +3228,28 @@ ALTER TABLE `draft_info`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `format_rules`
+--
+ALTER TABLE `format_rules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
 -- AUTO_INCREMENT for table `leagues`
 --
 ALTER TABLE `leagues`
   MODIFY `league_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `matchup`
+--
+ALTER TABLE `matchup`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `match_pokemon_stats`
+--
+ALTER TABLE `match_pokemon_stats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `pkmn_tier`
@@ -3127,7 +3261,7 @@ ALTER TABLE `pkmn_tier`
 -- AUTO_INCREMENT for table `roster_pkmn`
 --
 ALTER TABLE `roster_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `seasons`
@@ -3163,6 +3297,28 @@ ALTER TABLE `active_users`
 ALTER TABLE `drafted_pkmn`
   ADD CONSTRAINT `drafted_pkmn_ibfk_1` FOREIGN KEY (`active_user`) REFERENCES `active_users` (`id`),
   ADD CONSTRAINT `drafted_pkmn_ibfk_2` FOREIGN KEY (`showdown_pkmn`) REFERENCES `showdown_pkmn` (`id`);
+
+--
+-- Constraints for table `format_rules`
+--
+ALTER TABLE `format_rules`
+  ADD CONSTRAINT `format_rules_ibfk_1` FOREIGN KEY (`season_id`) REFERENCES `seasons` (`season_id`);
+
+--
+-- Constraints for table `matchup`
+--
+ALTER TABLE `matchup`
+  ADD CONSTRAINT `matchup_ibfk_1` FOREIGN KEY (`season_id`) REFERENCES `seasons` (`season_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `matchup_ibfk_2` FOREIGN KEY (`player1_active_user_id`) REFERENCES `active_users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `matchup_ibfk_3` FOREIGN KEY (`player2_active_user_id`) REFERENCES `active_users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `matchup_ibfk_4` FOREIGN KEY (`winner_active_user_id`) REFERENCES `active_users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `match_pokemon_stats`
+--
+ALTER TABLE `match_pokemon_stats`
+  ADD CONSTRAINT `match_pokemon_stats_ibfk_1` FOREIGN KEY (`matchup_id`) REFERENCES `matchup` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `match_pokemon_stats_ibfk_2` FOREIGN KEY (`roster_pkmn_id`) REFERENCES `roster_pkmn` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pkmn_tier`

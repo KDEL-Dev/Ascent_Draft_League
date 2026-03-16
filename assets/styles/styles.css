@@ -840,6 +840,9 @@ footer
     
     padding: 40px;
 
+
+    color: white;
+    font-family: "jura";
     background-color: black;
     border-radius: 10px;
     min-height: 100vh;
@@ -1049,6 +1052,15 @@ footer
 
 }
 
+#matchupResultCont
+{
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .contentBtnCont
 {
     
@@ -1060,9 +1072,10 @@ footer
 
 .editDeleteMatchCont
 {
-    max-width: 800px;
+    width: 625px;
     min-height: 320px;
 
+    margin: 10px;
     padding: 10px;
 
     border: white 1px solid;
@@ -1120,6 +1133,7 @@ footer
 {
     text-align: left;
     padding-left: 10px;
+    height: 50px;
 }
 
 .matchUpPlayerInfo td
@@ -1152,7 +1166,7 @@ footer
 .replayCont
 {
     width: 100%;
-    height: 100%;
+    height: 40px;
 
     text-align: center;
     font-family: "jura";
