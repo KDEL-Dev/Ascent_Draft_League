@@ -557,34 +557,83 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-    // Edit Matchup Form
-    document.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('editMatchBtn')) return;
+
+        // EDIT MATCHUP
+    document.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("editMatchBtn")) return;
 
         const matchId = e.target.dataset.matchId;
         if (!matchId) return;
 
+        // 🔥 redirect to edit page
         window.location.href = `/ascent_draft_league/edit_matchup.php?matchup_id=${matchId}`;
     });
 
-    function initEditMatchupForm() {
-        const form = document.getElementById('edit_matchup_form');
-        if (!form) return;
 
-        form.addEventListener('submit', async e => {
+    async function loadEditMatchup() {
+        if (typeof matchupId === "undefined") return;
+
+        try {
+            const res = await fetch(`/ascent_draft_league/api/matchup/get_matchup.php?matchup_id=${matchupId}`);
+            const data = await res.json();
+
+            if (data.status !== "success") {
+                alert(data.message);
+                return;
+            }
+
+            document.getElementById("replayLink").value = data.matchup.replay_link;
+
+            renderEditTable("team1Body", data.team1);
+            renderEditTable("team2Body", data.team2);
+
+        } catch (err) {
+            console.error("Failed to load matchup:", err);
+        }
+    }
+
+    function renderEditTable(containerId, team) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        team.forEach(p => {
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${p.pokemon_name}</td>
+                <td><input type="number" name="kills[${p.roster_pkmn_id}]" value="${p.kills}"></td>
+                <td><input type="number" name="deaths[${p.roster_pkmn_id}]" value="${p.deaths}"></td>
+            `;
+
+            container.appendChild(tr);
+        });
+    }
+
+    loadEditMatchup();
+
+
+    // test
+
+    const editForm = document.getElementById('edit_matchup_form');
+
+    if (editForm) {
+        editForm.addEventListener('submit', async e => {
             e.preventDefault();
 
-            const formData = new FormData(form);
+            const formData = new FormData(editForm);
+
             const data = {
                 matchup_id: formData.get('matchup_id'),
                 replay_link: formData.get('replay_link'),
                 stats: []
             };
 
-            // Collect kills/deaths inputs
             for (const [key, value] of formData.entries()) {
                 if (key.startsWith('kills[')) {
                     const rosterId = key.match(/\d+/)[0];
+
                     data.stats.push({
                         roster_pkmn_id: rosterId,
                         kills: parseInt(value),
@@ -599,16 +648,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
+
                 const result = await res.json();
+
                 if (result.status === "success") {
                     alert("Matchup updated!");
                     window.location.href = '/ascent_draft_league/matchup.php';
                 } else {
                     alert("Error: " + result.message);
                 }
-            } catch(err) {
+
+            } catch (err) {
+                console.error(err);
                 alert("Network error: " + err.message);
             }
         });
     }
+
 });

@@ -1,5 +1,4 @@
 <?php
-require_once 'includes/connection.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -7,44 +6,11 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$seasonId = $_SESSION['season_id'] ?? null;
 $matchupId = $_GET['matchup_id'] ?? null;
-
 if (!$matchupId) {
     echo "Matchup not specified";
     exit;
 }
-
-// Fetch matchup info
-$stmt = $conn->prepare("SELECT * FROM matchup WHERE id = ?");
-$stmt->bind_param("i", $matchupId);
-$stmt->execute();
-$matchup = $stmt->get_result()->fetch_assoc();
-if (!$matchup) exit("Matchup not found");
-
-// Fetch Team 1 Pokémon
-$stmt1 = $conn->prepare("
-    SELECT mps.*, sd.name AS pokemon_name
-    FROM match_pokemon_stats mps
-    JOIN roster_pkmn rp ON mps.roster_pkmn_id = rp.id
-    JOIN showdown_pkmn sd ON rp.showdown_pkmn = sd.id
-    WHERE mps.matchup_id = ? AND rp.active_user = ?
-");
-$stmt1->bind_param("ii", $matchupId, $matchup['player1_active_user_id']);
-$stmt1->execute();
-$team1Pkmn = $stmt1->get_result()->fetch_all(MYSQLI_ASSOC);
-
-// Fetch Team 2 Pokémon
-$stmt2 = $conn->prepare("
-    SELECT mps.*, sd.name AS pokemon_name
-    FROM match_pokemon_stats mps
-    JOIN roster_pkmn rp ON mps.roster_pkmn_id = rp.id
-    JOIN showdown_pkmn sd ON rp.showdown_pkmn = sd.id
-    WHERE mps.matchup_id = ? AND rp.active_user = ?
-");
-$stmt2->bind_param("ii", $matchupId, $matchup['player2_active_user_id']);
-$stmt2->execute();
-$team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -56,17 +22,13 @@ $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 <title>Edit Matchup</title>
 </head>
 <body>
+
 <div class="pageLayout">
     <?php include 'includes/navbar.php'; ?>
 
     <div class="pageContent">
         <header class="headerCont">
-            <div class="seasonCont">
-                <div class="seasonBtn">Season <?= htmlspecialchars($seasonId) ?></div>
-            </div>
-            <div class="pageNameCont">
-                <div class="pageTitle"> Edit Matchup</div>
-            </div>
+            <div class="pageTitle">Edit Matchup</div>
         </header>
 
         <main>
@@ -82,15 +44,7 @@ $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th>Deaths</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php foreach ($team1Pkmn as $p): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($p['pokemon_name']) ?></td>
-                            <td><input type="number" name="kills[<?= $p['roster_pkmn_id'] ?>]" value="<?= $p['kills'] ?>"></td>
-                            <td><input type="number" name="deaths[<?= $p['roster_pkmn_id'] ?>]" value="<?= $p['deaths'] ?>"></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                    <tbody id="team1Body"></tbody>
                 </table>
 
                 <h3>Team 2 Pokémon</h3>
@@ -102,19 +56,11 @@ $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
                             <th>Deaths</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php foreach ($team2Pkmn as $p): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($p['pokemon_name']) ?></td>
-                            <td><input type="number" name="kills[<?= $p['roster_pkmn_id'] ?>]" value="<?= $p['kills'] ?>"></td>
-                            <td><input type="number" name="deaths[<?= $p['roster_pkmn_id'] ?>]" value="<?= $p['deaths'] ?>"></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                    <tbody id="team2Body"></tbody>
                 </table>
 
-                <label for="replayLink">Showdown Replay</label>
-                <input type="text" id="replayLink" name="replay_link" value="<?= htmlspecialchars($matchup['replay_link']) ?>">
+                <label>Replay</label>
+                <input type="text" name="replay_link" id="replayLink">
 
                 <button type="submit">Save Changes</button>
             </form>
@@ -122,10 +68,10 @@ $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
     </div>
 </div>
 
-<script src="assets/js/script.js"></script>
 <script>
-    // Initialize the edit matchup form script
-    initEditMatchupForm();
+const matchupId = <?= json_encode($matchupId) ?>;
 </script>
+<script src="assets/js/script.js"></script>
+
 </body>
 </html>
