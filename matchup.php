@@ -84,7 +84,7 @@ while ($row = $result->fetch_assoc()) {
                                     ?>
                                     
                                     <section class="editDeleteMatchCont">
-                                        <button>edit</button>
+                                        <button class="editMatchBtn" data-match-id="<?= $match['id'] ?>">Edit</button>
                                         <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
                                         <section class="matchBox">
                                             <section class="matchUpPlayerInfo">

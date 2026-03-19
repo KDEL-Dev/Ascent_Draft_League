@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+
 require_once __DIR__ . '/../../includes/connection.php';
 session_start();
 
@@ -10,8 +15,7 @@ if (!$data) {
     exit;
 }
 
-var_dump($data);
-exit;
+
 
 $player1 = $data['player1'] ?? null;
 $player2 = $data['player2'] ?? null;
