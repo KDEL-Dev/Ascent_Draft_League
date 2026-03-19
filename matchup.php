@@ -82,6 +82,7 @@ while ($row = $result->fetch_assoc()) {
                                         $stmt2->execute();
                                         $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
                                     ?>
+                                    
                                     <section class="editDeleteMatchCont">
                                         <button>edit</button>
                                         <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
@@ -139,7 +140,9 @@ while ($row = $result->fetch_assoc()) {
                                             </section>
                                         </section>
                                         <section class="replayCont">
-                                            <?= htmlspecialchars($match['replay_link']) ?> 
+                                            <a href="<?= htmlspecialchars($match['replay_link']) ?>" target="_blank">
+                                                Replay
+                                            </a>
                                         </section>
                                     </section>
                                 <?php endforeach; ?>

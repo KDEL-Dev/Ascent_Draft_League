@@ -443,6 +443,10 @@ if (leagueInfoForm) {
         // console.log('Teams fetched:', teams); 
         const teamOne = document.getElementById('teamOneSelect');
         const teamTwo = document.getElementById('teamTwoSelect');
+
+        if(!teamOne || !teamTwo) return;
+
+
         teams.forEach(team => {
             const option1 = document.createElement('option');
             option1.value = team.active_user_id;
@@ -465,16 +469,22 @@ if (leagueInfoForm) {
         const team1Id = document.getElementById('teamOneSelect').value;
         const team2Id = document.getElementById('teamTwoSelect').value;
 
-        if(!team1Id || !team2Id) return alert("Select both teams");
+        if(loadBtn)
+        {
 
-        const res1 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
-        const team1Pkmn = await res1.json();
+        
 
-        const res2 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team2Id}`);
-        const team2Pkmn = await res2.json();
+            if(!team1Id || !team2Id) return alert("Select both teams");
 
-        renderPokemonSelection('team1Container', team1Pkmn, 1);
-        renderPokemonSelection('team2Container', team2Pkmn, 2);
+            const res1 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
+            const team1Pkmn = await res1.json();
+
+            const res2 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team2Id}`);
+            const team2Pkmn = await res2.json();
+
+            renderPokemonSelection('team1Container', team1Pkmn, 1);
+            renderPokemonSelection('team2Container', team2Pkmn, 2);
+        }
 
     });
 
@@ -484,6 +494,7 @@ if (leagueInfoForm) {
     function renderPokemonSelection(containerId, pokemonList, team) {
 
         const container = document.getElementById(containerId);
+        if (!container) return;
         container.innerHTML = '';
 
         pokemonList.forEach(p => {
@@ -529,6 +540,7 @@ if (leagueInfoForm) {
 
         const tableId = team === 1 ? "team1MatchTable" : "team2MatchTable";
         const table = document.getElementById(tableId);
+        if (!table) return;
 
         if (document.getElementById(`pkmn-${pokemon.roster_pkmn_id}`)) return;
 
@@ -550,6 +562,7 @@ if (leagueInfoForm) {
         deathsInput.value = 0;
         deathsInput.classList.add("deathsInput");
 
+
         tdKills.appendChild(killsInput);
         tdDeaths.appendChild(deathsInput);
 
@@ -570,6 +583,7 @@ if (leagueInfoForm) {
         if(!row) return;
 
         const table = row.closest("tbody");
+        if (!table) return;
         const team = table.id === "team1MatchTable" ? 1 : 2;
 
         row.remove();
@@ -586,106 +600,66 @@ if (leagueInfoForm) {
 
         const currentCount = document.querySelectorAll(`#${tableId} tr`).length;
 
-        document.getElementById(countId).textContent =
-            `Team ${team} (${currentCount} / 6 selected)`;
+        const countEl = document.getElementById(countId);
+        if (countEl) {
+            countEl.textContent = `Team ${team} (${currentCount} / 6 selected)`;
+        }
 
     }
 
 
 
     // SUBMISSION
-    document.getElementById('add_matchup_form').addEventListener('submit', async e => {
-        e.preventDefault();
+    const form = document.getElementById('add_matchup_form');
 
-        const player1 = document.getElementById('teamOneSelect').value;
-        const player2 = document.getElementById('teamTwoSelect').value;
+    if (form) {
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
 
-        // Gather Pokémon stats
-        const stats = [];
-        ['team1MatchTable','team2MatchTable'].forEach(tableId => {
-            document.querySelectorAll(`#${tableId} tr`).forEach(row => {
-                const rosterId = row.id.replace("pkmn-", "");
-                const kills = row.querySelector(".killsInput").value;
-                const deaths = row.querySelector(".deathsInput").value;
-                stats.push({
-                    roster_pkmn_id: rosterId,
-                    kills: parseInt(kills),
-                    deaths: parseInt(deaths),
-                    used: 1
+            const player1 = document.getElementById('teamOneSelect')?.value;
+            const player2 = document.getElementById('teamTwoSelect')?.value;
+            const replayLink = document.getElementById('replayLink')?.value;
+
+            const stats = [];
+            ['team1MatchTable','team2MatchTable'].forEach(tableId => {
+                document.querySelectorAll(`#${tableId} tr`).forEach(row => {
+                    const rosterId = row.id.replace("pkmn-", "");
+                    const kills = row.querySelector(".killsInput").value;
+                    const deaths = row.querySelector(".deathsInput").value;
+
+                    stats.push({
+                        roster_pkmn_id: rosterId,
+                        kills: parseInt(kills),
+                        deaths: parseInt(deaths),
+                        used: 1
+                    });
                 });
             });
-        });
 
-        // Send everything to the single PHP file
-        try {
-            const res = await fetch('/ascent_draft_league/api/matchup/submit_matchup.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ player1, player2, stats })
-            });
+            console.log("Replay link being sent:", replayLink); // ✅ debug
 
-            const data = await res.json();
+            try {
+                const res = await fetch('/ascent_draft_league/api/matchup/submit_matchup.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ player1, player2, stats, replayLink })
+                });
 
-            if (data.status === "success") {
-                alert("Matchup saved!");
-                // Redirect back to matchup.php
-                window.location.href = '/ascent_draft_league/matchup.php';
-            }
-            else
-            {
-                alert("Error: " + data.message);
-            }
-        } 
-        catch(err) 
-        {
-            alert("Network or server error: " + err.message);
-        }
-    });
-    
-    document.addEventListener("DOMContentLoaded", () => {
+                const data = await res.json();
 
-    // -----------------------------
-    // DELETE MATCHUP USING DELEGATION
-    // -----------------------------
-    document.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("deleteMatchBtn")) {
-                const btn = e.target;
-                const matchId = btn.dataset.matchId;
-                if (!matchId) return alert("Matchup ID missing!");
-
-                if (!confirm("Are you sure you want to delete this matchup?")) return;
-
-                try {
-                    const res = await fetch("/ascent_draft_league/api/matchup/delete_matchup.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ matchup_id: matchId })
-                    });
-
-                    const data = await res.json();
-                    if (data.status === "success") {
-                        alert("Matchup deleted!");
-                        // Remove the matchup section
-                        const container = btn.closest(".editDeleteMatchCont");
-                        if (container) container.remove();
-                    } else {
-                        alert("Error: " + (data.message || "Unknown error"));
-                    }
-                } catch (err) {
-                    alert("Network error: " + err.message);
+                if (data.status === "success") {
+                    alert("Matchup saved!");
+                    window.location.href = '/ascent_draft_league/matchup.php';
+                } else {
+                    alert("Error: " + data.message);
                 }
+
+            } catch(err) {
+                alert("Network or server error: " + err.message);
             }
 
-            // EDIT BUTTON
-            if (e.target.classList.contains("editMatchBtn")) {
-                const matchId = e.target.dataset.matchId;
-                if (!matchId) return;
-                // Redirect to edit page with query param
-                window.location.href = `/ascent_draft_league/edit_matchup.php?matchup_id=${matchId}`;
-            }
         });
-
-    });
-
-
+    }
+    
+    
 });

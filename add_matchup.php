@@ -89,6 +89,9 @@ if (!isset($_SESSION['user_id']))
                                 </thead>
                                 <tbody id="team2MatchTable"></tbody>
                             </table>   
+
+                            <label for=""> Showdown Replay </label>
+                            <input type="text" id="replayLink" placeholder="Add Replay Link">
                             
                             <button type="submit">Save Matchup</button>
                         </form>

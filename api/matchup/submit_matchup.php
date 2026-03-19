@@ -10,9 +10,13 @@ if (!$data) {
     exit;
 }
 
+var_dump($data);
+exit;
+
 $player1 = $data['player1'] ?? null;
 $player2 = $data['player2'] ?? null;
 $stats   = $data['stats'] ?? [];
+$replayLink = $data['replayLink'] ?? null;
 
 if (!$player1 || !$player2) {
     echo json_encode(["status"=>"error","message"=>"Player IDs missing"]);
@@ -23,10 +27,10 @@ $conn->begin_transaction();
 
 try {
     // Create matchup
-    $sql = "INSERT INTO matchup (season_id, player1_active_user_id, player2_active_user_id) VALUES (?,?,?)";
+    $sql = "INSERT INTO matchup (season_id, player1_active_user_id, player2_active_user_id, replay_link) VALUES (?,?,?,?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) throw new Exception($conn->error);
-    $stmt->bind_param("iii", $seasonId, $player1, $player2);
+    $stmt->bind_param("iiis", $seasonId, $player1, $player2, $replayLink);
     if (!$stmt->execute()) throw new Exception($stmt->error);
     $matchId = $stmt->insert_id;
 
