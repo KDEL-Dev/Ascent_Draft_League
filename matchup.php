@@ -51,7 +51,7 @@ while ($row = $result->fetch_assoc()) {
                     <section class="contentCont">
                         <section id="matchupCont">
                             <section class="contentBtnCont">
-                                <button><a href="add_matchup.php">Add New Matchup</a></button>
+                                <a id="newMatchBtn" href="add_matchup.php">Add New Matchup</a>
                             </section>
                             <section id="matchupResultCont">
                                 <?php foreach ($matchups as $match): ?>

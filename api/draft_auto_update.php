@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 header('Content-Type: application/json');
 
@@ -10,14 +10,20 @@ require_once __DIR__ . '/../includes/connection.php';
 $season_id = $_SESSION['season_id'] ?? null; // current season
 $user_id = $_SESSION['user_id'] ?? null;
 
+
+
 // Maximum Pokémon per user
-$MAX_POKEMON_PER_USER = 6;
+$MAX_POKEMON_PER_USER = 12;
 
 $response = [
+    'draft_started' => 0,  
+    'draft_finished' => 0,
     'current_player' => null,
     'previous_pick' => null,
     'myDraftedCount' => 0,
-    'maxPokemon' => $MAX_POKEMON_PER_USER
+    'maxPokemon' => $MAX_POKEMON_PER_USER,
+    'current_pick' => 0,        // 👈 ADD
+    'total_picks' => 0          // 👈 ADD
 ];
 
 try {
@@ -42,13 +48,29 @@ try {
     // ----------------- Snake draft logic -----------------
 
     // 1️⃣ Get current pick
-    $pickRes = mysqli_query($conn, "SELECT current_pick FROM draft_info WHERE season_id = $season_id");
+    $pickRes = mysqli_query($conn, "
+    SELECT current_pick, draft_started, total_picks 
+    FROM draft_info 
+    WHERE season_id = $season_id
+    ");
+
     $pickRow = mysqli_fetch_assoc($pickRes);
+
     if (!$pickRow) {
         echo json_encode($response);
         exit;
     }
+
     $currentPick = $pickRow['current_pick'];
+    $response['current_pick'] = $currentPick;
+    $response['total_picks'] = $pickRow['total_picks'];
+    $response['draft_started'] = (int)$pickRow['draft_started'];
+    $response['draft_finished'] = ($pickRow['current_pick'] > $pickRow['total_picks']) ? 1 : 0;
+
+    if ($response['draft_finished']) {
+    echo json_encode($response);
+    exit;
+}
 
     // 2️⃣ Draft order
     $usersRes = mysqli_query($conn, "
@@ -98,6 +120,7 @@ try {
         $myDraftRow = mysqli_fetch_assoc($myDraftRes);
         $response['myDraftedCount'] = $myDraftRow['drafted_count'] ?? 0;
     }
+
 
     echo json_encode($response);
 

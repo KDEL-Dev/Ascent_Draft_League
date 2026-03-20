@@ -41,6 +41,7 @@ $result = $stmt->get_result();
 $teams = [];
 while ($row = $result->fetch_assoc()) {
     $teams[$row['gamerTag']][] = $row; // now the team name is the gamerTag
+    $tiers[$row['tier']][] = $row; //Testing this to see if this is how i get tiers
 }
 
 $tierOrder = ['OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU','PUBL', 'PU','ZUBL','ZU'];
@@ -95,7 +96,35 @@ unset($pokemonList); // break reference
                                     <?php foreach ($pokemonList as $pkmn): ?>
                                         <li class="pkmnNameTier">
                                             <div><?= htmlspecialchars($pkmn['name']); ?></div>
-                                            <div><?= htmlspecialchars($pkmn['tier']); ?></div>
+                                                                                        
+                                            <?php  
+                                                
+                                                $tierMap = [
+                                                    'OU' => 'ou',
+                                                    'UUBL' => 'ou',
+
+                                                    'UU' => 'uu',
+                                                    'RUBL' => 'uu',
+
+                                                    'RU' => 'ru',
+                                                    'NUBL' => 'ru',
+
+                                                    'NU' => 'nu',
+                                                    'PUBL' => 'nu',
+
+                                                    'PU' => 'nu',
+                                                    'ZUBL' => 'nu',
+                                                    'ZU' => 'nu'
+
+                                                ];
+                                                $tier = strtoupper($pkmn['tier']);
+                                                $baseTier = $tierMap[$tier] ?? 'default';
+                                            ?>
+                                            <div class="<?= $baseTier ?>-RosterColor">
+                                                <?= htmlspecialchars($tier); ?>
+                                            </div>
+
+
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>

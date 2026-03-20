@@ -49,11 +49,14 @@ if (!isset($_SESSION['user_id']))
                             <div>
                                 <button id="clearDraftBtn" class="adminSettingsBtn">Reset Draft & Rosters</button>
                             </div>
+                            <div>
+                                <button id="" class="adminSettingsBtn">Users Management</button>
+                            </div>
                         </div>
                         <div class="adminSettingsCont">
                             <div class="adminSettingsHeader">League Management</div>
                             <div>
-                                <button class="adminSettingsBtn">Update League News </button>
+                                <button class="adminSettingsBtn">Update Overview - News </button>
                             </div>
                             <div>
                                 <button class="adminSettingsBtn" id="updateLeagueInfoBtn">Update League Information </button>

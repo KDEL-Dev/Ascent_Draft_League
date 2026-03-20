@@ -89,7 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -------------------
     let draftInterval = null;
 
-    async function loadDraftState() {
+    
+    async function loadDraftState() 
+    {
         try {
             const response = await fetch('/ascent_draft_league/api/draft_auto_update.php');
             const data = await response.json();
@@ -97,14 +99,36 @@ document.addEventListener("DOMContentLoaded", async () => {
             const currentPickEl = document.getElementById("currentPickInfo");
             const previousPickEl = document.getElementById("previousPickInfo");
 
+            // ❗ If this page doesn't have draft UI, just exit safely
+            if (!currentPickEl && !previousPickEl) return;
+
+            // 🚨 NEW: check if draft is finished
+            if (data.draft_finished) {
+                currentPickEl.textContent = "Draft Complete";
+                toggleDraftButtons(false);
+                return;
+            }
+
+            if (!data.draft_started) {
+                if (currentPickEl) currentPickEl.textContent = "Stand-By";
+                if (previousPickEl) previousPickEl.textContent = "-";
+
+                toggleDraftButtons(false);
+                return; 
+            }
+
             if (currentPickEl) currentPickEl.textContent = data.current_player ?? "Waiting...";
             if (previousPickEl) previousPickEl.textContent = data.previous_pick ?? "-";
 
             const myGamerTag = document.body.dataset.gamertag;
-            const MAX_POKEMON_PER_USER = data.maxPokemon ?? 6;
-            const canDraft = (myGamerTag === data.current_player) && (data.myDraftedCount < MAX_POKEMON_PER_USER);
+            const MAX_POKEMON_PER_USER = data.maxPokemon ?? 12; //CHANGED TO 12
+
+            const canDraft =
+                (myGamerTag === data.current_player) &&
+                (data.myDraftedCount < MAX_POKEMON_PER_USER);
 
             toggleDraftButtons(canDraft);
+
         } catch (err) {
             console.error("Failed to load draft state:", err);
         }
@@ -147,6 +171,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    
+    await loadDraftState();
+    setInterval(loadDraftState, 2000);
+
     // -------------------
     // RANDOMIZE DRAFT ORDER
     // -------------------
@@ -170,12 +198,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     // START DRAFT BUTTON
     // -------------------
     const startDraftBtn = document.getElementById('startDraftBtn');
+
     if (startDraftBtn) {
-        startDraftBtn.addEventListener("click", () => {
-            if (draftInterval) clearInterval(draftInterval);
-            loadDraftState();
-            draftInterval = setInterval(loadDraftState, 2000);
-            startDraftBtn.disabled = true;
+        startDraftBtn.addEventListener("click", async () => {
+            if (!confirm("Start draft for ALL users?")) return;
+
+            try {
+                const res = await fetch('/ascent_draft_league/api/draft/start_draft.php', {
+                    method: 'POST'
+                });
+
+                const data = await res.json();
+
+                if (data.status === "success") {
+                    alert("Draft started!");
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+            }
         });
     }
 
@@ -202,16 +244,82 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // -------------------
+    // SKIP PICK
+    // -------------------
+
+    const skipBtn = document.getElementById("skipPickBtn");
+
+    if (skipBtn) {
+        skipBtn.addEventListener("click", async () => {
+            if (!confirm("Skip the current pick?")) return;
+
+            try {
+                const res = await fetch('/ascent_draft_league/api/draft/skip_pick.php', {
+                    method: 'POST'
+                });
+
+                const data = await res.json();
+
+                if (data.status === "success") {
+                    alert("Pick skipped!");
+
+                    // Refresh draft state so next player updates
+                    await loadDraftState();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
+
+
+    // -------------------
+    // ENHD DRAFT
+    // -------------------
+
+    const endDraftBtn = document.getElementById("endDraftBtn");
+
+    if (endDraftBtn) {
+        endDraftBtn.addEventListener("click", async () => {
+            if (!confirm("End the draft for all users?")) return;
+
+            try {
+                const res = await fetch('/ascent_draft_league/api/draft/end_draft.php', {
+                    method: 'POST'
+                });
+
+                const data = await res.json();
+
+                if (data.status === "success") {
+                    alert("Draft ended!");
+
+                    // Refresh UI state so buttons freeze immediately
+                    await loadDraftState();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
+    // -------------------
     // DRAFT RECAP
     // -------------------
-    const recapTable = document.getElementById("recapTable");
+    const recapTableBody = document.getElementById("recapTableBody");
+
     function displayDraftResults() {
-        if (!recapTable) return;
+        if (!recapTableBody) return;
 
         fetch('/ascent_draft_league/api/draft/get_draft_result.php')
         .then(res => res.json())
         .then(data => {
-            recapTable.innerHTML = "";
+            recapTableBody.innerHTML = "";
+
             data.forEach(pick => {
                 const tr = document.createElement("tr");
 
@@ -223,7 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const tdTier = document.createElement("td");
                 tdTier.textContent = pick.tier;
-                if(pick.tier === "OU") tdTier.classList.add("ouBadge");
+                if (pick.tier === "OU") tdTier.classList.add("ouBadge");
 
                 const tdTeam = document.createElement("td");
                 tdTeam.textContent = pick.gamerTag;
@@ -232,11 +340,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tr.appendChild(tdName);
                 tr.appendChild(tdTier);
                 tr.appendChild(tdTeam);
-                recapTable.appendChild(tr);
+
+                recapTableBody.appendChild(tr);
             });
         })
         .catch(err => console.error("Failed to load draft results:", err));
     }
+
     displayDraftResults();
 
     // -------------------

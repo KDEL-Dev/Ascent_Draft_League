@@ -22,7 +22,7 @@ if (!isset($_SESSION['user_id']))
 
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
-    <title>Document</title>
+    <title>Ascent - Add Match</title>
 </head>
 <body>
     <div class="pageLayout">
@@ -35,7 +35,7 @@ if (!isset($_SESSION['user_id']))
                     <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
                 </div>
                 <div class="pageNameCont">
-                    <div class="pageTitle"> League Information</div>
+                    <div class="pageTitle"> Match Ups</div>
                 </div>
             </header>
             <div>

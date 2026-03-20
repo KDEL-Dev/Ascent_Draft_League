@@ -40,12 +40,17 @@
                         <section id="recapFlexCont">
                             <div class="tableCont">
                                 <table id="recapTable">
-                                    <tr class="thGradientBg" >
-                                        <th>No.</th>
-                                        <th style="min-width: 450px;">Pokemon</th>
-                                        <th style="width: 125px;">Tier</th>
-                                        <th style="width: 250px;">Team</th>
-                                    </tr>
+                                    <thead>    
+                                        <tr class="thGradientBg" >
+                                            <th>No.</th>
+                                            <th style="min-width: 450px;">Pokemon</th>
+                                            <th style="width: 125px;">Tier</th>
+                                            <th style="width: 250px;">Team</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recapTableBody">
+                                        <!-- Dynamically Created -->
+                                    </tbody>
                                     <!-- <tr>                                    
                                         <td>1</td>
                                         <td>Landorus-T</td>

@@ -19,7 +19,7 @@ if (!isset($_SESSION['user_id']))
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
 
-    <title>Pokebox</title>
+    <title>Ascent - Overview</title>
 </head>
 <body>
     <div class="pageLayout">
@@ -32,7 +32,9 @@ if (!isset($_SESSION['user_id']))
                     <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
                 </div>
                 <div class="pageNameCont">
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                     <div class="pageTitle"> Overview</div>
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 </div>
             </header>
             <div class="pageLayout">
@@ -57,18 +59,16 @@ if (!isset($_SESSION['user_id']))
                 </main>
                 <aside>
                     <section id="replayCont">
-                        <div id="sectionTitle">Replay</div>
+                        <div class="smallerSectionTitle">Replay</div>
                         <div id="miniStandings">Will update after first match</div>
                     </section>
                     <section id="miniStandingsCont">
-                        <div id="sectionTitle">Standings</div>
+                        <div class="smallerSectionTitle">Standings</div>
                         <div id="miniStandings">Will update when league starts</div>
                     </section>
                     <section id="killLeaderBoardCont">
-                     
-                            <div id="sectionTitle">Kill Leader</div>
-                            <div id="killLeader">Will update when league starts</div>
-                       
+                            <div class="smallerSectionTitle">Kill Leader</div>
+                            <div id="killLeader">Will update when league starts</div>             
                     </section>
                 </aside>
             </div>

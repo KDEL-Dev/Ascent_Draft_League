@@ -29,25 +29,27 @@ if (!isset($_SESSION['user_id']))
         <?php include 'includes/navbar.php';?>
 
         <div class="pageContent">
-            <header class="headerCont">
-                <div class="seasonCont">
-                    <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
+            
+                <header class="headerCont">
+                    <div class="seasonCont">
+                        <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
+                    </div>
+                    <div class="pageNameCont">
+                        <div class="pageTitle"> Profile</div>
+                    </div>
+                </header>
+                <div>
+                    <main>
+                        <section class="shortContentCont">
+                            <div>
+                                Log Out:
+                                <button><a href="logout.php">Log Out</a></button>
+                            </div>
+                        </section>
+                    </main>
                 </div>
-                <div class="pageNameCont">
-                    <div class="pageTitle"> Profile</div>
-                </div>
-            </header>
-            <div>
-                <main>
-                    <section class="contentCont">
-                        <div>
-                            
-                            <button><a href="logout.php">Log Out</a></button>
-                        </div>
-                    </section>
-                </main>
-            </div>
-            <?php include 'includes/footer.php'; ?>
+                <?php include 'includes/footer.php'; ?>
+         
         </div>
     </div>
 </body>

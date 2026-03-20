@@ -6,7 +6,15 @@
     box-sizing: border-box;
 }
 
-body
+a,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+html, body
 {
     margin: 0;
 
@@ -72,7 +80,53 @@ body
 .navMainBtns
 {
     margin-bottom: 20px;
+    width: fit-content;
+    position: relative;
+
+    text-decoration: none;
+    color: white;
+    
+    transition: text-shadow .2s ease;
 }
+
+.navMainBtns::after 
+{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+
+    width: 100%;
+    height: 2px;
+    background-image: linear-gradient(to right, #F79767, #FFE284);
+
+    /* Animation */
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .2s ease;
+}
+
+.navMainBtns:hover::after
+{
+    transform: scaleX(1);
+    box-shadow: 0 0 10px rgb(255, 226, 132, 0.7);
+}
+
+.navMainBtns:hover
+{
+    text-shadow: 0 0 25px rgb(255, 226, 132, 0.7);
+}
+
+.navMainBtns a
+{
+    gap: 10px;
+
+    display: flex;
+    align-items: center;
+
+}
+
+
 
 .navSettingsCont
 {
@@ -85,6 +139,7 @@ body
 {
     width: 200px;
     height: 50px;
+    
 
     background-color: black;
     color: white;
@@ -95,6 +150,8 @@ body
     display: flex;
     justify-content: center;
     align-items: center;
+
+    transition: background-color .2s ease, color .2s ease;
 }
 
 .profileSettingsBtn a
@@ -117,11 +174,23 @@ body
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* Animation */
+    transition: background-color .2s ease, color .2s ease;
 }
 
 .adminSettingsBtn a
 {
     font-size: 1.25em;
+}
+
+.profileSettingsBtn a
+{
+     gap: 10px;
+
+    display: flex;
+    align-items: center;
+    
 }
 
 .profileSettingsBtn:hover
@@ -135,6 +204,7 @@ body
 {
     color: black;
     background-color: white;
+
 }
 
 #profileName
@@ -253,13 +323,14 @@ body
 .pageNameCont
 {
     margin: 20px;
+    padding: 0 50px;
 
     height: 80px;
     background-color: black;
     border-radius: 10px;
     
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -292,9 +363,22 @@ main
 .sectionTitle
 {
     height: 50px;
+    
     color: white;
     font-family: "zen dots";
     font-size: 1.5em;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.smallerSectionTitle
+{
+    height: 50px;
+    
+    color: white;
+    font-family: "zen dots";
 
     display: flex;
     justify-content: center;
@@ -412,7 +496,7 @@ main
 
 #miniStandings
 {
-    height: 100%;
+    flex: 1;
     font-family: "jura";
     text-align: center;
     font-size: .75em;
@@ -441,7 +525,7 @@ main
 
 #killLeader
 {
-    height: 100%;
+    flex: 1;
     font-family: "jura";
     text-align: center;
     font-size: .75em;
@@ -522,6 +606,7 @@ footer
 
     font-family: "jura";
     font-size: 1.5em;
+    text-align: center;
 
     display: flex;
     justify-content: center;
@@ -607,9 +692,11 @@ footer
 #draftOrderList li
 {
     list-style: none;
-    border-bottom: 1px white solid;
-    border-right: 1px white solid;
+    border-bottom: 1px rgb(0, 0, 0) solid;
+    border-right: 1px rgb(0, 0, 0) solid;
     font-size: 1.25em;
+    color: black;
+    background-image: linear-gradient(to top, rgb(159, 173, 177) ,white);
 
     
     display: flex;
@@ -637,6 +724,8 @@ footer
     cursor: pointer;
     font-family: "jura"; 
     font-size: 1.25em;  
+
+    transition: background-color .2s ease, color .2s ease;
 }
 
 #draftOrderBtnCont button:hover
@@ -668,21 +757,21 @@ footer
 
 #ouPoolTierColor
 {
-    background-color: rgb(255, 0, 0);
+    background-image: linear-gradient(to top, rgb(109, 0, 0), rgb(228, 91, 91));
 }
 
 #uuPoolTierColor
 {
-    background-color: orange;
+    background-image: linear-gradient(to top, rgb(117, 76, 0), rgb(245, 189, 85));
 }
 
 #ruPoolTierColor
 {
-    background-color: rgb(212, 212, 3);
+    background-image: linear-gradient(to top, rgb(119, 119, 0), rgb(221, 221, 100));
 }
 #nuPoolTierColor
 {
-    background-color: green;
+    background-image: linear-gradient(to top, rgb(0, 95, 0), rgb(108, 204, 108));
 }
 
 .listOfMetaPkmn
@@ -739,6 +828,8 @@ footer
     font-family: "jura";
     color: white;
     cursor: pointer;
+
+    transition: background-color .3s ease, color .3s ease;
 }
 
 .adminDraftBtns:hover
@@ -832,7 +923,9 @@ footer
 
 
 
-/* Roster */
+/******************* 
+        Roster 
+********************/
 
 .contentCont
 {
@@ -860,6 +953,8 @@ footer
     height: 650px;
     border: solid 1px white;
     border-radius: 10px;
+    overflow: hidden;
+
 
     display: flex;
     flex-direction: column;
@@ -869,13 +964,16 @@ footer
 
 .teamName
 {
+    width: 100%;
     color: white;
+    background-image: linear-gradient(to bottom, rgb(49, 49, 49), rgb(0, 0, 0));
     font-family: "jura";
     font-size: 1.5em;
     height: 50px;
 
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .rosterPkmn
@@ -898,7 +996,7 @@ footer
 .pkmnNameTier
 {
     height: 50px;
-    padding: 0 20px ;
+    padding: 0 0 0 20px ;
     /* background-image: linear-gradient(to right,black 20%,red); */
 
     display: flex;
@@ -909,14 +1007,32 @@ footer
 
 .pkmnNameTier div:last-child
 {
+    height: 100%;
     width: 80px;
+    
     border-left: white 1px solid;
-    padding-left: 10px;
     font-weight: bold;
 
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.ou-RosterColor
+{
+    background-color: rgb(65, 0, 0);
+}
+.uu-RosterColor
+{
+    background-color: rgb(145, 101, 8);
+}
+.ru-RosterColor
+{
+    background-color: rgb(61, 65, 0);
+}
+.nu-RosterColor
+{
+    background-color: rgb(0, 88, 0);
 }
 
 /**************************************
@@ -1070,6 +1186,30 @@ footer
     border-bottom: 1px solid white;
 }
 
+#newMatchBtn
+{
+    padding: 10px;
+
+    font-family: "jura";
+    font-size: 1.25em;
+    
+    border-radius: 10px;
+    background-image: linear-gradient(to top, #092017, #258662);
+    color: white;
+    border: none;
+    box-sizing: border-box;
+
+    display: inline-block;
+    
+    transition: transform 0.2s ease;
+}
+
+#newMatchBtn:hover
+{
+    transform: scale(1.05);
+    /* border: white 1px solid; */
+}
+
 .editDeleteMatchCont
 {
     width: 625px;
@@ -1080,13 +1220,24 @@ footer
 
     border: white 1px solid;
     border-radius: 10px;
+    background-image: linear-gradient(to top, rgb(99, 99, 99), rgb(29, 29, 29));
 
     text-align: end;
 }
 
 .editDeleteMatchCont button
 {
+    width: 75px;
     margin-bottom: 10px;
+    margin-left: 10px;
+    padding: 5px;
+
+
+    background-image: linear-gradient(to top, #092017, #258662);
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .matchBox
@@ -1127,7 +1278,10 @@ footer
 .matchUpHeader th
 {
     font-size: .75em;
+    background-image: linear-gradient(to top, rgb(80, 80, 80), rgb(172, 183, 190));
+    border-right: white 1px solid;
 }
+
 
 .matchName
 {
@@ -1177,6 +1331,39 @@ footer
 {
     cursor: pointer;
 }
+
+/**************************************
+            Profile Page 
+ *************************************/
+
+/* .fullHeight {
+
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+} */
+
+.shortContentCont
+{
+    margin: 0 20px 20px 20px;
+    padding: 40px;
+
+
+    color: white;
+    font-family: "jura";
+    background-color: black;
+    border-radius: 10px;
+    flex: 1;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+
+
 
 
 
