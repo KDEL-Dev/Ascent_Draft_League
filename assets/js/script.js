@@ -595,13 +595,34 @@ document.addEventListener("DOMContentLoaded", async () => {
             const replayLink = document.getElementById('replayLink')?.value;
 
             const stats = [];
-            ['team1MatchTable','team2MatchTable'].forEach(tableId => {
-                document.querySelectorAll(`#${tableId} tr`).forEach(row => {
-                    const rosterId = row.id.replace("pkmn-", "");
-                    const kills = row.querySelector(".killsInput")?.value ?? 0;
-                    const deaths = row.querySelector(".deathsInput")?.value ?? 0;
 
-                    stats.push({ roster_pkmn_id: rosterId, kills: parseInt(kills), deaths: parseInt(deaths), used: 1 });
+            // TEAM 1
+            document.querySelectorAll('#team1MatchTable tr').forEach(row => {
+                const rosterId = row.id.replace("pkmn-", "");
+                const kills = row.querySelector(".killsInput")?.value ?? 0;
+                const deaths = row.querySelector(".deathsInput")?.value ?? 0;
+
+                stats.push({ 
+                    roster_pkmn_id: rosterId,
+                    active_user_id: player1,
+                    kills: parseInt(kills),
+                    deaths: parseInt(deaths),
+                    used: 1
+                });
+            });
+
+            // TEAM 2
+            document.querySelectorAll('#team2MatchTable tr').forEach(row => {
+                const rosterId = row.id.replace("pkmn-", "");
+                const kills = row.querySelector(".killsInput")?.value ?? 0;
+                const deaths = row.querySelector(".deathsInput")?.value ?? 0;
+
+                stats.push({ 
+                    roster_pkmn_id: rosterId,
+                    active_user_id: player2,
+                    kills: parseInt(kills),
+                    deaths: parseInt(deaths),
+                    used: 1
                 });
             });
 

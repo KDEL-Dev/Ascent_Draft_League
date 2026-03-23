@@ -37,7 +37,7 @@ if (!isset($_SESSION['user_id']))
                     <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 </div>
             </header>
-            <div class="pageLayout">
+            <div id="overviewPageLayout">
                 <main>
                     <section class="newsCont">
                         <div class="sectionTitle">News/Updates</div>
@@ -71,9 +71,10 @@ if (!isset($_SESSION['user_id']))
                             <div id="killLeader">Will update when league starts</div>             
                     </section>
                 </aside>
+            
             </div>
-
             <?php include 'includes/footer.php'; ?>
+            
             
         </div>
     </div>

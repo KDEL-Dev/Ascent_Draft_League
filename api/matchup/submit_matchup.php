@@ -39,14 +39,24 @@ try {
     $matchId = $stmt->insert_id;
 
     // Insert Pokémon stats
-    $sql = "INSERT INTO match_pokemon_stats (matchup_id, roster_pkmn_id, kills, deaths, used) VALUES (?,?,?,?,?)";
+    $sql = "INSERT INTO match_pokemon_stats (matchup_id, active_user_id, roster_pkmn_id, kills, deaths, used) VALUES (?,?,?,?,?,?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) throw new Exception($conn->error);
 
+
+
     foreach ($stats as $s) {
+
+        if (!isset($s['active_user_id'])) 
+            {
+                throw new Exception("Missing active_user_id in stats");
+            }
+
+
         $stmt->bind_param(
-            "iiiii",
+            "iiiiii",
             $matchId,
+            $s['active_user_id'],
             $s['roster_pkmn_id'],
             $s['kills'],
             $s['deaths'],

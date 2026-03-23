@@ -26,6 +26,7 @@
             'UUBL' => 'OU',
             'RUBL' => 'UU',
             'NUBL' => 'NU',
+            'PUBL' => 'NU'
             // add more as needed
         ];
         

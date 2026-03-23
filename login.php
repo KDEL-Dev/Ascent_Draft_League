@@ -44,17 +44,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/styles.css">
-    <title>Login</title>
+
+    <link rel="stylesheet" href="assets/styles/styles.css">
+
+    <title>Ascent - Login</title>
 </head>
 <body>
     <section id="loginLayout">
-        <img id="loginLogo" src="img/Ascent Horizontal Text.png" alt="site logo">
+        <img id="loginLogo" src="img/Ascent Horizontal Text.svg" alt="site logo">
         <form id="loginForm" method="post" action="login.php">
             <label for="email">Email: </label>
             <input type="email" id="email" class="formInput" name="email" required>
@@ -68,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button><a href="register.html">Register</a></button>
     </section>
 
-    <?php include 'includes/footer.php'; ?>
+    <!-- <?php include 'includes/footer.php'; ?> -->
 </body>
 </html>
 
