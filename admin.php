@@ -32,7 +32,9 @@ if (!isset($_SESSION['user_id']))
                     <div class="seasonBtn">Season <?php echo $seasonId; ?></div>
                 </div>
                 <div class="pageNameCont">
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                     <div class="pageTitle"> Admin Settings</div>
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 </div>
             </header>
             <div class="pageLayout">

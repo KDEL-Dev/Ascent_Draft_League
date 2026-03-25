@@ -487,21 +487,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadActiveTeams();
 
     const loadBtn = document.getElementById('loadSelectedTeamsBtn');
-    if (loadBtn) {
-        loadBtn.addEventListener('click', async () => {
-            const team1Id = document.getElementById('teamOneSelect')?.value;
-            const team2Id = document.getElementById('teamTwoSelect')?.value;
-            if (!team1Id || !team2Id) return alert("Select both teams");
+    if (loadBtn) 
+        {
+            loadBtn.addEventListener('click', async () => {
 
-            try {
+            const team1Select = document.getElementById('teamOneSelect');
+            const team2Select = document.getElementById('teamTwoSelect');
+
+            const team1Id = team1Select?.value;
+            const team2Id = team2Select?.value;
+
+            const team1Name = team1Select?.selectedOptions[0]?.text;
+            const team2Name = team2Select?.selectedOptions[0]?.text;
+
+            if (!team1Id || !team2Id) 
+            {
+                return alert("Select both teams");
+            }
+
+            // ✅ Update UI titles
+            const title1 = document.getElementById("team1Title");
+            const title2 = document.getElementById("team2Title");
+
+            if (title1) title1.textContent = `${team1Name} Pokémon`;
+            if (title2) title2.textContent = `${team2Name} Pokémon`;
+
+            try 
+            {
+                // ✅ USE IDs (not names)
                 const res1 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
                 const team1Pkmn = await res1.json();
+
                 const res2 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team2Id}`);
                 const team2Pkmn = await res2.json();
 
                 renderPokemonSelection('team1Container', team1Pkmn, 1);
                 renderPokemonSelection('team2Container', team2Pkmn, 2);
-            } catch(err) {
+
+            } 
+            catch(err) 
+            {
                 console.error("Failed to load selected teams:", err);
             }
         });
@@ -592,7 +617,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const player1 = document.getElementById('teamOneSelect')?.value;
             const player2 = document.getElementById('teamTwoSelect')?.value;
-            const replayLink = document.getElementById('replayLink')?.value;
+            const replayLink = document.getElementById('replayLink')?.value?.trim();
+            const winner = document.querySelector('input[name="winner"]:checked');
+
+
+            if (!winner) 
+            {
+                alert("Please select a winning team.");
+                return;
+            }
+
+            if (!replayLink) 
+            {
+                alert("Replay link is required.");
+                return;
+            }
+
+            const winnerValue = winner.value; // "team1" or "team2"
 
             const stats = [];
 
@@ -632,7 +673,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const res = await fetch('/ascent_draft_league/api/matchup/submit_matchup.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ player1, player2, stats, replayLink })
+                    body: JSON.stringify({ player1, player2, stats, replayLink, winner: winnerValue })
                 });
                 const data = await res.json();
 
@@ -713,7 +754,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
+
+
             document.getElementById("replayLink").value = data.matchup.replay_link;
+
+            // Set winner radio
+            if (data.matchup.winner_active_user_id == data.matchup.player1_active_user_id) {
+                document.querySelector('input[name="winner"][value="team1"]').checked = true;
+            } else {
+                document.querySelector('input[name="winner"][value="team2"]').checked = true;
+            }
 
             renderEditTable("team1Body", data.team1);
             renderEditTable("team2Body", data.team2);
@@ -722,6 +772,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Failed to load matchup:", err);
         }
     }
+
 
     function renderEditTable(containerId, team) {
         const container = document.getElementById(containerId);
@@ -755,9 +806,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const formData = new FormData(editForm);
 
+            const winner = document.querySelector('input[name="winner"]:checked');
+
+            if (!winner) {
+                alert("Please select a winner.");
+                return;
+            }
+
             const data = {
                 matchup_id: formData.get('matchup_id'),
                 replay_link: formData.get('replay_link'),
+                winner: winner.value,
                 stats: []
             };
 

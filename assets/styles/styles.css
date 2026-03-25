@@ -1248,6 +1248,8 @@ footer
     background-image: linear-gradient(to top, rgb(99, 99, 99), rgb(29, 29, 29));
 
     text-align: end;
+
+    
 }
 
 .editDeleteMatchCont button
@@ -1267,6 +1269,8 @@ footer
 
 .matchBox
 {
+    
+
     font-size: 1.1em;
     font-family: "jura";
 
@@ -1279,7 +1283,8 @@ footer
 
 .matchUpPlayerInfo
 {
-    width: 100%;
+    
+
 
     text-align: center;
     
@@ -1357,6 +1362,154 @@ footer
 {
     cursor: pointer;
 }
+
+/**************************************
+            New Matchup Page 
+ *************************************/
+
+.teamSelectCont 
+{
+    border-right: white 1px solid;
+    margin-right: 20px;
+    padding-right: 20px;
+}
+
+.teamSelectCont p
+{
+    text-decoration: underline;
+}
+
+.selectMatchPkmn
+{
+    padding-left: 0;
+
+    list-style: none;
+    cursor: pointer;
+    
+}
+
+.selectMatchPkmn li
+{
+    display: inline-block;
+    width: auto;
+    border: 1px solid white;
+    padding: 5px 10px;
+    margin:4px;
+    cursor: pointer;
+
+}
+
+.selectMatchPkmn li:hover
+{
+    background-color: white;
+    color: #000000;
+}
+
+.selectMatchPkmn li.selected
+{
+    background-color: #258662;
+}
+
+.selectMatchPkmn li.selected:hover
+{
+    color: white;
+}
+
+.newMatchTable
+{
+    border-collapse: collapse;
+}
+
+.newMatchTable table,th,td
+{
+    padding: 10px;
+}
+
+#newMatchReplayCont
+{
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#add_matchup_form
+{
+    min-width: 50%;
+}
+
+#add_matchup_form p 
+{
+    text-decoration: underline;
+}
+
+#replayLink
+{
+    margin: 10px 0;
+}
+
+#saveNewMatchBtn
+{
+    margin-top: 10px;
+    padding: 10px;
+
+    background-image: linear-gradient(to top, #092017, #258662);
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/**************************************
+            Edit Matchup Page 
+ *************************************/
+
+#edit_matchup_form
+{
+    width: 100%;
+
+    color: white;
+}
+
+#edit_matchup_form table
+{
+    border-collapse: collapse;
+}
+
+.editMatchRow
+{
+    display: flex;
+    justify-content: center;
+
+    
+}
+
+.editMatchCol
+{
+    margin-right: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#editMatchReplaySect
+{
+    margin-top: 20px;
+    text-align: center;
+}
+
+#editMatchSaveBtn
+{
+    margin-top: 10px;
+    padding: 10px;
+
+    background-image: linear-gradient(to top, #092017, #258662);
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 
 /**************************************
             Statistics Page 

@@ -79,7 +79,9 @@ unset($pokemonList); // break reference
                     <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
                 </div>
                 <div class="pageNameCont">
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                     <div class="pageTitle"> Rosters</div>
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 </div>
             </header>
             <div>

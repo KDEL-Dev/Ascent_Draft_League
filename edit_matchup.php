@@ -28,42 +28,78 @@ if (!$matchupId) {
 
     <div class="pageContent">
         <header class="headerCont">
-            <div class="pageTitle">Edit Matchup</div>
-        </header>
+                <div class="seasonCont">
+                    <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
+                </div>
+                <div class="pageNameCont">
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <div class="pageTitle"> Edit Match</div>
+                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                </div>
+            </header>
 
         <main>
-            <form id="edit_matchup_form">
-                <input type="hidden" name="matchup_id" value="<?= $matchupId ?>">
+            <section class="contentCont">
 
-                <h3>Team 1 Pokémon</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pokemon</th>
-                            <th>Kills</th>
-                            <th>Deaths</th>
-                        </tr>
-                    </thead>
-                    <tbody id="team1Body"></tbody>
-                </table>
+            
+                <form id="edit_matchup_form">
+                    <input type="hidden" name="matchup_id" value="<?= $matchupId ?>">
+                    <section class="editMatchRow">
+                        <section class="editMatchCol">
+                            <h3>Team 1 Pokémon</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Pokemon</th>
+                                        <th>Kills</th>
+                                        <th>Deaths</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="team1Body"></tbody>
+                            </table>
+                        </section>
+                        <section class="editMatchRow">
+                            <section class="editMatchCol">
+                                <h3>Team 2 Pokémon</h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Pokemon</th>
+                                            <th>Kills</th>
+                                            <th>Deaths</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="team2Body"></tbody>
+                                </table>
+                            </section>
+                        </section>
+                    </section>
+                    <section class="editMatchRow">
+                        <section class="editMatchCol">
+                            <h3>Winner</h3>
 
-                <h3>Team 2 Pokémon</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pokemon</th>
-                            <th>Kills</th>
-                            <th>Deaths</th>
-                        </tr>
-                    </thead>
-                    <tbody id="team2Body"></tbody>
-                </table>
-
-                <label>Replay</label>
-                <input type="text" name="replay_link" id="replayLink">
-
-                <button type="submit">Save Changes</button>
-            </form>
+                            <label>
+                                <input type="radio" name="winner" value="team1"> Team 1
+                            </label>
+                            <label>
+                                <input type="radio" name="winner" value="team2"> Team 2
+                               </label>
+                        </section>
+                    </section>
+                    <section class="editMatchRow" id="editMatchReplaySect">
+                            <section class="editMatchCol">
+                                <label>Replay</label>
+                                <input type="text" name="replay_link" id="replayLink">
+                            </section>
+                    </section>
+                    <section class="editMatchRow">
+                            <section class="editMatchCol">
+                                <button type="submit" id="editMatchSaveBtn">Save Changes</button>
+                            </section>
+                        </section>
+                    </section>    
+                </form>
+            </section>
         </main>
     </div>
 </div>

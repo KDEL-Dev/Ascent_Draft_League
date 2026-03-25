@@ -24,7 +24,9 @@
                 </div>
             </div>
             <div class="pageNameCont">
+                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 <div class="pageTitle">Standings</div>
+                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
             </div>
         </header>
 

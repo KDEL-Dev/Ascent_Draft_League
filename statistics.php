@@ -76,7 +76,9 @@ while ($row = $result->fetch_assoc()) {
                 </div>
             </div>
             <div class="pageNameCont">
+                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 <div class="pageTitle">Statistics</div>
+                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
             </div>
         </header>
 

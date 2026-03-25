@@ -20,6 +20,7 @@ if (!$data) {
 $player1 = $data['player1'] ?? null;
 $player2 = $data['player2'] ?? null;
 $stats   = $data['stats'] ?? [];
+$winner = $data['winner'] ?? null;
 $replayLink = $data['replayLink'] ?? null;
 
 if (!$player1 || !$player2) {
@@ -27,14 +28,33 @@ if (!$player1 || !$player2) {
     exit;
 }
 
+if (!$winner) {
+    echo json_encode(["status"=>"error","message"=>"Winner not selected"]);
+    exit;
+}
+
+if ($winner === "team1") {
+    $winnerId = $player1;
+} else {
+    $winnerId = $player2;
+}
+
+if (empty($replayLink)) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Replay link is required"
+    ]);
+    exit;
+}
+
 $conn->begin_transaction();
 
 try {
     // Create matchup
-    $sql = "INSERT INTO matchup (season_id, player1_active_user_id, player2_active_user_id, replay_link) VALUES (?,?,?,?)";
+    $sql = "INSERT INTO matchup (season_id, player1_active_user_id, player2_active_user_id, replay_link, winner_active_user_id) VALUES (?,?,?,?,?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) throw new Exception($conn->error);
-    $stmt->bind_param("iiis", $seasonId, $player1, $player2, $replayLink);
+    $stmt->bind_param("iiisi", $seasonId, $player1, $player2, $replayLink, $winnerId);
     if (!$stmt->execute()) throw new Exception($stmt->error);
     $matchId = $stmt->insert_id;
 

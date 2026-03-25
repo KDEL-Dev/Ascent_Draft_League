@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/includes/connection.php';
 
 if (!isset($_SESSION['user_id'])) 
     {
@@ -8,6 +9,67 @@ if (!isset($_SESSION['user_id']))
     }
 
     $seasonId = $_SESSION['season_id'] ?? null;
+
+    // Get latest replay
+
+    $sql = $sql = "
+    SELECT 
+        m.replay_link,
+        m.created_at,
+
+        u1.gamerTag AS player1_name,
+        u2.gamerTag AS player2_name
+
+    FROM matchup m
+
+    JOIN active_users au1 
+        ON au1.id = m.player1_active_user_id
+    JOIN users u1 
+        ON u1.id = au1.user_id
+
+    JOIN active_users au2 
+        ON au2.id = m.player2_active_user_id
+    JOIN users u2 
+        ON u2.id = au2.user_id
+
+    WHERE m.season_id = ?
+      AND m.replay_link IS NOT NULL
+      AND m.replay_link != ''
+
+    ORDER BY m.created_at DESC
+    LIMIT 1
+";
+
+    $replay_stmt = $conn->prepare($sql);
+    $replay_stmt->bind_param("i", $seasonId);
+    $replay_stmt->execute();
+
+    $replayResult = $replay_stmt->get_result();
+    $latestReplay = $replayResult->fetch_assoc();
+
+    // Standings
+
+    $standingSql = "
+    SELECT users.gamerTag, 
+    COUNT(matchup.winner_active_user_id) AS Wins
+    FROM active_users
+    JOIN users
+    ON active_users.user_id = users.id
+    LEFT JOIN matchup
+    ON matchup.winner_active_user_id = active_users.id
+    AND matchup.season_id = ?
+    WHERE active_users.season_id = ?
+    GROUP BY active_users.id, users.gamerTag
+    ORDER BY Wins DESC;
+    ";
+
+    $standingStmt = $conn->prepare($standingSql);
+    $standingStmt->bind_param("ii", $seasonId, $seasonId);
+    $standingStmt->execute();
+
+    $standingResult = $standingStmt->get_result();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -60,11 +122,60 @@ if (!isset($_SESSION['user_id']))
                 <aside>
                     <section id="replayCont">
                         <div class="smallerSectionTitle">Replay</div>
-                        <div id="miniStandings">Will update after first match</div>
+                        <?php if ($latestReplay): ?>
+                            <a href="<?php echo htmlspecialchars($latestReplay['replay_link']); ?>" 
+                            target="_blank" 
+                            class="replayBox">
+
+                                <div class="matchup">
+                                    <?php echo htmlspecialchars($latestReplay['player1_name']); ?>
+                                    vs
+                                    <?php echo htmlspecialchars($latestReplay['player2_name']); ?>
+                                </div>
+
+                                <div class="replayDate">
+                                    <?php 
+                                        $date = new DateTime($latestReplay['created_at']);
+                                        echo $date->format('m/d/y g:i A');;
+                                    ?>
+                                </div>
+
+                            </a>
+                        <?php else: ?>
+                            <div>No replays yet</div>
+                        <?php endif; ?>
                     </section>
                     <section id="miniStandingsCont">
                         <div class="smallerSectionTitle">Standings</div>
-                        <div id="miniStandings">Will update when league starts</div>
+                        <div id="miniStandings">
+                            <?php if ($standingResult && $standingResult->num_rows > 0): ?>
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Team</th>
+                                          
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                            $rank = 1;
+                                            while ($row = $standingResult->fetch_assoc()): 
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $rank++; ?></td>
+                                                <td><?php echo htmlspecialchars($row['gamerTag']); ?></td>
+                                                
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+
+                            <?php else: ?>
+                                <div>No Standings Yet</div>
+                            <?php endif; ?>
+                        </div>
                     </section>
                     <section id="killLeaderBoardCont">
                             <div class="smallerSectionTitle">Kill Leader</div>
