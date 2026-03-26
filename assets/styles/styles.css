@@ -36,7 +36,7 @@ html, body
 
 .navBar
 {
-    width: 300px;
+    width: 250px;
     /* min-height: 1050px; */
     height: 100vh; /* added */
     background-image: linear-gradient(to bottom, black 50%,#094D33);
@@ -68,7 +68,7 @@ Navigation Menu
 
 .navLogo
 {
-    width: 236px;
+    width: 200px;
 }
 
 .topNav div
@@ -81,11 +81,14 @@ Navigation Menu
 .navMainBtnCont
 {
     margin: 0;
+    padding: 0 50px;
     
     font-family: "jura";
     color: white;
     list-style: none;
-    font-size: 1.25em;
+    /* font-size: 1.25em; */
+
+   
 }
 
 .navMainBtns
@@ -131,6 +134,7 @@ Navigation Menu
 .navMainBtns a
 {
     gap: 10px;
+    /* font-size: .75em; */
 
     display: flex;
     align-items: center;
@@ -139,21 +143,21 @@ Navigation Menu
 
 .navMainBtns img
 {
-    width: 40px;
+    width: 30px;
 }
 
 
 
 .navSettingsCont
 {
-    font-family: jura;
+    font-family: "jura";
 
     margin-bottom: 20px;
 }
 
 .profileSettingsBtn
 {
-    width: 200px;
+    width: 175px;
     height: 50px;
     
 
@@ -172,13 +176,13 @@ Navigation Menu
 
 .profileSettingsBtn a
 {
-    font-size: 1.25em;
+    /* font-size: 1.25em; */
 }
 
 .adminSettingsBtn
 {
     margin-top: 10px;
-    width: 200px;
+    width: 175px;
     height: 50px;
 
     color: white;
@@ -197,7 +201,7 @@ Navigation Menu
 
 .adminSettingsBtn a
 {
-    font-size: 1.25em;
+    /* font-size: 1.25em; */
 }
 
 .profileSettingsBtn a
@@ -308,7 +312,9 @@ Navigation Menu
     cursor: pointer;
 }
 
-/* Overview Page */
+/*********************
+    Overview Page 
+ *********************/
 
 .headerCont
 {
@@ -490,6 +496,7 @@ main
 #replayCont
 {
     margin: 30px 20px;
+    /* padding: 20px; */
     width: 250px;
     min-height: 150px;
 
@@ -497,10 +504,42 @@ main
     color: white;
     font-family: "zen dots";
     font-size: 1.5em;
+    border-radius: 10px;
 
     display: flex;
     align-items: center;
+    /* justify-content: center; */
     flex-direction: column;
+}
+
+#replayCont a
+{
+    height: 100%;
+}
+
+.replayBox
+{
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+
+#replayTeams
+{
+    font-size: .75em;
+    
+}
+
+.replayDate
+{
+    margin-top: auto;
+    font-size: .75em;
+    font-family: "jura";
+    text-align: center;
+    border-top: 1px solid white;
 }
 
 #miniStandingsCont
@@ -508,11 +547,14 @@ main
     margin: 30px 20px;
     width: 250px;
     min-height: 400px;
+    padding: 20px;
 
     background-color: black;
     color: white;
     font-family: "zen dots";
     font-size: 1.5em;
+    border-radius: 10px;
+    
 
     display: flex;
     align-items: center;
@@ -521,15 +563,41 @@ main
 
 #miniStandings
 {
+    width: 100%;
     flex: 1;
+
     font-family: "jura";
     text-align: center;
     font-size: .75em;
+    
 
     display: flex;
     justify-content: center;
-    align-items: center;
 }
+
+#miniStandings table,
+#miniStandings thead,
+#miniStandings tbody,
+#miniStandings tr,
+#miniStandings th,
+#miniStandings td
+{
+    border-left: none;
+    border-right: none;
+
+}
+
+
+
+#miniStandings table
+{
+    width: 100%;
+
+    border-collapse: collapse;
+    
+}
+
+
 
 #killLeaderBoardCont
 {
@@ -621,12 +689,16 @@ footer
 
 #currentPick header
 {
+    padding:  10px;
+
     text-align: center;
     border-bottom: 1px white solid;
+    background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
 #currentPickInfo
 {   
+    padding: 10px;
     flex: 1;
 
     font-family: "jura";
@@ -653,8 +725,11 @@ footer
 
 #previousPick header
 {
+    padding:  10px;
+
     text-align: center;
     border-bottom: 1px white solid;
+    background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
 #previousPickInfo
@@ -693,8 +768,11 @@ footer
 
 #draftOrderCont header
 {
+    padding:  10px;
+
     text-align: center;
     border-bottom: white 1px solid;
+    background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
 .flexSpacedBetween
@@ -928,7 +1006,7 @@ footer
 
 .thGradientBg
 {
-    background-image: linear-gradient(to right,#07140F, #258662);
+    background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
 
@@ -1216,7 +1294,7 @@ footer
     padding: 10px;
 
     font-family: "jura";
-    font-size: 1.25em;
+    /* font-size: 1.25em; */
     
     border-radius: 10px;
     background-image: linear-gradient(to top, #092017, #258662);
@@ -1237,7 +1315,7 @@ footer
 
 .editDeleteMatchCont
 {
-    width: 625px;
+    width: 650px;
     min-height: 320px;
 
     margin: 10px;
@@ -1269,8 +1347,6 @@ footer
 
 .matchBox
 {
-    
-
     font-size: 1.1em;
     font-family: "jura";
 
@@ -1316,9 +1392,17 @@ footer
 
 .matchName
 {
+    width: 80%;
+
+    font-size: .75em;
     text-align: left;
     padding-left: 10px;
     height: 50px;
+}
+
+.matchKill .matchDeath
+{
+    width: 70px;
 }
 
 .matchUpPlayerInfo td
@@ -1331,7 +1415,8 @@ footer
 
 .vsCont
 {
-    width: 175px;
+    max-width: 150px;
+    padding: 0 10px;
 
     font-size: 2.5em;
     border-top: white 1px solid;

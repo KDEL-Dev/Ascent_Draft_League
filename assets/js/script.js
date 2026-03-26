@@ -855,4 +855,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // STANDINGS
+
+    async function loadStandings() 
+    {
+        const tbody = document.getElementById("standingsBody");
+        if (!tbody) return;
+
+        try {
+            const res = await fetch('/ascent_draft_league/api/standings/get_standings.php');
+            const data = await res.json();
+
+            tbody.innerHTML = "";
+
+            let rank = 1;
+
+            data.forEach(team => {
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+                    <td>${rank++}</td>
+                    <td>${team.gamerTag}</td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                    <td>${team.diff}</td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+        } catch (err) {
+            console.error("Failed to load standings:", err);
+        }
+    }
+
+    loadStandings();
+
+
+    
+    
+
 });

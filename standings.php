@@ -1,3 +1,14 @@
+<?php
+    session_start();
+
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
+    }
+
+
+    $seasonId = $_SESSION['season_id'] ?? null;
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +43,7 @@
 
         <div>
             <main>
-                <section class="contentCont">
+                <section class="shortContentCont">
                     <section id="standingsCont">
                         <table id="standingsTable">
                             <thead id="standingsHeader">
@@ -45,34 +56,7 @@
                                 </tr>
                             </thead>
                             <tbody id="standingsBody">
-                                <tr>
-                                    <td>1</td>
-                                    <td>sgs pete</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>5</td>
-                                </tr>  
-                                <tr>
-                                    <td>1</td>
-                                    <td>sgs pete</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>5</td>
-                                </tr>  
-                                <tr>
-                                    <td>1</td>
-                                    <td>sgs pete</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>5</td>
-                                </tr>  
-                                <tr>
-                                    <td>1</td>
-                                    <td>sgs pete</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>5</td>
-                                </tr>  
+                                <!-- Dynamically Added -->
                             </tbody>
                         </table>
                     </section>

@@ -127,7 +127,7 @@ if (!isset($_SESSION['user_id']))
                             target="_blank" 
                             class="replayBox">
 
-                                <div class="matchup">
+                                <div id="replayTeams">
                                     <?php echo htmlspecialchars($latestReplay['player1_name']); ?>
                                     vs
                                     <?php echo htmlspecialchars($latestReplay['player2_name']); ?>

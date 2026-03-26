@@ -95,9 +95,9 @@ while ($row = $result->fetch_assoc()) {
                                                         <th colspan="3" class="matchUpTeamName"> Team 1</th>
                                                     </tr>
                                                     <tr class="matchUpHeader">
-                                                        <th>Name</th>
-                                                        <th style="width: 20%;">Kills</th>
-                                                        <th style="width: 20%;">Deaths</th>
+                                                        <th >Name</th>
+                                                        <th  >Kills</th>
+                                                        <th >Deaths</th>
                                                     </tr>
                                                     <?php foreach ($team1Pkmn as $p): ?>
                                                         <tr>

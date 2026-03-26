@@ -70,43 +70,7 @@ if (!isset($_SESSION['user_id']))
             
         </div>
     </div>
-
-    <!--------------- 
-        MODALS 
-    ---------------->
-
-    <div id="editLeagueInfoModal" class="modal hidden">
-
-    <div class="modalContent">
-
-        <div class="modalHeader">
-            <h2>Edit League Information</h2>
-            <button id="closeModalBtn">X</button>
-        </div>
-
-        <form id="leagueInfoForm">
-
-            <h3>Important Dates</h3>
-
-            <label>Draft Date</label>
-            <input type="date" name="draft_date" id="draftDate">
-
-            <label>Season Start</label>
-            <input type="date" name="season_start" id="seasonStart">
-
-            <h3>Rules</h3>
-
-            <div id="rulesContainer"></div>
-
-            
-
-            <button type="button" id="addRuleBtn">Add Rule</button>
-
-            <br><br>
-
-            <button type="submit">Save Changes</button>
-        </form>
-    </div>
+    
 </div>
 
 
