@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (!empty($login_error)) : ?>
             <p style="color:red;"><?php echo $login_error; ?></p>
         <?php endif; ?>
-        <button><a href="register.html">Register</a></button>
+        <button><a href="register.php">Register</a></button>
     </section>
 
     <!-- <?php include 'includes/footer.php'; ?> -->

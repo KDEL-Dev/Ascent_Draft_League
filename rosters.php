@@ -14,7 +14,8 @@ require_once __DIR__ . '/includes/connection.php';
 // Simple query using active_user as team identifier
 $stmt = $conn->prepare("
     SELECT 
-        u.gamerTag,
+        u.team_name,
+        u.team_mascot_pkmn,
         sp.name,
         pt.tier
     FROM roster_pkmn rp
@@ -28,7 +29,7 @@ $stmt = $conn->prepare("
     JOIN users u
         ON au.user_id = u.id
     WHERE rp.season_id = ?
-    ORDER BY u.gamerTag, pt.tier
+    ORDER BY u.team_name, pt.tier
 ");
 
 $stmt->bind_param("i", $seasonId);
@@ -36,9 +37,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 $teams = [];
-while ($row = $result->fetch_assoc()) {
-    $teams[$row['gamerTag']][] = $row; // now the team name is the gamerTag
-    $tiers[$row['tier']][] = $row; //Testing this to see if this is how i get tiers
+while ($row = $result->fetch_assoc()) 
+{
+    $teamDisplayName = $row['team_name'] . ' ' . $row['team_mascot_pkmn'];
+    $teams[$teamDisplayName][] = $row; 
+    $tiers[$row['tier']][] = $row; // optional, if you want tier-based grouping
 }
 
 $tierOrder = ['OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU','PUBL', 'PU','ZUBL','ZU'];
@@ -95,26 +98,20 @@ unset($pokemonList); // break reference
                                     <?php foreach ($pokemonList as $pkmn): ?>
                                         <li class="pkmnNameTier">
                                             <div><?= htmlspecialchars($pkmn['name']); ?></div>
-                                                                                        
+                                                                    
                                             <?php  
-                                                
                                                 $tierMap = [
                                                     'OU' => 'ou',
                                                     'UUBL' => 'ou',
-
                                                     'UU' => 'uu',
                                                     'RUBL' => 'uu',
-
                                                     'RU' => 'ru',
                                                     'NUBL' => 'ru',
-
                                                     'NU' => 'nu',
                                                     'PUBL' => 'nu',
-
                                                     'PU' => 'nu',
                                                     'ZUBL' => 'nu',
                                                     'ZU' => 'nu'
-
                                                 ];
                                                 $tier = strtoupper($pkmn['tier']);
                                                 $baseTier = $tierMap[$tier] ?? 'default';
@@ -122,8 +119,6 @@ unset($pokemonList); // break reference
                                             <div class="<?= $baseTier ?>-RosterColor">
                                                 <?= htmlspecialchars($tier); ?>
                                             </div>
-
-
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>

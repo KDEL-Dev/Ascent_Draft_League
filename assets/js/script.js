@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    // REGISTRATION
+
+    const teamInput = document.getElementById('teamNameInput');
+    if(teamInput) {
+        teamInput.addEventListener('input', () => {
+            teamInput.value = teamInput.value.toUpperCase();
+        });
+    }
+
     // -------------------
     // LOAD POKÉMON BY TIER
     // -------------------
