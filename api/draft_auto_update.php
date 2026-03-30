@@ -22,8 +22,8 @@ $response = [
     'previous_pick' => null,
     'myDraftedCount' => 0,
     'maxPokemon' => $MAX_POKEMON_PER_USER,
-    'current_pick' => 0,        // 👈 ADD
-    'total_picks' => 0          // 👈 ADD
+    'current_pick' => 0,       
+    'total_picks' => 0        
 ];
 
 try {
@@ -77,6 +77,7 @@ try {
         SELECT user_id
         FROM active_users
         WHERE season_id = $season_id
+        AND competitor = 'yes'
         ORDER BY draft_pick ASC
     ");
     $users = [];
@@ -101,12 +102,12 @@ try {
 
     $activeUserId = $users[$activeUserIndex] ?? null;
 
-    // 4️⃣ Current player gamerTag
+    // 4️⃣ Current player team name
     if ($activeUserId) {
-        $tagRes = mysqli_query($conn, "SELECT gamerTag FROM users WHERE id = $activeUserId LIMIT 1");
+        $tagRes = mysqli_query($conn, "SELECT team_name FROM users WHERE id = $activeUserId LIMIT 1");
         $tagRow = mysqli_fetch_assoc($tagRes);
         if ($tagRow) {
-            $response['current_player'] = $tagRow['gamerTag'];
+            $response['current_player'] = $tagRow['team_name'];
         }
     }
 

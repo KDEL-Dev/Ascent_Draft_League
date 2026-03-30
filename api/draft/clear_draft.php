@@ -46,7 +46,8 @@ $rosterStmt->close();
 $updateStmt = $conn->prepare("
     UPDATE draft_info
     SET current_pick = 1,
-        draft_started = 0
+    total_picks = 0,
+    draft_started = 0
     WHERE season_id = ?
 ");
 $updateStmt->bind_param("i",$seasonId);

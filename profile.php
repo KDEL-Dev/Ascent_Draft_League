@@ -44,6 +44,10 @@ if (!isset($_SESSION['user_id']))
                     <main>
                         <section class="shortContentCont">
                             <div>
+
+                                <button><a href="edit_Name_Mascot.php">Edit Profile</a></button>
+                            </div>
+                            <div>
                                 Log Out:
                                 <button><a href="logout.php">Log Out</a></button>
                             </div>

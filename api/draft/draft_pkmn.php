@@ -25,7 +25,7 @@
         $blMap = [
             'UUBL' => 'OU',
             'RUBL' => 'UU',
-            'NUBL' => 'NU',
+            'NUBL' => 'RU', // NUBL was accidentally adding to RU
             'PUBL' => 'NU'
             // add more as needed
         ];
@@ -82,7 +82,7 @@
     $draftInfoStmt->close();
 
     // Get draft order for this season
-    $orderStmt = $conn->prepare("SELECT user_id FROM active_users WHERE season_id = ? ORDER BY draft_pick ASC");
+    $orderStmt = $conn->prepare("SELECT user_id FROM active_users WHERE season_id = ? AND competitor = 'yes' ORDER BY draft_pick ASC");
     $orderStmt->bind_param("i", $seasonId);
     $orderStmt->execute();
     $orderResult = $orderStmt->get_result();
@@ -117,7 +117,7 @@
     // ----------------
     // GET ACTIVE_USER.ID
     // ----------------
-    $activeUserStmt = $conn->prepare("SELECT id FROM active_users WHERE user_id = ? AND season_id = ? LIMIT 1");
+    $activeUserStmt = $conn->prepare("SELECT id FROM active_users WHERE user_id = ? AND season_id = ?  LIMIT 1");
     $activeUserStmt->bind_param("ii", $userId, $seasonId);
     $activeUserStmt->execute();
     $activeUserRow = $activeUserStmt->get_result()->fetch_assoc();

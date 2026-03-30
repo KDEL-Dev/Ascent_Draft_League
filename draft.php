@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$gamerTag = htmlspecialchars($_SESSION['gamerTag']);
+$teamName = htmlspecialchars($_SESSION['team_name']);
 $seasonId = $_SESSION['season_id'] ?? 1;
 ?>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ $seasonId = $_SESSION['season_id'] ?? 1;
     <title>Ascent - Draft</title>
     <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
-<body data-gamertag="<?php echo $gamerTag; ?>">
+<body data-team-name="<?php echo $teamName; ?>">
 
 <div class="pageLayout">
 

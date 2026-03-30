@@ -1,54 +1,54 @@
 <?php
-session_start();
+    session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
+    }
 
-$seasonId = $_SESSION['season_id'] ?? null;
+    $seasonId = $_SESSION['season_id'] ?? null;
 
-require_once __DIR__ . '/includes/connection.php';
+    require_once __DIR__ . '/includes/connection.php';
 
-/*
-    STATS QUERY
-*/
-$sql = "
-SELECT 
-    u.gamerTag,
-    sd.name AS pokemon_name,
-    SUM(mps.kills) AS total_kills,
-    SUM(mps.deaths) AS total_deaths,
-    SUM(mps.used) AS total_used
-FROM match_pokemon_stats mps
-JOIN roster_pkmn rp 
-    ON mps.roster_pkmn_id = rp.id
-JOIN showdown_pkmn sd 
-    ON rp.showdown_pkmn = sd.id
-JOIN active_users au 
-    ON mps.active_user_id = au.id
-JOIN users u 
-    ON au.user_id = u.id
-JOIN matchup m 
-    ON mps.matchup_id = m.id
-WHERE m.season_id = ?
-GROUP BY u.gamerTag, sd.name
-ORDER BY u.gamerTag, total_kills DESC
-";
+    /*
+        STATS QUERY
+    */
+    $sql = "
+    SELECT 
+        u.team_name,
+        sd.name AS pokemon_name,
+        SUM(mps.kills) AS total_kills,
+        SUM(mps.deaths) AS total_deaths,
+        SUM(mps.used) AS total_used
+    FROM match_pokemon_stats mps
+    JOIN roster_pkmn rp 
+        ON mps.roster_pkmn_id = rp.id
+    JOIN showdown_pkmn sd 
+        ON rp.showdown_pkmn = sd.id
+    JOIN active_users au 
+        ON mps.active_user_id = au.id
+    JOIN users u 
+        ON au.user_id = u.id
+    JOIN matchup m 
+        ON mps.matchup_id = m.id
+    WHERE m.season_id = ?
+    GROUP BY u.team_name, sd.name
+    ORDER BY u.team_name, total_kills DESC
+    ";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $seasonId);
-$stmt->execute();
-$result = $stmt->get_result();
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $seasonId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-/*
-    GROUP DATA BY TEAM
-*/
-$teams = [];
+    /*
+        GROUP DATA BY TEAM
+    */
+    $teams = [];
 
-while ($row = $result->fetch_assoc()) {
-    $teams[$row['gamerTag']][] = $row;
-}
+    while ($row = $result->fetch_assoc()) {
+        $teams[$row['team_name']][] = $row;
+    }
 ?>
 
 <!DOCTYPE html>

@@ -52,11 +52,11 @@ if (!isset($_SESSION['user_id']))
                                 <button id="clearDraftBtn" class="adminSettingsBtn">Reset Draft & Rosters</button>
                             </div>
                             <div>
-                                <button id="" class="adminSettingsBtn">Users Management</button>
+                                <a href="/ascent_draft_league/edit_role.php" class="adminSettingsBtn">Users Management</a>
                             </div>
                         </div>
                         <div class="adminSettingsCont">
-                            <div class="adminSettingsHeader">League Management</div>
+                            <div class="adminSettingsHeader">Update Info</div>
                             <div>
                                 <button class="adminSettingsBtn">Update Overview - News </button>
                             </div>

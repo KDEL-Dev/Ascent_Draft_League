@@ -15,7 +15,8 @@ if (!$seasonId) {
 $result = $conn->prepare("
     SELECT COUNT(*) AS user_count 
     FROM active_users 
-    WHERE season_id = ?
+    WHERE season_id = ? 
+    AND competitor = 'yes'
 ");
 $result->bind_param("i", $seasonId);
 $result->execute();

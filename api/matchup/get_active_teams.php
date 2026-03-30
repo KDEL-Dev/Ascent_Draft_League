@@ -16,11 +16,12 @@ if (!$seasonId) {
 $sql = "
 SELECT 
     au.id AS active_user_id,
-    u.gamerTag
+    u.team_name
 FROM active_users au
 JOIN users u ON u.id = au.user_id
 WHERE au.season_id = ?
-ORDER BY u.gamerTag
+AND competitor= 'yes'
+ORDER BY u.team_name
 ";
 
 $stmt = $conn->prepare($sql);

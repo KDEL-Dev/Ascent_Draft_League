@@ -57,7 +57,10 @@
                 </ul>
             </div>
             <div class="navSettingsCont">
-                <div id="profileName">Welcome <?= $_SESSION['gamerTag'] ?? 'Spectator'; ?></div>
+                <div id="profileName">Welcome: <br>
+                    <?= 
+                    ($_SESSION['team_name'] ?? 'Spectator') .' '. ($_SESSION['team_mascot_pkmn'] ?? 'No Mascot'); 
+                ?></div>
                 <div class="profileSettingsBtn">
                     <a href="profile.php">
                        Profile

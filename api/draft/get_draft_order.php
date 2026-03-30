@@ -7,11 +7,12 @@ $seasonId = $_SESSION['season_id'] ?? null;
 
 //could of also just pasted this straight into prepare
 $sql = "
-    SELECT u.gamerTag
+    SELECT u.team_name
     FROM active_users au
     JOIN users u ON au.user_id = u.id
     WHERE au.draft_pick IS NOT NULL
       AND au.season_id = ? 
+      AND au.competitor = 'yes'
     GROUP BY au.user_id
     ORDER BY MIN(au.draft_pick) ASC
 ";
@@ -27,7 +28,7 @@ if (!$result) {
 
 $order = [];
 while ($row = $result->fetch_assoc()) {
-    $order[] = $row['gamerTag'];
+    $order[] = $row['team_name'];
 }
 
 echo json_encode($order);

@@ -12,13 +12,13 @@ if (!isset($_SESSION['user_id']))
 
     // Get latest replay
 
-    $sql = $sql = "
+    $sql = "
     SELECT 
         m.replay_link,
         m.created_at,
 
-        u1.gamerTag AS player1_name,
-        u2.gamerTag AS player2_name
+        u1.team_name AS player1_name,
+        u2.team_name AS player2_name
 
     FROM matchup m
 
@@ -44,13 +44,13 @@ if (!isset($_SESSION['user_id']))
     $replay_stmt->bind_param("i", $seasonId);
     $replay_stmt->execute();
 
-    $replayResult = $replay_stmt->get_result();
-    $latestReplay = $replayResult->fetch_assoc();
+    $replayResult = $replay_stmt->get_result();     //Stores the metadata and not actually can be read by php
+    $latestReplay = $replayResult->fetch_assoc();   //Fetching turns data into something PHP can use which in this case I believe is an array
 
     // Standings
 
     $standingSql = "
-    SELECT users.gamerTag, 
+    SELECT users.team_name, 
     COUNT(matchup.winner_active_user_id) AS Wins
     FROM active_users
     JOIN users
@@ -59,7 +59,8 @@ if (!isset($_SESSION['user_id']))
     ON matchup.winner_active_user_id = active_users.id
     AND matchup.season_id = ?
     WHERE active_users.season_id = ?
-    GROUP BY active_users.id, users.gamerTag
+    AND competitor= 'yes'
+    GROUP BY active_users.id, users.team_name
     ORDER BY Wins DESC;
     ";
 
@@ -69,7 +70,27 @@ if (!isset($_SESSION['user_id']))
 
     $standingResult = $standingStmt->get_result();
 
+    // Kill LeaderBoard
 
+    $killSql =  "
+        SELECT showdown_pkmn.name, 
+        SUM(mps.kills) AS total_kills
+        FROM match_pokemon_stats mps
+        JOIN roster_pkmn
+        ON mps.roster_pkmn_id = roster_pkmn.id
+        JOIN showdown_pkmn
+        ON showdown_pkmn.id = roster_pkmn.showdown_pkmn
+        WHERE roster_pkmn.season_id = ?
+        GROUP BY showdown_pkmn.name
+        ORDER BY total_kills DESC
+        LIMIT 3;
+    ";
+
+    $killStmt = $conn->prepare($killSql);
+    $killStmt->bind_param("i", $seasonId);
+    $killStmt->execute();
+
+    $killResult = $killStmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -108,14 +129,17 @@ if (!isset($_SESSION['user_id']))
                     <section class="playerDashCont">
                         <div class="sectionTitle">Player Dashboard</div>
                         <article class="playerDashContent"> 
+                            Under Construction
+                            <!-- Turning off for now. Javascript dynamically loads this
                             <section id="homeRosterCont">
                                 <section id="homeRosterHeader">Team Name</section>
                                 <section id="homeRosterBox">
                                     <ul id="homePkmnList">
-                                        <!-- Javascript will load results -->
+                                        
                                     </ul>
                                 </section>
-                            </section>
+                            </section> 
+                            -->
                         </article>
                     </section>
                 </main>
@@ -155,7 +179,6 @@ if (!isset($_SESSION['user_id']))
                                         <tr>
                                             <th>#</th>
                                             <th>Team</th>
-                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -165,8 +188,7 @@ if (!isset($_SESSION['user_id']))
                                         ?>
                                             <tr>
                                                 <td><?php echo $rank++; ?></td>
-                                                <td><?php echo htmlspecialchars($row['gamerTag']); ?></td>
-                                                
+                                                <td><?php echo htmlspecialchars($row['team_name']); ?></td>
                                             </tr>
                                         <?php endwhile; ?>
                                     </tbody>
@@ -179,7 +201,36 @@ if (!isset($_SESSION['user_id']))
                     </section>
                     <section id="killLeaderBoardCont">
                             <div class="smallerSectionTitle">Kill Leader</div>
-                            <div id="killLeader">Will update when league starts</div>             
+                            <div id="killLeader">
+
+                            
+
+                                <?php if ($killResult && $killResult->num_rows > 0): ?>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Pkmn</th>
+                                                <th>Kills</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                                $rank = 1;
+                                                while ($row = $killResult->fetch_assoc()): 
+                                            ?>
+                                                <tr>
+                                                    <td><?php echo $rank++; ?></td>
+                                                    <td><?php echo htmlspecialchars($row['name']); ?></td>
+                                                    <td><?php echo htmlspecialchars($row['total_kills']); ?></td>
+                                                </tr>
+                                            <?php endwhile; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else: ?>
+                                    <div>No Standings Yet</div>
+                                <?php endif; ?>
+                            </div>             
                     </section>
                 </aside>
             

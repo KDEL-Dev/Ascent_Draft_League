@@ -10,33 +10,35 @@
     }
 
     $sql = "
-    SELECT 
-    users.gamerTag,
+        SELECT 
+        users.team_name,
 
-    SUM(matchup.winner_active_user_id = active_users.id) AS wins,
+        SUM(matchup.winner_active_user_id = active_users.id) AS wins,
 
-    SUM(
-        matchup.winner_active_user_id IS NOT NULL 
-        AND matchup.winner_active_user_id != active_users.id
-    ) AS losses
+        SUM(
+            matchup.winner_active_user_id IS NOT NULL 
+            AND matchup.winner_active_user_id != active_users.id
+        ) AS losses
 
-    FROM active_users
+        FROM active_users
 
-    JOIN users 
-        ON active_users.user_id = users.id
+        JOIN users 
+            ON active_users.user_id = users.id
 
-    LEFT JOIN matchup 
-        ON matchup.season_id = active_users.season_id
-        AND (
-            matchup.player1_active_user_id = active_users.id 
-            OR matchup.player2_active_user_id = active_users.id
-        )
+        LEFT JOIN matchup 
+            ON matchup.season_id = active_users.season_id
+            AND (
+                matchup.player1_active_user_id = active_users.id 
+                OR matchup.player2_active_user_id = active_users.id
+            )
 
-    WHERE active_users.season_id = ?
+        WHERE active_users.season_id = ?
+        AND competitor = 'yes'
 
-    GROUP BY active_users.id
+        GROUP BY active_users.id
 
-    ORDER BY wins DESC;";
+        ORDER BY wins DESC;
+    ";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $seasonId);

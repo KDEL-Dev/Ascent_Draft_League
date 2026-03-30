@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 session_start();
 include("includes/connection.php");
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     // --- Use prepared statements to prevent SQL injection ---
-    $stmt = $conn->prepare("SELECT id, gamerTag FROM users WHERE email = ? AND password = ?");
+    $stmt = $conn->prepare("SELECT id, team_name, team_mascot_pkmn FROM users WHERE email = ? AND password = ?");
     $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -22,7 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $row = $result->fetch_assoc();
 
             $_SESSION['user_id'] = $row['id'];
-            $_SESSION['gamerTag'] = $row['gamerTag'];
+            $_SESSION['team_name'] = $row['team_name'];
+            $_SESSION['team_mascot_pkmn'] = $row['team_mascot_pkmn'];
+
             $seasonResult = $conn->query("SELECT season_id FROM seasons WHERE is_active = 1 LIMIT 1");
             if($seasonRow = $seasonResult->fetch_assoc())
                 {

@@ -153,6 +153,10 @@ Navigation Menu
     font-family: "jura";
 
     margin-bottom: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profileSettingsBtn
@@ -217,6 +221,7 @@ Navigation Menu
 {
     color: black;
     background-color: white;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
 }
 
 
@@ -224,11 +229,13 @@ Navigation Menu
 {
     color: black;
     background-color: white;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
 
 }
 
 #profileName
 {
+    padding: 20px;
     margin-bottom: 10px;
 
     color: white;
@@ -797,14 +804,22 @@ footer
     list-style: none;
     border-bottom: 1px rgb(0, 0, 0) solid;
     border-right: 1px rgb(0, 0, 0) solid;
-    font-size: 1.25em;
-    color: black;
-    background-image: linear-gradient(to top, rgb(159, 173, 177) ,white);
+    font-size: 1.0em;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-image: linear-gradient(45deg, rgb(52, 63, 77) ,rgb(132, 150, 168));
 
     
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#draftOrderList li .draftNumber {
+    display: inline-block;
+    width: 30px;       /* space for number */
+    font-weight: bold;
+    text-align: right;
 }
 
 #draftOrderBtnCont

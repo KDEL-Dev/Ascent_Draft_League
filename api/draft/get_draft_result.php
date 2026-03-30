@@ -11,7 +11,7 @@ SELECT
     drafted_pkmn.pick_number,
     showdown_pkmn.name, 
     pkmn_tier.tier,
-    users.gamerTag
+    users.team_name
 FROM drafted_pkmn
 JOIN showdown_pkmn
     ON showdown_pkmn.id = drafted_pkmn.showdown_pkmn

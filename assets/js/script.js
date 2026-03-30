@@ -84,14 +84,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function renderDraftOrder(list) {
-        if (!draftOrderList) return;
-        draftOrderList.innerHTML = "";
-        list.forEach(gamerTag => {
-            const li = document.createElement("li");
-            li.textContent = gamerTag;
-            draftOrderList.appendChild(li);
-        });
-    }
+    if (!draftOrderList) return;
+    draftOrderList.innerHTML = "";
+
+    list.forEach((teamName, index) => {
+        const li = document.createElement("li");
+
+        // Add number + team name
+        li.innerHTML = `<span class="draftNumber">${index + 1}.</span> ${teamName}`;
+
+        draftOrderList.appendChild(li);
+    });
+}
 
     // -------------------
     // DRAFT STATE
@@ -108,10 +112,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const currentPickEl = document.getElementById("currentPickInfo");
             const previousPickEl = document.getElementById("previousPickInfo");
 
-            // ❗ If this page doesn't have draft UI, just exit safely
             if (!currentPickEl && !previousPickEl) return;
 
-            // 🚨 NEW: check if draft is finished
             if (data.draft_finished) {
                 currentPickEl.textContent = "Draft Complete";
                 toggleDraftButtons(false);
@@ -129,11 +131,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (currentPickEl) currentPickEl.textContent = data.current_player ?? "Waiting...";
             if (previousPickEl) previousPickEl.textContent = data.previous_pick ?? "-";
 
-            const myGamerTag = document.body.dataset.gamertag;
+            const myTeamName = document.body.dataset.teamName;
             const MAX_POKEMON_PER_USER = data.maxPokemon ?? 12; //CHANGED TO 12
 
+
             const canDraft =
-                (myGamerTag === data.current_player) &&
+                (myTeamName === data.current_player) &&
                 (data.myDraftedCount < MAX_POKEMON_PER_USER);
 
             toggleDraftButtons(canDraft);
@@ -343,7 +346,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (pick.tier === "OU") tdTier.classList.add("ouBadge");
 
                 const tdTeam = document.createElement("td");
-                tdTeam.textContent = pick.gamerTag;
+                tdTeam.textContent = pick.team_name;
 
                 tr.appendChild(tdPick);
                 tr.appendChild(tdName);
@@ -361,23 +364,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -------------------
     // OVERVIEW PAGE
     // -------------------
-    function loadOverviewRoster() {
-        const homeRoster = document.getElementById('homePkmnList');
-        if (!homeRoster) return;
 
-        fetch('/ascent_draft_league/api/overview/get_active_user_roster.php')
-        .then(res => res.json())
-        .then(data => {
-            homeRoster.innerHTML = "";
-            data.forEach(pkmn => {
-                const li = document.createElement("li");
-                li.textContent = pkmn;
-                homeRoster.appendChild(li);
-            });
-        })
-        .catch(err => console.error("Failed to load roster:", err));
-    }
-    loadOverviewRoster();
+    // Turning off function below. This will be a future feature.
+    /*
+        function loadOverviewRoster() {
+            const homeRoster = document.getElementById('homePkmnList');
+            if (!homeRoster) return;
+
+            fetch('/ascent_draft_league/api/overview/get_active_user_roster.php')
+            .then(res => res.json())
+            .then(data => {
+                homeRoster.innerHTML = "";
+                data.forEach(pkmn => {
+                    const li = document.createElement("li");
+                    li.textContent = pkmn;
+                    homeRoster.appendChild(li);
+                });
+            })
+            .catch(err => console.error("Failed to load roster:", err));
+        }
+        loadOverviewRoster();
+    */
 
     // -------------------
     // LEAGUE INFORMATION
@@ -481,12 +488,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             teams.forEach(team => {
                 const option1 = document.createElement('option');
                 option1.value = team.active_user_id;
-                option1.textContent = team.gamerTag;
+                option1.textContent = team.team_name;
                 teamOne.appendChild(option1);
 
                 const option2 = document.createElement('option');
                 option2.value = team.active_user_id;
-                option2.textContent = team.gamerTag;
+                option2.textContent = team.team_name;
                 teamTwo.appendChild(option2);
             });
         } catch(err) {
@@ -884,7 +891,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 tr.innerHTML = `
                     <td>${rank++}</td>
-                    <td>${team.gamerTag}</td>
+                    <td>${team.team_name}</td>
                     <td>${team.wins}</td>
                     <td>${team.losses}</td>
                     <td>${team.diff}</td>
@@ -901,7 +908,108 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadStandings();
 
 
-    
+    const tbody = document.querySelector("table tbody");
+    const editRolePageEl = document.getElementById("editRolePage");
+
+    if (!editRolePageEl || !tbody) {
+        return;
+    }
+
+    const seasonId = editRolePageEl.dataset.season;
+
+    try {
+        const response = await fetch("/ascent_draft_league/api/admin/update_roles.php");
+        const users = await response.json();
+
+        users.forEach(user => {
+            const tr = document.createElement("tr");
+
+            // 1. Email
+            const emailTd = document.createElement("td");
+            emailTd.textContent = user.email;
+            tr.appendChild(emailTd);
+
+            // 2. Team Name
+            const teamTd = document.createElement("td");
+            teamTd.textContent = user.team_name;
+            tr.appendChild(teamTd);
+
+            // 3. Mascot
+            const mascotTd = document.createElement("td");
+            mascotTd.textContent = user.team_mascot_pkmn;
+            tr.appendChild(mascotTd);
+
+            // 4. Role column
+            const roleTd = document.createElement("td");
+            if (user.role === "owner") {
+                roleTd.textContent = "owner"; // read-only
+            } else {
+                const roleSelect = document.createElement("select");
+                ["admin", "user"].forEach(r => {
+                    const option = document.createElement("option");
+                    option.value = r;
+                    option.textContent = r;
+                    if (r === user.role) option.selected = true;
+                    roleSelect.appendChild(option);
+                });
+                roleTd.appendChild(roleSelect);
+
+                // Update role on change
+                roleSelect.addEventListener("change", async () => {
+                    await fetch("/ascent_draft_league/api/admin/update_roles.php", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            user_id: user.id,
+                            role: roleSelect.value,
+                            competitor: competitorSelect.value,
+                            season_id: seasonId
+                        })
+                    });
+                });
+            }
+            tr.appendChild(roleTd);
+
+            // 5. Competitor column (always editable)
+            const competitorTd = document.createElement("td");
+            const competitorSelect = document.createElement("select");
+            ["yes", "no"].forEach(c => {
+                const option = document.createElement("option");
+                option.value = c;
+                option.textContent = c;
+                if (c === user.competitor) option.selected = true;
+                competitorSelect.appendChild(option);
+            });
+            competitorSelect.addEventListener("change", async () => {
+                await fetch("/ascent_draft_league/api/admin/update_roles.php", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        user_id: user.id,
+                        role: user.role, // keep role as is
+                        competitor: competitorSelect.value,
+                        season_id: seasonId
+                    })
+                });
+            });
+            competitorTd.appendChild(competitorSelect);
+            tr.appendChild(competitorTd);
+
+            // 6. Season
+            const seasonTd = document.createElement("td");
+            seasonTd.textContent = user.season_id ?? "-";
+            tr.appendChild(seasonTd);
+
+            // 7. Created At
+            const createdTd = document.createElement("td");
+            createdTd.textContent = user.created_at;
+            tr.appendChild(createdTd);
+
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error("Failed to load users:", err);
+    }
     
 
 });
