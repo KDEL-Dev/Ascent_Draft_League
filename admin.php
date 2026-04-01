@@ -19,7 +19,7 @@ if (!isset($_SESSION['user_id']))
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
 
-    <title>Admin Settings</title>
+    <title>Ascent - Admin Settings</title>
 </head>
 <body>
     <div class="pageLayout">
@@ -38,10 +38,10 @@ if (!isset($_SESSION['user_id']))
                 </div>
             </header>
             <div class="pageLayout">
-                <main>
-                    <section class="contentCont">
+                <main class="centerMain">
+                    <section class="adminContentCont">
                         <div class="adminSettingsCont">
-                            <div class="adminSettingsHeader">League Setup</div>
+                            <div class="adminSettingsHeader">League Initial Setup</div>
                             <div>
                                 <button id="insertPokemonBtn" class="adminSettingsBtn">Update Pokemon Database</button>
                             </div>
@@ -51,17 +51,23 @@ if (!isset($_SESSION['user_id']))
                             <div>
                                 <button id="clearDraftBtn" class="adminSettingsBtn">Reset Draft & Rosters</button>
                             </div>
-                            <div>
-                                <a href="/ascent_draft_league/edit_role.php" class="adminSettingsBtn">Users Management</a>
-                            </div>
+                           
                         </div>
                         <div class="adminSettingsCont">
-                            <div class="adminSettingsHeader">Update Info</div>
+                            <div class="adminSettingsHeader">League Management</div>
+                             <div>
+                                <a href="/ascent_draft_league/edit_role.php" class="adminSettingsBtn">Users Management</a>
+                            </div>
+                            <div>
+                                <p class="adminSectionTitle">Written Content Update</p>
+                            </div>
                             <div>
                                 <button class="adminSettingsBtn">Update Overview - News </button>
                             </div>
                             <div>
-                                <button class="adminSettingsBtn" id="updateLeagueInfoBtn">Update League Information </button>
+                                <button class="adminSettingsBtn" id="updateLeagueInfoBtn">
+                                    <a href="edit_league_info.php">Update League Information </a>
+                                </button>
                             </div>
                         </div>
                     </section>

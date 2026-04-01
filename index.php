@@ -150,21 +150,18 @@ if (!isset($_SESSION['user_id']))
                             <a href="<?php echo htmlspecialchars($latestReplay['replay_link']); ?>" 
                             target="_blank" 
                             class="replayBox">
-
                                 <div id="replayTeams">
                                     <?php echo htmlspecialchars($latestReplay['player1_name']); ?>
                                     vs
                                     <?php echo htmlspecialchars($latestReplay['player2_name']); ?>
                                 </div>
-
-                                <div class="replayDate">
-                                    <?php 
-                                        $date = new DateTime($latestReplay['created_at']);
-                                        echo $date->format('m/d/y g:i A');;
-                                    ?>
-                                </div>
-
                             </a>
+                        <div class="replayDate">
+                            <?php 
+                                $date = new DateTime($latestReplay['created_at']);
+                                echo $date->format('m/d/y g:i A');;
+                            ?>
+                        </div>
                         <?php else: ?>
                             <div>No replays yet</div>
                         <?php endif; ?>

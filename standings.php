@@ -42,7 +42,7 @@
         </header>
 
         <div>
-            <main>
+            <main class="centerMain">
                 <section class="shortContentCont">
                     <section id="standingsCont">
                         <table id="standingsTable">

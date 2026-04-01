@@ -43,25 +43,26 @@
 
         <div>
             <main>
-                <section class="shortContentCont">
-                    
-                    <div id="editRolePage" data-season="<?= htmlspecialchars($seasonId) ?>"></div>
+                <section class="contentCont">
+                    <div id="centerTable">
+                        <div id="editRolePage" data-season="<?= htmlspecialchars($seasonId) ?>"></div>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Team Name</th>
-                                <th>Team Mascot</th>
-                                <th>role</th>
-                                <th>competitor</th>
-                                <th>season</th>
-                                <th>created at</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                        <table id="roleTable">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Team Name</th>
+                                    <th>Team Mascot</th>
+                                    <th>role</th>
+                                    <th>competitor</th>
+                                    <th>season</th>
+                                    <th>created at</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
             </main>
 

@@ -61,11 +61,11 @@
                     <?= 
                     ($_SESSION['team_name'] ?? 'Spectator') .' '. ($_SESSION['team_mascot_pkmn'] ?? 'No Mascot'); 
                 ?></div>
-                <div class="profileSettingsBtn">
-                    <a href="profile.php">
-                       Profile
-                    </a>
+                <div >
+                    <a class="profileSettingsBtn" href="profile.php">Profile</a>
                 </div>
-                <div class="adminSettingsBtn"><a href="admin.php">Admin Settings</a></div>
+                <div >
+                    <a class="navAdminSettingsBtn" href="admin.php">Admin Settings</a>
+                </div>
             </div>
         </div>

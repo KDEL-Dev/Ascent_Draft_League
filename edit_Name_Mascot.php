@@ -74,7 +74,7 @@
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
 
-    <title>Ascent - Standings</title>
+    <title>Ascent - edit profile</title>
 </head>
 <body>
 <div class="pageLayout">
@@ -97,7 +97,7 @@
         </header>
 
         <div>
-            <main>
+            <main class="centerMain">
                 <section class="shortContentCont">
 
                     <?php if (!empty($success)): ?>
@@ -109,13 +109,17 @@
                     <?php endif; ?>
 
                     <form method="POST" action="">
-                        <label for="">Team Name</label>
-                        <input type="text" name="team_name" oninput="this.value = this.value.toUpperCase()" maxlength="5" value="<?php echo htmlspecialchars($user['team_name'] ?? ''); ?>">
-
-                        <label for=""> Team Mascot </label>
-                        <input type="text" name="team_mascot" value="<?php echo htmlspecialchars($user['team_mascot_pkmn'] ?? ''); ?>"> 
-
-                        <button type="submit">Save Changes</button>
+                        <div class="editTeamCol">
+                            <label for="">Team Name:</label>
+                            <input type="text" name="team_name" oninput="this.value = this.value.toUpperCase()" maxlength="5" value="<?php echo htmlspecialchars($user['team_name'] ?? ''); ?>">
+                        </div>
+                        <div class="editTeamCol">
+                            <label for=""> Team Mascot: </label>
+                            <input type="text" name="team_mascot" value="<?php echo htmlspecialchars($user['team_mascot_pkmn'] ?? ''); ?>"> 
+                        </div>
+                        <div>
+                            <button class="adminSettingsBtn" type="submit">Save Changes</button>
+                        </div>
                     </form>
                 </section>
             </main>

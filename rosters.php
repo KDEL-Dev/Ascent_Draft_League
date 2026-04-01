@@ -69,7 +69,7 @@ unset($pokemonList); // break reference
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
 
-    <title>Rosters</title>
+    <title>Ascent - Rosters</title>
 </head>
 <body>
     <div class="pageLayout">

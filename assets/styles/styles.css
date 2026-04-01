@@ -159,7 +159,7 @@ Navigation Menu
     align-items: center;
 }
 
-.profileSettingsBtn
+.profileSettingsBtn 
 {
     width: 175px;
     height: 50px;
@@ -167,9 +167,11 @@ Navigation Menu
 
     background-color: black;
     color: white;
+    
     border: white solid 1px;
     border-radius: 10px;
     cursor: pointer;
+    
 
     display: flex;
     justify-content: center;
@@ -178,12 +180,14 @@ Navigation Menu
     transition: background-color .2s ease, color .2s ease;
 }
 
-.profileSettingsBtn a
-{
-    /* font-size: 1.25em; */
+.profileSettingsBtn:link,
+.profileSettingsBtn:visited {
+    color: white;
 }
 
-.adminSettingsBtn
+
+
+.navAdminSettingsBtn
 {
     margin-top: 10px;
     width: 175px;
@@ -203,9 +207,10 @@ Navigation Menu
     transition: background-color .2s ease, color .2s ease;
 }
 
-.adminSettingsBtn a
+.navAdminSettingsBtn:link,
+.navAdminSettingsBtn:visited
 {
-    /* font-size: 1.25em; */
+    color: white;
 }
 
 .profileSettingsBtn a
@@ -225,7 +230,7 @@ Navigation Menu
 }
 
 
-.adminSettingsBtn:hover
+.navAdminSettingsBtn:hover
 {
     color: black;
     background-color: white;
@@ -235,14 +240,15 @@ Navigation Menu
 
 #profileName
 {
-    padding: 20px;
+    padding: 5px;
     margin-bottom: 10px;
 
     color: white;
     text-align: center;
     font-family: "jura";
     font-size: 1.25em;
-    text-decoration: underline;
+    /* text-decoration: underline; */
+    border-bottom: 1px solid white;
     
 }
 
@@ -528,6 +534,10 @@ main
 {
     flex: 1;
 
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    font-size: 1.25em;
+
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -543,10 +553,13 @@ main
 .replayDate
 {
     margin-top: auto;
-    font-size: .75em;
-    font-family: "jura";
+    padding-top: 5px;
+
+
+    font-size: .65em;
+    font-family: "zen dots";
     text-align: center;
-    border-top: 1px solid white;
+    
 }
 
 #miniStandingsCont
@@ -1217,7 +1230,7 @@ footer
 {
     border: white 2px solid;
     width: 300px;
-    height: 300px;
+    min-height: 200px;
     border-radius: 10px;
 
    
@@ -1225,7 +1238,7 @@ footer
 
 #whatIsCont
 {
-    width: 70%;
+    width: 80%;
 
     display: flex;
     justify-content: left;
@@ -1268,6 +1281,11 @@ footer
 #formatRulesCont p
 {
     text-align: center;
+}
+
+#ruleList
+{
+    list-style: none;
 }
 
 
@@ -1728,32 +1746,111 @@ footer
     justify-content: space-between;
 } */
 
+.centerMain
+{
+    display: flex;
+    justify-content: center;
+}
+
 .shortContentCont
 {
     margin: 0 20px 20px 20px;
     padding: 40px;
 
-
+    width: 700px;
     color: white;
     font-family: "jura";
     background-color: black;
     border-radius: 10px;
-    flex: 1;
+    /* flex: 1; */
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     flex-wrap: wrap;
 }
 
+.profileSettingsBtn
+{
+    margin-top: 10px;
+    width: 175px;
+    height: 50px;
 
+    color: white;
+    background-color: black;
+    border: white solid 1px;
+    border-radius: 10px;
+    cursor: pointer;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    /* Animation */
+    transition: background-color .2s ease, color .2s ease;
+}
 
+#logoutBorder
+{
+    border-top: 1px solid rgb(255, 255, 255, .5);
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+#logoutBtn
+{
+    background-color: black;
+    color: red;
+    border-color: red;
+
+    font-size: 1.5em;
+    font-family: "jura";
+    font-weight: bold;
+}
+
+#logoutBtn:hover
+{
+    background-color: red;
+    color: white;
+    text-shadow: 0 0 20px white ;
+    box-shadow:  0 0 10px red ;
+
+}
+/**************************************
+        Edit Team Name and Mascot Page 
+ *************************************/
+
+.editTeamCol
+{
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
 
 
 /**************************************
             Admin Page 
  *************************************/
+
+ .adminContentCont
+ {
+    margin: 0 20px 20px 20px;
+    padding: 40px;
+
+    width: 900px;
+    max-height: 600px;
+    color: white;
+    font-family: "jura";
+    background-color: black;
+    border-radius: 10px;
+    /* flex: 1; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+ }
 
 .adminSettingsCont
 {
@@ -1799,3 +1896,74 @@ footer
 .hidden{
     display:none;
 }
+
+.adminSettingsBtn
+{
+    margin-top: 10px;
+    width: 175px;
+    height: 50px;
+
+    color: white;
+    background-color: black;
+    border: white solid 1px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: .5em;
+    font-family: "jura";
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Animation */
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.adminSettingsBtn:link,
+.adminSettingsBtn:visited
+{
+    color: white;
+}
+
+.adminSettingsBtn:hover
+{
+    color: black;
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+
+}
+
+.adminSectionTitle
+{
+    margin: 0;
+    margin-top: 20px;
+
+    font-size: .5em;
+    text-decoration: underline;
+}
+
+/**************************************
+            Edit Role Page 
+ *************************************/
+
+ #centerTable
+ {  
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+ }
+
+ #roleTable
+ {
+    border-collapse: collapse;
+    align-self: flex-start;
+ }
+
+ 
+/*  */
+ #editLeagueInfoForm
+ {
+    width: 100%;
+    flex: 1;
+ }

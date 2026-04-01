@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id']))
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="assets/js/script.js"></script>
 
-    <title>Profile</title>
+    <title>Ascent - Profile</title>
 </head>
 <body>
     
@@ -41,15 +41,13 @@ if (!isset($_SESSION['user_id']))
                     </div>
                 </header>
                 <div>
-                    <main>
+                    <main class="centerMain">
                         <section class="shortContentCont">
                             <div>
-
-                                <button><a href="edit_Name_Mascot.php">Edit Profile</a></button>
+                                <button class="profileSettingsBtn"><a href="edit_name_mascot.php" >Edit Team Name and Mascot</a></button>
                             </div>
-                            <div>
-                                Log Out:
-                                <button><a href="logout.php">Log Out</a></button>
+                            <div id="logoutBorder">
+                                <button class="profileSettingsBtn" id="logoutBtn"><a href="logout.php">Log Out</a></button>
                             </div>
                         </section>
                     </main>

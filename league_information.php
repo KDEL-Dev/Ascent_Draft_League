@@ -1,13 +1,47 @@
 <?php
-session_start();
+    session_start();
+    require_once __DIR__ . '/includes/connection.php';
 
-if (!isset($_SESSION['user_id'])) 
-    {
+    // Check user login
+    if (!isset($_SESSION['user_id'])) {
         header("Location: login.php");
         exit;
     }
 
+    // Get season ID from query string
     $seasonId = $_SESSION['season_id'] ?? null;
+    if (!$seasonId) {
+        die("Season ID missing.");
+    }
+
+    // READ FUNCTION - About and Rules
+
+    $infoSql = "
+        SELECT * FROM `league_information`
+        WHERE season_id = ?
+    ";
+
+    $stmt = $conn->prepare($infoSql);
+    $stmt->bind_param("i", $seasonId);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $infoResult = $result->fetch_assoc();
+
+    // READ FUNCTION - Date
+
+    $dateSql = "
+        SELECT draft_date, start_date
+        FROM seasons
+        WHERE season_id = ?;
+    ";
+
+    $dateStmt = $conn->prepare($dateSql);
+    $dateStmt->bind_param("i",$seasonId);
+    $dateStmt->execute();
+
+    $dateResult = $dateStmt->get_result();
+    $dateInfo = $dateResult->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +53,7 @@ if (!isset($_SESSION['user_id']))
     <link rel="stylesheet" href="assets/styles/styles.css">
     <script src="/ascent_draft_league/assets/js/script.js"></script>
 
-    <title>League Information</title>
+    <title>Ascent - League Information</title>
 </head>
 <body>
     <div class="pageLayout">
@@ -44,14 +78,20 @@ if (!isset($_SESSION['user_id']))
                             <section id="leagueInfoRow">
                                 <section id="whatIsCont" class="leagueInfoSect">
                                     <h2>What is Ascent Draft League?</h2>
-                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Porro, libero laborum! Facilis, recusandae. Porro, at similique libero id maxime nesciunt ullam cumque incidunt consectetur? Placeat enim laboriosam pariatur assumenda nam!</p>
+                                    <p><?= htmlspecialchars($infoResult['about']) ?></p>                                
                                 </section>
                                 <section id="importantDatesCont" class="leagueInfoSect">
-                                    <h2>Important Dates:</h2>
-                                    <h3>Draft Date:</h3>
-                                    <p>Date goes here</p>
-                                    <h3>Season Start:</h3>
-                                    <p>Date Goes Here</p>
+                                   <h2>Important Dates</h2>
+                                    <table>
+                                        <tr>
+                                            <th>Draft Date</th>
+                                            <td><?= htmlspecialchars($dateInfo['draft_date']) ?></td>    
+                                        </tr>
+                                        <tr>
+                                            <th>Season Start</th>
+                                            <td><?= htmlspecialchars($dateInfo['start_date']) ?></td>
+                                        </tr>
+                                    </table>
                             
 
                                 </section>
@@ -59,7 +99,14 @@ if (!isset($_SESSION['user_id']))
                             <section id="formatRulesCont" class="leagueInfoSect">
                                 <h2>Format and Rules</h2>
                                 <ul id="ruleList">
-                                    <!-- Adding list from db -->
+                                    <?php
+                                    foreach (explode("\n", $infoResult['rules']) as $rule) {
+                                        $rule = trim($rule);
+                                        if (!empty($rule)) {
+                                            echo "<li>" . htmlspecialchars($rule) . "</li>";
+                                        }
+                                    }
+                                    ?>
                                 </ul>
                             </section>
                         </section>
