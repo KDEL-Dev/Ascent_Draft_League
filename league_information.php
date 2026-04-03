@@ -82,7 +82,7 @@
                                 </section>
                                 <section id="importantDatesCont" class="leagueInfoSect">
                                    <h2>Important Dates</h2>
-                                    <table>
+                                    <table id="leagueDateTable">
                                         <tr>
                                             <th>Draft Date</th>
                                             <td><?= htmlspecialchars($dateInfo['draft_date']) ?></td>    

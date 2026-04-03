@@ -42,8 +42,11 @@
         </header>
 
         <div>
-            <main>
-                <section class="contentCont">
+            <main class="centerMain">
+                <section class="roleContentCont">
+                    <section class="contentBtnCont">
+                        <a id="newMatchBtn" href="admin.php">Return</a>
+                    </section>
                     <div id="centerTable">
                         <div id="editRolePage" data-season="<?= htmlspecialchars($seasonId) ?>"></div>
 

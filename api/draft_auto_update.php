@@ -19,6 +19,7 @@ $response = [
     'draft_started' => 0,  
     'draft_finished' => 0,
     'current_player' => null,
+    'previous_team' => null,
     'previous_pick' => null,
     'myDraftedCount' => 0,
     'maxPokemon' => $MAX_POKEMON_PER_USER,
@@ -29,19 +30,22 @@ $response = [
 try {
     // ----------------- Previous pick -----------------
     $prevStmt = $conn->prepare("
-        SELECT sp.name
+        SELECT u.team_name, sp.name AS pokemon_name
         FROM drafted_pkmn dp
         JOIN showdown_pkmn sp ON dp.showdown_pkmn = sp.id
+        JOIN active_users au ON dp.active_user = au.id
+        JOIN users u ON au.user_id = u.id
         WHERE dp.season_id = ?
         ORDER BY dp.pick_number DESC
-        LIMIT 1
+        LIMIT 1;
     ");
     $prevStmt->bind_param("i", $season_id);
     $prevStmt->execute();
     $prevResult = $prevStmt->get_result();
 
     if ($row = $prevResult->fetch_assoc()) {
-        $response['previous_pick'] = $row['name'];
+        $response['previous_team'] = $row['team_name'];
+        $response['previous_pick'] = $row['pokemon_name'];
     }
     $prevStmt->close();
 

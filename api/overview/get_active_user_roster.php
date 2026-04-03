@@ -9,7 +9,7 @@ $seasonId = $_SESSION['season_id'] ?? null;
 $user = $_SESSION['user_id'] ?? null;
 
 $sql = "
-    SELECT showdown_pkmn.name, users.gamerTag
+    SELECT showdown_pkmn.name, users.team_name
     FROM showdown_pkmn
     JOIN roster_pkmn
     ON roster_pkmn.showdown_pkmn = showdown_pkmn.id

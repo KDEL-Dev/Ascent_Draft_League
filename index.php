@@ -61,6 +61,7 @@ if (!isset($_SESSION['user_id']))
     WHERE active_users.season_id = ?
     AND competitor= 'yes'
     GROUP BY active_users.id, users.team_name
+    HAVING wins > 0
     ORDER BY Wins DESC;
     ";
 
@@ -121,7 +122,7 @@ if (!isset($_SESSION['user_id']))
                 </div>
             </header>
             <div id="overviewPageLayout">
-                <main>
+                <main id="mainSpaced">
                     <section class="newsCont">
                         <div class="sectionTitle">News/Updates</div>
                         <article class="newsContent"> No new updates for this league</article>
@@ -145,15 +146,19 @@ if (!isset($_SESSION['user_id']))
                 </main>
                 <aside>
                     <section id="replayCont">
-                        <div class="smallerSectionTitle">Replay</div>
+                        <div class="smallerSectionTitle" id="indexReplayTitle">Replay</div>
                         <?php if ($latestReplay): ?>
                             <a href="<?php echo htmlspecialchars($latestReplay['replay_link']); ?>" 
                             target="_blank" 
                             class="replayBox">
                                 <div id="replayTeams">
                                     <?php echo htmlspecialchars($latestReplay['player1_name']); ?>
-                                    vs
+                                    <span id="replayVs">VS</span>
                                     <?php echo htmlspecialchars($latestReplay['player2_name']); ?>
+                                </div>
+                                <!-- My Overlay -->
+                                <div class="replayOverlay">
+                                    Click to Watch
                                 </div>
                             </a>
                         <div class="replayDate">
@@ -163,72 +168,76 @@ if (!isset($_SESSION['user_id']))
                             ?>
                         </div>
                         <?php else: ?>
-                            <div>No replays yet</div>
+                            <div id="noReplayText">No replays yet</div>
                         <?php endif; ?>
                     </section>
-                    <section id="miniStandingsCont">
-                        <div class="smallerSectionTitle">Standings</div>
-                        <div id="miniStandings">
-                            <?php if ($standingResult && $standingResult->num_rows > 0): ?>
+                    <a href="standings.php">
+                        <section id="miniStandingsCont">
+                            <div class="smallerSectionTitle">Standings</div>
+                            <div id="miniStandings">
+                                <?php if ($standingResult && $standingResult->num_rows > 0): ?>
 
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Team</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php 
-                                            $rank = 1;
-                                            while ($row = $standingResult->fetch_assoc()): 
-                                        ?>
-                                            <tr>
-                                                <td><?php echo $rank++; ?></td>
-                                                <td><?php echo htmlspecialchars($row['team_name']); ?></td>
-                                            </tr>
-                                        <?php endwhile; ?>
-                                    </tbody>
-                                </table>
-
-                            <?php else: ?>
-                                <div>No Standings Yet</div>
-                            <?php endif; ?>
-                        </div>
-                    </section>
-                    <section id="killLeaderBoardCont">
-                            <div class="smallerSectionTitle">Kill Leader</div>
-                            <div id="killLeader">
-
-                            
-
-                                <?php if ($killResult && $killResult->num_rows > 0): ?>
                                     <table>
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Pkmn</th>
-                                                <th>Kills</th>
+                                                <th>Team</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php 
                                                 $rank = 1;
-                                                while ($row = $killResult->fetch_assoc()): 
+                                                while ($row = $standingResult->fetch_assoc()): 
                                             ?>
                                                 <tr>
                                                     <td><?php echo $rank++; ?></td>
-                                                    <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                                    <td><?php echo htmlspecialchars($row['total_kills']); ?></td>
+                                                    <td><?php echo htmlspecialchars($row['team_name']); ?></td>
                                                 </tr>
                                             <?php endwhile; ?>
                                         </tbody>
                                     </table>
+
                                 <?php else: ?>
-                                    <div>No Standings Yet</div>
+                                    <div id="emptyStandings">No Standings Yet</div>
                                 <?php endif; ?>
-                            </div>             
-                    </section>
+                            </div>
+                        </section>
+                    </a>
+                    <a href="statistics.php">
+                        <section id="killLeaderBoardCont">
+                                <div class="smallerSectionTitle">Kill Leader</div>
+                                <div id="killLeader">
+
+                                
+
+                                    <?php if ($killResult && $killResult->num_rows > 0): ?>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Pkmn</th>
+                                                    <th>Kills</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php 
+                                                    $rank = 1;
+                                                    while ($row = $killResult->fetch_assoc()): 
+                                                ?>
+                                                    <tr>
+                                                        <td><?php echo $rank++; ?></td>
+                                                        <td><?php echo htmlspecialchars($row['name']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['total_kills']); ?></td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            </tbody>
+                                        </table>
+                                    <?php else: ?>
+                                        <div>No Standings Yet</div>
+                                    <?php endif; ?>
+                                </div>             
+                        </section>
+                    </a>
                 </aside>
             
             </div>

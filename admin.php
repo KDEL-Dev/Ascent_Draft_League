@@ -62,11 +62,11 @@ if (!isset($_SESSION['user_id']))
                                 <p class="adminSectionTitle">Written Content Update</p>
                             </div>
                             <div>
-                                <button class="adminSettingsBtn">Update Overview - News </button>
+                                <button class="adminSettingsBtn">Update News </button>
                             </div>
                             <div>
                                 <button class="adminSettingsBtn" id="updateLeagueInfoBtn">
-                                    <a href="edit_league_info.php">Update League Information </a>
+                                    <a href="edit_league_info.php">Update - League Information </a>
                                 </button>
                             </div>
                         </div>

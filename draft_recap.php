@@ -37,8 +37,8 @@
                 </div>
             </header>
             <div>
-                <main>
-                    <section class="contentCont">
+                <main class="centerMain">
+                    <section class="roleContentCont">
                         <section id="recapFlexCont">
                             <div class="tableCont">
                                 <table id="recapTable">

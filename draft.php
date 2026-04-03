@@ -50,7 +50,51 @@ $seasonId = $_SESSION['season_id'] ?? 1;
 
                     <section id="previousPick">
                         <header>Previous Pick</header>
-                        <section id="previousPickInfo"></section>
+                        <section id="previousPickInfo">
+                            <section id="ppTeamName">
+                                <!-- Dynamically Added -->
+                            </section>
+                            <section id="ppFlexRow">
+                                <section id="ppPkmnCont">
+                                    <section id="ppPkmnImgCont"></section>
+                                    
+                                </section>
+                                <section id="ppStatCont">
+                                    
+                                        <table class="ppStatTable">
+                                            <thead>
+                                                <th class="ppTH">hp</th>
+                                                <th class="ppTH">atk</th>
+                                                <th class="ppTH">def</th>                                               
+                                            </thead>
+                                            <tbody>
+                                                <td class="ppTD"></td>
+                                                <td class="ppTD"></td>
+                                                <td class="ppTD"></td>
+                                               
+                                            </tbody>
+                                        </table>
+                                  
+                                
+                                        <table class="ppStatTable">
+                                            <thead>
+                                                <th class="ppTH">sp.atk</th>
+                                                <th class="ppTH">sp.def</th>
+                                                <th class="ppTH">spe</th>
+                                            </thead>
+                                            <tbody>
+                                             
+                                                <td class="ppTD"></td>
+                                                <td class="ppTD"></td>
+                                                <td class="ppTD"></td>
+                                            </tbody>
+                                        </table>
+                                
+                                </section>
+                            </section>
+                            
+                            <section id="ppPkmnNameCont"></section>
+                        </section>
                     </section>
 
                     <section id="draftOrderCont">

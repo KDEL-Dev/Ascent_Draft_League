@@ -118,7 +118,7 @@
                             <input type="text" name="team_mascot" value="<?php echo htmlspecialchars($user['team_mascot_pkmn'] ?? ''); ?>"> 
                         </div>
                         <div>
-                            <button class="adminSettingsBtn" type="submit">Save Changes</button>
+                            <button class="adminSettingsBtn" id="saveProfileChanges" type="submit">Save Changes</button>
                         </div>
                     </form>
                 </section>

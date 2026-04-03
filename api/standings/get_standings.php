@@ -36,7 +36,7 @@
         AND competitor = 'yes'
 
         GROUP BY active_users.id
-
+        HAVING wins + losses > 0
         ORDER BY wins DESC;
     ";
 

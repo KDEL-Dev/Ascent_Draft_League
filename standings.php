@@ -52,7 +52,7 @@
                                     <th style="width: 40%;">Teams</th>
                                     <th style="width: 15%;">Wins</th>
                                     <th style="width: 15%;">Losses</th>
-                                    <th style="width: 15%;">+/-</th>
+                                    <!-- <th style="width: 15%;">+/-</th> -->
                                 </tr>
                             </thead>
                             <tbody id="standingsBody">

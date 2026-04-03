@@ -87,40 +87,47 @@
                 <section class="contentCont">
                     <section class="statsCont">
 
-                        <?php foreach ($teams as $teamName => $pokemonList): ?>
+                        <?php if (!empty($teams)): ?>
+                            <?php foreach ($teams as $teamName => $pokemonList): ?>
 
-                            <section class="statsBox">
-                                <table>
+                                <section class="statsBox">
+                                    <table>
 
-                                    <thead>
-                                        <tr>
-                                            <th colspan="4" class="statsNameBox">
-                                                <?= htmlspecialchars($teamName); ?>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th style="width: 55%;">Pokemon</th>
-                                            <th style="width: 15%;">Kills</th>
-                                            <th style="width: 15%;">Deaths</th>
-                                            <th style="width: 15%;">Usage</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <?php foreach ($pokemonList as $pkmn): ?>
+                                        <thead>
                                             <tr>
-                                                <td><?= htmlspecialchars($pkmn['pokemon_name']); ?></td>
-                                                <td><?= $pkmn['total_kills']; ?></td>
-                                                <td><?= $pkmn['total_deaths']; ?></td>
-                                                <td><?= $pkmn['total_used']; ?></td>
+                                                <th colspan="4" class="statsNameBox">
+                                                    <?= htmlspecialchars($teamName); ?>
+                                                </th>
                                             </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
+                                            <tr>
+                                                <th style="width: 55%;">Pokemon</th>
+                                                <th style="width: 15%;">Kills</th>
+                                                <th style="width: 15%;">Deaths</th>
+                                                <th style="width: 15%;">Usage</th>
+                                            </tr>
+                                        </thead>
 
-                                </table>
+                                        <tbody>
+                                            <?php foreach ($pokemonList as $pkmn): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($pkmn['pokemon_name']); ?></td>
+                                                    <td><?= $pkmn['total_kills']; ?></td>
+                                                    <td><?= $pkmn['total_deaths']; ?></td>
+                                                    <td><?= $pkmn['total_used']; ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+
+                                    </table>
+                                </section>
+
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <section id="emptyMatches">
+                                No matches have been played yet
                             </section>
 
-                        <?php endforeach; ?>
+                        <?php endif; ?>
 
                     </section>
                 </section>

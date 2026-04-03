@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    // ------------
     // REGISTRATION
+    // ------------
 
     const teamInput = document.getElementById('teamNameInput');
     if(teamInput) {
@@ -69,6 +71,47 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await getShowdownDexFromDB();
 
+    // ------------------------------------------------
+    // ADMIN BUTTONS FOR SHOWDOWN TO DB AND INSERT TIER
+    // ------------------------------------------------
+
+    const insertPokemonBtn = document.getElementById("insertPokemonBtn");
+    const insertPkmnTierBtn = document.getElementById("insertPkmnTierBtn");
+
+    if(insertPokemonBtn)
+    {
+        // Insert Pokémon into DB
+        insertPokemonBtn.addEventListener("click", async () => {
+            try {
+                const response = await fetch('/ascent_draft_league/api/showdown_to_db/add_pokemon_to_db.php');
+                const data = await response.json();
+
+                console.log("Insert Pokémon response:", data);
+                alert(`Inserted Pokémon: ${data.inserted}`);
+            } catch (err) {
+                console.error("Error inserting Pokémon:", err);
+                alert("Failed to insert Pokémon.");
+            }
+        })
+    }
+
+    if(insertPkmnTierBtn)
+    {
+    // Insert Pokémon tiers
+        insertPkmnTierBtn.addEventListener("click", async () => {
+            try {
+                const response = await fetch('/ascent_draft_league/api/showdown_to_db/insert_current_pokemon_tier.php');
+                const data = await response.json();
+
+                console.log("Insert tiers response:", data);
+                alert(`Updated tiers: ${data.inserted}`);
+            } catch (err) {
+                console.error("Error inserting tiers:", err);
+                alert("Failed to insert Pokémon tiers.");
+            }
+        })
+    }
+
     // -------------------
     // DRAFT ORDER DISPLAY
     // -------------------
@@ -100,9 +143,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -------------------
     // DRAFT STATE
     // -------------------
-    let draftInterval = null;
 
-    
+    let draftInterval = null;
+    let pokedexData = null;
+    let showdownId = null;
+
+    async function loadPokedex() {
+        if (!pokedexData) {
+            const res = await fetch('/ascent_draft_league/showdownData/pokedex.json');
+            pokedexData = await res.json();
+        }
+        return pokedexData;
+    }
+
     async function loadDraftState() 
     {
         try {
@@ -111,8 +164,94 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const currentPickEl = document.getElementById("currentPickInfo");
             const previousPickEl = document.getElementById("previousPickInfo");
+            const ppPkmnImgCont = document.getElementById("ppPkmnImgCont");
+            const ppPkmnNameCont = document.getElementById("ppPkmnNameCont");
+            const ppTeamName = document.getElementById("ppTeamName");
+            const ppStatCont = document.getElementById("ppStatCont");
 
             if (!currentPickEl && !previousPickEl) return;
+            
+            let lastPreviousPick = null;
+            
+            let pokeName = null;
+
+            if (data.previous_pick) {
+                pokeName = data.previous_pick.toLowerCase();
+
+                showdownId = data.previous_pick
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '');
+            }
+
+            if (data.previous_pick && data.previous_pick !== lastPreviousPick) 
+            {
+
+                if (previousPickEl && data.previous_pick && data.previous_pick !== lastPreviousPick) {
+
+                    lastPreviousPick = data.previous_pick;
+
+                    // const pokeName = data.previous_pick.toLowerCase();
+
+                    const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
+
+                    const url1 = `${base}${pokeName}.png`;
+                    const url2 = `${base}${pokeName
+                        .replace('-galar', '-galarian')
+                        .replace('-hisui', '-hisuian')
+                        .replace('-paldea', '-paldean')
+                        .replace('-alola', '-alolan')
+                        .replace('-f', '-female')
+                    }.png`;
+
+                    ppPkmnImgCont.innerHTML = `
+                        <img src="${url1}" width="200"
+                            onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
+                    `;
+                    ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`
+                    ppTeamName.innerHTML = `<div>${data.previous_team}</div>`
+                }
+
+                // Load pokedex and display stats
+                const dex = await loadPokedex();
+                const pkmnData = dex[showdownId];
+
+                if (pkmnData && pkmnData.baseStats) 
+                    {
+                    const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
+                    ppStatCont.innerHTML = `
+                        <table class="ppStatTable">
+                            <thead>
+                                <th class="ppTH">HP</th>
+                                <th class="ppTH">ATK</th>
+                                <th class="ppTH">DEF</th>
+                            </thead>
+                            <tbody>
+                                <td class="ppTD">${hp}</td>
+                                <td class="ppTD">${atk}</td>
+                                <td class="ppTD">${def}</td>
+                            </tbody>
+                        </table>
+                        <table class="ppStatTable">
+                            <thead>
+                                <th class="ppTH">SP.ATK</th>
+                                <th class="ppTH">SP.DEF</th>
+                                <th class="ppTH">SPE</th>
+                            </thead>
+                            <tbody>
+                                <td class="ppTD">${spa}</td>
+                                <td class="ppTD">${spd}</td>
+                                <td class="ppTD">${spe}</td>
+                            </tbody>
+                        </table>
+                    `;
+                }
+            }
+        
+            else 
+            {
+                previousPickEl.textContent = "-";
+            }
+
 
             if (data.draft_finished) {
                 currentPickEl.textContent = "Draft Complete";
@@ -129,7 +268,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             if (currentPickEl) currentPickEl.textContent = data.current_player ?? "Waiting...";
-            if (previousPickEl) previousPickEl.textContent = data.previous_pick ?? "-";
+            // if (previousPickEl) previousPickEl.textContent = data.previous_pick ?? "-";
 
             const myTeamName = document.body.dataset.teamName;
             const MAX_POKEMON_PER_USER = data.maxPokemon ?? 12; //CHANGED TO 12
@@ -141,7 +280,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             toggleDraftButtons(canDraft);
 
-        } catch (err) {
+        } 
+        catch (err) 
+        {
             console.error("Failed to load draft state:", err);
         }
     }
@@ -178,14 +319,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 alert(data.error || "Draft failed");
             }
-        } catch (err) {
+        } 
+        catch (err) 
+        {
             console.error("Draft error:", err);
         }
     }
 
     
     await loadDraftState();
-    setInterval(loadDraftState, 2000);
+    setInterval(loadDraftState, 2000); //restore to 2000 later
 
     // -------------------
     // RANDOMIZE DRAFT ORDER
@@ -332,6 +475,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         .then(data => {
             recapTableBody.innerHTML = "";
 
+            const tierMap = {
+            'OU': 'ou-RosterColor',
+            'UUBL': 'ou-RosterColor',
+            'UU': 'uu-RosterColor',
+            'RUBL': 'uu-RosterColor',
+            'RU': 'ru-RosterColor',
+            'NUBL': 'ru-RosterColor',
+            'NU': 'nu-RosterColor',
+            'PUBL': 'nu-RosterColor',
+            'PU': 'nu-RosterColor',
+            'ZUBL': 'nu-RosterColor',
+            'ZU': 'nu-RosterColor'
+        };
+
+
             data.forEach(pick => {
                 const tr = document.createElement("tr");
 
@@ -343,7 +501,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const tdTier = document.createElement("td");
                 tdTier.textContent = pick.tier;
-                if (pick.tier === "OU") tdTier.classList.add("ouBadge");
+
+                const tierClass = tierMap[pick.tier.toUpperCase()];
+                if (tierClass) tdTier.classList.add(tierClass);
 
                 const tdTeam = document.createElement("td");
                 tdTeam.textContent = pick.team_name;
@@ -870,8 +1030,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
-
-    // STANDINGS
+    // ------------------
+    //      STANDINGS
+    // ------------------
 
     async function loadStandings() 
     {
@@ -884,6 +1045,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             tbody.innerHTML = "";
 
+            if (!data || data.length === 0) 
+            {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding: 20px;">
+                            No matches have been played yet
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
             let rank = 1;
 
             data.forEach(team => {
@@ -894,7 +1067,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <td>${team.team_name}</td>
                     <td>${team.wins}</td>
                     <td>${team.losses}</td>
-                    <td>${team.diff}</td>
+                    
                 `;
 
                 tbody.appendChild(tr);

@@ -56,98 +56,105 @@ while ($row = $result->fetch_assoc()) {
                                 <a id="newMatchBtn" href="add_matchup.php">Add New Matchup</a>
                             </section>
                             <section id="matchupResultCont">
-                                <?php foreach ($matchups as $match): ?>
-                                    <?php
-                                        // Team 1 Pokémon
-                                        $sql1 = "
-                                            SELECT mps.*, sd.name AS pokemon_name
-                                            FROM match_pokemon_stats mps
-                                            JOIN roster_pkmn rp ON mps.roster_pkmn_id = rp.id
-                                            JOIN showdown_pkmn sd ON rp.showdown_pkmn = sd.id
-                                            WHERE mps.matchup_id = ? AND rp.active_user = ?
-                                        ";
-                                        $stmt1 = $conn->prepare($sql1);
-                                        $stmt1->bind_param("ii", $match['id'], $match['player1_active_user_id']);
-                                        $stmt1->execute();
-                                        $team1Pkmn = $stmt1->get_result()->fetch_all(MYSQLI_ASSOC);
+                                <?php if (!empty($matchups)): ?>
+                                    <?php foreach ($matchups as $match): ?>
+                                        <?php
+                                            // Team 1 Pokémon
+                                            $sql1 = "
+                                                SELECT mps.*, sd.name AS pokemon_name
+                                                FROM match_pokemon_stats mps
+                                                JOIN roster_pkmn rp ON mps.roster_pkmn_id = rp.id
+                                                JOIN showdown_pkmn sd ON rp.showdown_pkmn = sd.id
+                                                WHERE mps.matchup_id = ? AND rp.active_user = ?
+                                            ";
+                                            $stmt1 = $conn->prepare($sql1);
+                                            $stmt1->bind_param("ii", $match['id'], $match['player1_active_user_id']);
+                                            $stmt1->execute();
+                                            $team1Pkmn = $stmt1->get_result()->fetch_all(MYSQLI_ASSOC);
 
-                                        // Team 2 Pokémon
-                                        $sql2 = "
-                                            SELECT mps.*, sd.name AS pokemon_name
-                                            FROM match_pokemon_stats mps
-                                            JOIN roster_pkmn rp ON mps.roster_pkmn_id = rp.id
-                                            JOIN showdown_pkmn sd ON rp.showdown_pkmn = sd.id
-                                            WHERE mps.matchup_id = ? AND rp.active_user = ?
-                                        ";
-                                        $stmt2 = $conn->prepare($sql2);
-                                        $stmt2->bind_param("ii", $match['id'], $match['player2_active_user_id']);
-                                        $stmt2->execute();
-                                        $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
-                                    ?>
-                                    
-                                    <section class="editDeleteMatchCont">
-                                        <button class="editMatchBtn" data-match-id="<?= $match['id'] ?>">Edit</button>
-                                        <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
-                                        <section class="matchBox">
-                                            <section class="matchUpPlayerInfo">
-                                                <table class="matchUpStats">
-                                                    <tr>
-                                                        <th colspan="3" class="matchUpTeamName"> Team 1</th>
-                                                    </tr>
-                                                    <tr class="matchUpHeader">
-                                                        <th >Name</th>
-                                                        <th  >Kills</th>
-                                                        <th >Deaths</th>
-                                                    </tr>
-                                                    <?php foreach ($team1Pkmn as $p): ?>
+                                            // Team 2 Pokémon
+                                            $sql2 = "
+                                                SELECT mps.*, sd.name AS pokemon_name
+                                                FROM match_pokemon_stats mps
+                                                JOIN roster_pkmn rp ON mps.roster_pkmn_id = rp.id
+                                                JOIN showdown_pkmn sd ON rp.showdown_pkmn = sd.id
+                                                WHERE mps.matchup_id = ? AND rp.active_user = ?
+                                            ";
+                                            $stmt2 = $conn->prepare($sql2);
+                                            $stmt2->bind_param("ii", $match['id'], $match['player2_active_user_id']);
+                                            $stmt2->execute();
+                                            $team2Pkmn = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
+                                        ?>
+                                        
+                                        <section class="editDeleteMatchCont">
+                                            <button class="editMatchBtn" data-match-id="<?= $match['id'] ?>">Edit</button>
+                                            <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
+                                            <section class="matchBox">
+                                                <section class="matchUpPlayerInfo">
+                                                    <table class="matchUpStats">
                                                         <tr>
-                                                            <td class="matchName"><?= htmlspecialchars($p['pokemon_name']) ?></td>
-                                                            <td class="matchKill"><?= $p['kills'] ?></td>
-                                                            <td class="matchDeath"><?= $p['deaths'] ?></td>
+                                                            <th colspan="3" class="matchUpTeamName"> Team 1</th>
                                                         </tr>
-                                                    <?php endforeach; ?>
-                                                    <tr>
-                                                        <td colspan="3" class="matchResultCont">
-                                                            <?= $match['winner_active_user_id'] == $match['player1_active_user_id'] ? 'Win' : 'Loss' ?>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                        <tr class="matchUpHeader">
+                                                            <th >Name</th>
+                                                            <th  >Kills</th>
+                                                            <th >Deaths</th>
+                                                        </tr>
+                                                        <?php foreach ($team1Pkmn as $p): ?>
+                                                            <tr>
+                                                                <td class="matchName"><?= htmlspecialchars($p['pokemon_name']) ?></td>
+                                                                <td class="matchKill"><?= $p['kills'] ?></td>
+                                                                <td class="matchDeath"><?= $p['deaths'] ?></td>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                        <tr>
+                                                            <td colspan="3" class="matchResultCont">
+                                                                <?= $match['winner_active_user_id'] == $match['player1_active_user_id'] ? 'Win' : 'Loss' ?>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </section>
+
+                                                <section class="vsCont">VS</section>
+
+                                                <section class="matchUpPlayerInfo">
+                                                    <table class="matchUpStats">
+                                                        <tr>
+                                                            <th colspan="3" class="matchUpTeamName"> Team 2</th>
+                                                        </tr>
+                                                        <tr class="matchUpHeader">
+                                                            <th>Name</th>
+                                                            <th style="width: 20%;">Kills</th>
+                                                            <th style="width: 20%;">Deaths</th>
+                                                        </tr>
+                                                        <?php foreach ($team2Pkmn as $p): ?>
+                                                            <tr>
+                                                                <td class="matchName"><?= htmlspecialchars($p['pokemon_name']) ?></td>
+                                                                <td class="matchKill"><?= $p['kills'] ?></td>
+                                                                <td class="matchDeath"><?= $p['deaths'] ?></td>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                        <tr>
+                                                            <td colspan="3" class="matchResultCont">
+                                                                <?= $match['winner_active_user_id'] == $match['player2_active_user_id'] ? 'Win' : 'Loss' ?>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </section>
                                             </section>
-
-                                            <section class="vsCont">VS</section>
-
-                                            <section class="matchUpPlayerInfo">
-                                                <table class="matchUpStats">
-                                                    <tr>
-                                                        <th colspan="3" class="matchUpTeamName"> Team 2</th>
-                                                    </tr>
-                                                    <tr class="matchUpHeader">
-                                                        <th>Name</th>
-                                                        <th style="width: 20%;">Kills</th>
-                                                        <th style="width: 20%;">Deaths</th>
-                                                    </tr>
-                                                    <?php foreach ($team2Pkmn as $p): ?>
-                                                        <tr>
-                                                            <td class="matchName"><?= htmlspecialchars($p['pokemon_name']) ?></td>
-                                                            <td class="matchKill"><?= $p['kills'] ?></td>
-                                                            <td class="matchDeath"><?= $p['deaths'] ?></td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                    <tr>
-                                                        <td colspan="3" class="matchResultCont">
-                                                            <?= $match['winner_active_user_id'] == $match['player2_active_user_id'] ? 'Win' : 'Loss' ?>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                            <section class="replayCont">
+                                                <a href="<?= htmlspecialchars($match['replay_link']) ?>" target="_blank">
+                                                    Replay
+                                                </a>
                                             </section>
                                         </section>
-                                        <section class="replayCont">
-                                            <a href="<?= htmlspecialchars($match['replay_link']) ?>" target="_blank">
-                                                Replay
-                                            </a>
-                                        </section>
-                                    </section>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                <section id="emptyMatches">
+                                    No matches have been played yet
+                                </section>
+
+                            <?php endif; ?>
                             </section>
                         </section>
                     </section>

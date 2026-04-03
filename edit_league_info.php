@@ -51,20 +51,22 @@
         <div>
             <main class="centerMain">
                 <section class="shortContentCont">
-                
-                        <form id="editLeagueInfoForm" action="/ascent_draft_league/api/league_information/save_league_info.php" method="post">
-                            <div class="editTeamCol">
-                                <label for="about">About</label>
-                                <textarea name="about" id="about" rows="5" style="width: 100%;"><?= htmlspecialchars($infoResult['about']) ?></textarea>
-                            </div>
-                            <div class="editTeamCol">
-                                <label for="rules">Format & Rules</label>
-                                <textarea name="rules" id="rules" rows="10"><?= htmlspecialchars($infoResult['rules']) ?></textarea>
-                            </div>
-                            <div>
-                                <button type="submit">Save Changes</button>
-                            </div>
-                        </form>
+                    <section class="contentBtnCont">
+                        <a id="newMatchBtn" href="admin.php">Return</a>
+                    </section>
+                    <form id="editLeagueInfoForm" action="/ascent_draft_league/api/league_information/save_league_info.php" method="post">
+                        <div class="editTeamCol">
+                            <label for="about">About</label>
+                            <textarea name="about" id="about" rows="5" style="width: 100%;"><?= htmlspecialchars($infoResult['about']) ?></textarea>
+                        </div>
+                        <div class="editTeamCol">
+                            <label for="rules">Format & Rules</label>
+                            <textarea name="rules" id="rules" rows="10"><?= htmlspecialchars($infoResult['rules']) ?></textarea>
+                        </div>
+                        <div>
+                           <button type="submit">Save Changes</button>
+                        </div>
+                    </form>
                     
                 </section>
             </main>
