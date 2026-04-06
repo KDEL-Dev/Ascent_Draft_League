@@ -44,10 +44,13 @@ if (!isset($_SESSION['user_id']))
                     <main class="centerMain">
                         <section class="shortContentCont">
                             <div>
-                                <button class="profileSettingsBtn"><a href="edit_name_mascot.php" >Edit Team Name and Mascot</a></button>
+                                <button class="editProfileSettingsBtn"><a href="edit_name_mascot.php" >Edit Team Name and Mascot</a></button>
+                            </div>
+                            <div>
+                                <button class="editProfileSettingsBtn"><a href="change_password.php" >Change password</a></button>
                             </div>
                             <div id="logoutBorder">
-                                <button class="profileSettingsBtn" id="logoutBtn"><a href="logout.php">Log Out</a></button>
+                                <button class="editProfileSettingsBtn" id="logoutBtn"><a href="logout.php">Log Out</a></button>
                             </div>
                         </section>
                     </main>

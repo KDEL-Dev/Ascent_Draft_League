@@ -156,6 +156,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         return pokedexData;
     }
 
+    // Moved outside of loadDraftState
+    let lastPreviousPick = null;
+
     async function loadDraftState() 
     {
         try {
@@ -171,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!currentPickEl && !previousPickEl) return;
             
-            let lastPreviousPick = null;
+            
             
             let pokeName = null;
 
@@ -249,7 +252,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         
             else 
             {
-                previousPickEl.textContent = "-";
+                if (!data.previous_pick) 
+                {
+                    previousPickEl.textContent = "-";
+                }
             }
 
 
@@ -261,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!data.draft_started) {
                 if (currentPickEl) currentPickEl.textContent = "Stand-By";
-                if (previousPickEl) previousPickEl.textContent = "-";
+                if (previousPickEl) previousPickEl.textContent = "No picks have been made yet";
 
                 toggleDraftButtons(false);
                 return; 
@@ -462,6 +468,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    
+
     // -------------------
     // DRAFT RECAP
     // -------------------
@@ -549,6 +557,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -------------------
     // LEAGUE INFORMATION
     // -------------------
+
     function loadRulesFormatFromDb() {
         const ruleList = document.getElementById("ruleList");
         if (!ruleList) return;
@@ -676,12 +685,29 @@ document.addEventListener("DOMContentLoaded", async () => {
             const team1Name = team1Select?.selectedOptions[0]?.text;
             const team2Name = team2Select?.selectedOptions[0]?.text;
 
+            const winnerLabel1 = document.getElementById("winnerLabel1");
+            const winnerLabel2 = document.getElementById("winnerLabel2");
+
+            if (winnerLabel1) {
+                winnerLabel1.innerHTML = `
+                    <input type="radio" name="winner" value="team1" id="winnerTeam1">
+                    ${team1Name} Wins
+                `;
+            }
+
+            if (winnerLabel2) {
+                winnerLabel2.innerHTML = `
+                    <input type="radio" name="winner" value="team2" id="winnerTeam2">
+                    ${team2Name} Wins
+                `;
+            }
+
             if (!team1Id || !team2Id) 
             {
                 return alert("Select both teams");
             }
 
-            // ✅ Update UI titles
+    
             const title1 = document.getElementById("team1Title");
             const title2 = document.getElementById("team2Title");
 
@@ -690,7 +716,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             try 
             {
-                // ✅ USE IDs (not names)
+                
                 const res1 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
                 const team1Pkmn = await res1.json();
 
@@ -913,7 +939,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const matchId = e.target.dataset.matchId;
         if (!matchId) return;
 
-        // 🔥 redirect to edit page
+        // redirect to edit page
         window.location.href = `/ascent_draft_league/edit_matchup.php?matchup_id=${matchId}`;
     });
 
@@ -1081,6 +1107,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadStandings();
 
 
+    async function loadStandings() {
+        const tbody = document.getElementById("standingsBody");
+        if (!tbody) return;
+
+        try {
+            const res = await fetch('/ascent_draft_league/api/standings/get_standings.php');
+            const data = await res.json();
+
+            tbody.innerHTML = "";
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding: 20px;">
+                            No matches have been played yet
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let rank = 1;
+            data.forEach(team => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${rank++}</td>
+                    <td>${team.team_name}</td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } catch (err) {
+            console.error("Failed to load standings:", err);
+        }
+    }
+
+    await loadStandings();
+    
+    // -----------
+    // ROLE UPDATE
+    // -----------
+
     const tbody = document.querySelector("table tbody");
     const editRolePageEl = document.getElementById("editRolePage");
 
@@ -1184,5 +1254,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Failed to load users:", err);
     }
     
+    // -------------
+    // CLEAR MATCHUP
+    // -------------
+    const clearMatchupBtn = document.getElementById('clearMatchupBtn');
+        if (clearMatchupBtn) 
+        {
+            clearMatchupBtn.addEventListener("click", async () => {
+                if(!confirm("Are you sure you want to delete all matchups? This cannot be undone!")) return;
+
+                try {
+                    const response = await fetch('/ascent_draft_league/api/matchup/delete_all_matchups.php', { method: 'POST' });
+                    const data = await response.json();
+                    if(!response.ok) throw new Error(data.error || "Failed to clear matchups");
+                    
+                    alert("All matchups cleared successfully.");
+                    location.reload(); // refresh the page to reflect changes
+                } catch (error) {
+                    console.error("Clear matchups error", error);
+                    alert("Error clearing matchups. Check console.");
+                }
+            });
+        }
 
 });

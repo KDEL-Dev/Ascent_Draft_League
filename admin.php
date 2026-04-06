@@ -49,6 +49,12 @@ if (!isset($_SESSION['user_id']))
                                 <button id="insertPkmnTierBtn" class="adminSettingsBtn">Insert Current Pokémon Tiers</button>
                             </div>
                             <div>
+                                <p class="adminSectionTitle">Resets</p>
+                            </div>
+                            <div>
+                                <button id="clearMatchupBtn" class="adminSettingsBtn">Clear All Matchups</button>
+                            </div>
+                            <div>
                                 <button id="clearDraftBtn" class="adminSettingsBtn">Reset Draft & Rosters</button>
                             </div>
                            
@@ -62,7 +68,9 @@ if (!isset($_SESSION['user_id']))
                                 <p class="adminSectionTitle">Written Content Update</p>
                             </div>
                             <div>
-                                <button class="adminSettingsBtn">Update News </button>
+                                <button class="adminSettingsBtn">
+                                    <a href="edit_news.php">Update News </a>
+                                </button>
                             </div>
                             <div>
                                 <button class="adminSettingsBtn" id="updateLeagueInfoBtn">

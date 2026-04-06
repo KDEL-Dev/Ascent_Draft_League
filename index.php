@@ -10,6 +10,21 @@ if (!isset($_SESSION['user_id']))
 
     $seasonId = $_SESSION['season_id'] ?? null;
 
+    // News
+
+    $news_Sql = "
+        SELECT news
+        FROM league_information
+        WHERE season_id = ?;
+    ";
+
+    $news_Stmt = $conn->prepare($news_Sql);
+    $news_Stmt->bind_param("i", $seasonId);
+    $news_Stmt->execute();
+
+    $newsResult = $news_Stmt->get_result();
+    $news = $newsResult->fetch_assoc();
+
     // Get latest replay
 
     $sql = "
@@ -112,8 +127,14 @@ if (!isset($_SESSION['user_id']))
 
         <div class="pageContent">
             <header class="headerCont">
-                <div class="seasonCont">
-                    <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
+                <div>
+                    <div class="seasonCont">
+                        
+                        <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
+                        <div id="adminSettingIcon">
+                            <img src="img/icons/icons8-settings.svg"  alt="admin button">
+                        </div>
+                    </div>
                 </div>
                 <div class="pageNameCont">
                     <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
@@ -125,7 +146,9 @@ if (!isset($_SESSION['user_id']))
                 <main id="mainSpaced">
                     <section class="newsCont">
                         <div class="sectionTitle">News/Updates</div>
-                        <article class="newsContent"> No new updates for this league</article>
+                        <article class="newsContent">
+                            <p><?= htmlspecialchars($news['news']) ?></p>
+                        </article>
                     </section>
                     <section class="playerDashCont">
                         <div class="sectionTitle">Player Dashboard</div>

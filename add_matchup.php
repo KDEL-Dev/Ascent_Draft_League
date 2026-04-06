@@ -93,11 +93,11 @@ if (!isset($_SESSION['user_id']))
                                 </table>   
                                 <section>
                                     <h3>Select Winner</h3>
-                                    <label>
+                                    <label id="winnerLabel1">
                                         <input type="radio" name="winner" value="team1" id="winnerTeam1">
                                         Team 1 Wins
                                     </label>
-                                    <label>
+                                    <label id="winnerLabel2">
                                         <input type="radio" name="winner" value="team2" id="winnerTeam2">
                                         Team 2 Wins
                                     </label>

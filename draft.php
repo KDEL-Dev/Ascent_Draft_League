@@ -106,7 +106,8 @@ $seasonId = $_SESSION['season_id'] ?? 1;
                     </section>
                     <section id="draftAdminBtnCont">
                         <button id="startDraftBtn" class="adminDraftBtns">Start Draft</button>
-                        <button id="skipPickBtn" class="adminDraftBtns">Skip</button>
+                        <!-- Turning off skip for now -->
+                        <!-- <button id="skipPickBtn" class="adminDraftBtns" disabled>Skip</button> -->
                         <button id="endDraftBtn" class="adminDraftBtns">End Draft</button>
                     </section>
                 </section>

@@ -1,9 +1,4 @@
 <?php
-
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 session_start();
 include("includes/connection.php");
 
@@ -11,37 +6,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // --- Use prepared statements to prevent SQL injection ---
-    $stmt = $conn->prepare("SELECT id, team_name, team_mascot_pkmn FROM users WHERE email = ? AND password = ?");
-    $stmt->bind_param("ss", $email, $password);
+    // 1. Fetch the user by email
+    $stmt = $conn->prepare("SELECT id, team_name, team_mascot_pkmn, password FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows === 1) 
-        {
-            $row = $result->fetch_assoc();
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
 
+        // 2. Verify the password
+        if (password_verify($password, $row['password'])) {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['team_name'] = $row['team_name'];
             $_SESSION['team_mascot_pkmn'] = $row['team_mascot_pkmn'];
 
             $seasonResult = $conn->query("SELECT season_id FROM seasons WHERE is_active = 1 LIMIT 1");
-            if($seasonRow = $seasonResult->fetch_assoc())
-                {
-                    $_SESSION['season_id'] = $seasonRow['season_id'];
-                }
-            else
-                {
-                    $_SESSION['season_id'] = 0;
-                }
+            if($seasonRow = $seasonResult->fetch_assoc()) {
+                $_SESSION['season_id'] = $seasonRow['season_id'];
+            } else {
+                $_SESSION['season_id'] = 0;
+            }
 
-            header("Location: index.php"); // redirect to your draft page
+            header("Location: index.php");
             exit;
-        } 
-    else 
+        } else 
         {
             $login_error = "Invalid email or password";
         }
+        
+    } else 
+    {
+        $login_error = "Invalid email or password";
+    }
 
     $stmt->close();
 }
@@ -73,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p style="color:red;"><?php echo $login_error; ?></p>
         <?php endif; ?>
         <button><a href="register.php">Register</a></button>
+        <!-- <button>Forgot password</button> -->
     </section>
 
     <!-- <?php include 'includes/footer.php'; ?> -->

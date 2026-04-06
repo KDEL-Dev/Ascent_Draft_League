@@ -14,11 +14,27 @@
 
     $about = $_POST['about'] ?? '';
     $rules = $_POST['rules'] ?? '';
+    $draftDate = $_POST['draft_date'] ?? null;
+    $startDate = $_POST['start_date'] ?? null;
 
     $updateSql = "UPDATE league_information SET about = ?, rules = ? WHERE season_id = ?";
     $stmt = $conn->prepare($updateSql);
     $stmt->bind_param("ssi", $about, $rules, $seasonId);
     $stmt->execute();
+
+    // Dates
+
+    if (!empty($draftDate)) {
+        $stmt = $conn->prepare("UPDATE seasons SET draft_date = ? WHERE season_id = ?");
+        $stmt->bind_param("si", $draftDate, $seasonId);
+        $stmt->execute();
+    }
+
+    if (!empty($startDate)) {
+        $stmt = $conn->prepare("UPDATE seasons SET start_date = ? WHERE season_id = ?");
+        $stmt->bind_param("si", $startDate, $seasonId);
+        $stmt->execute();
+    }
 
     header("Location: /ascent_draft_league/league_information.php");
     exit;

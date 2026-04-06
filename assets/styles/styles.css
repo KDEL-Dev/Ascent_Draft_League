@@ -22,8 +22,9 @@ html, body
 }
 
 
-
-/* Navbar/Main Page Split */
+/* ********************** */
+/* Navbar and Main Page Split */
+/* ********************** */
 
 .pageLayout
 {
@@ -134,7 +135,7 @@ Navigation Menu
 .navMainBtns a
 {
     gap: 10px;
-    /* font-size: .75em; */
+    /* font-size: 1.25em; */
 
     display: flex;
     align-items: center;
@@ -143,7 +144,7 @@ Navigation Menu
 
 .navMainBtns img
 {
-    width: 30px;
+    width: 28px;
 }
 
 
@@ -162,7 +163,7 @@ Navigation Menu
 .profileSettingsBtn 
 {
     width: 175px;
-    height: 50px;
+    height: 40px;
     
 
     background-color: black;
@@ -191,7 +192,7 @@ Navigation Menu
 {
     margin-top: 10px;
     width: 175px;
-    height: 50px;
+    height: 40px;
 
     color: white;
     background-color: black;
@@ -247,12 +248,12 @@ Navigation Menu
     text-align: center;
     font-family: "jura";
     font-size: 1.25em;
-    /* text-decoration: underline; */
     border-bottom: 1px solid white;
     
 }
-
-/* Login Page */
+/**************************************
+            Login Page
+*************************************/
 
 #loginLayout
 {
@@ -294,35 +295,92 @@ Navigation Menu
     font-size: 1.5em;
 }
 
-/* Registration Page */
+/**************************************
+            Registration Page
+ *************************************/
 
-#registerLayout {
+
+
+#registerLayout 
+{
+    min-height: 100vh;
+    gap: 20px;
+
+    color: white;
+    background-color: #000000;
+    font-family: "jura";
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    gap: 20px;
-    color: white;
-    font-family: "jura";
+    
 }
 
-#registerForm {
+#registerForm 
+{
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-#registerForm input {
+#registerForm input 
+{
     padding: 10px;
     font-size: 1.2em;
     width: 300px;
 }
 
-#registerForm button {
+#registerForm button 
+{
     padding: 10px;
     font-size: 1.2em;
     cursor: pointer;
+}
+
+.formRow
+{
+    gap: 20px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+#registerLogo
+{
+    width: 500px;
+    height: auto;
+}
+
+/* HEADER CONTENT */
+
+#adminSettingIcon
+{
+    margin: 20px 20px 0 10px;
+
+    width: 50px;
+    height: 50px;
+
+
+    background-color: #000000;
+    /* border: 1px solid white; */
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+#adminSettingIcon img
+{
+    width: 40px;
+}
+
+#adminSettingIcon:hover 
+{
+    border-radius: 10px;
+    border: 1px solid white;
 }
 
 /*********************
@@ -345,14 +403,14 @@ Navigation Menu
 
 .seasonBtn
 {
-    margin: 20px 20px 0;
+    margin: 20px 10px 0;
 
     color: white;
     background-color: black;
     border-radius: 10px;
     width: 250px;
     height: 50px;
-    font-size: 1.5em;
+    font-size: 1.25em;
     font-family: "Zen dots";
 
     display: flex;
@@ -376,9 +434,12 @@ Navigation Menu
 
 .pageTitle
 {
+    margin: 5px;
+
     color: white;
     font-family: "jura";
-    font-size: 4.5em;
+    font-size: 2.5em;
+    text-align: center;
 }
 
 /***********************************
@@ -850,7 +911,7 @@ footer
     flex: 1;
 
     font-family: "jura";
-    font-size: 1.5em;
+    font-size: 1em;
     text-align: center;
 
     display: flex;
@@ -882,10 +943,10 @@ footer
 
 #previousPickInfo
 {
-    /* height: 100%; */
+    height: 100%;
 
     font-family: "jura";
-    font-size: 1.5em;
+    font-size: 1em;
 
     display: flex;          
     flex-direction: column;     
@@ -1347,25 +1408,115 @@ footer
     align-items: center;
 }
 
-.ou-RosterColor
+/* .ou-RosterColor
 {
     background-color: rgb(65, 0, 0);
+    font-weight: bold;  
+} */
+
+.ou-RosterColor {
+    background-color: rgb(80, 0, 0);
     font-weight: bold;
+
+    position: relative;
+    overflow: hidden;
 }
+
+.ou-RosterColor::after {
+    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: linear-gradient(
+        270deg,
+        rgba(255,255,255,0.2) 0%,
+        rgba(255,255,255,0.1) 15%,
+        rgba(255,255,255,0.05) 30%,
+        rgba(255,255,255,0) 50%
+    );
+    pointer-events: none;
+}
+
 .uu-RosterColor
 {
     background-color: rgb(145, 63, 8);
     font-weight: bold;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.uu-RosterColor::after {
+    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: linear-gradient(
+        270deg,
+        rgba(255,255,255,0.2) 0%,
+        rgba(255,255,255,0.1) 15%,
+        rgba(255,255,255,0.05) 30%,
+        rgba(255,255,255,0) 50%
+    );
+    pointer-events: none;
 }
 .ru-RosterColor
 {
     background-color: rgb(122, 120, 0);
     font-weight: bold;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.ru-RosterColor::after {
+    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: linear-gradient(
+        270deg,
+        rgba(255,255,255,0.2) 0%,
+        rgba(255,255,255,0.1) 15%,
+        rgba(255,255,255,0.05) 30%,
+        rgba(255,255,255,0) 50%
+    );
+    pointer-events: none;
 }
 .nu-RosterColor
 {
     background-color: rgb(0, 88, 0);
     font-weight: bold;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.nu-RosterColor::after {
+    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: linear-gradient(
+        270deg,
+        rgba(255,255,255,0.2) 0%,
+        rgba(255,255,255,0.1) 15%,
+        rgba(255,255,255,0.05) 30%,
+        rgba(255,255,255,0) 50%
+    );
+    pointer-events: none;
 }
 
 /**************************************
@@ -1459,6 +1610,8 @@ footer
 {
     margin-left: 20px;
     flex: 1;
+
+    text-align: center;
 
     display: flex;
     /* justify-content: center; */
@@ -2005,7 +2158,7 @@ footer
     flex-wrap: wrap;
 }
 
-.profileSettingsBtn
+.editProfileSettingsBtn
 {
     margin-top: 10px;
     width: 175px;
@@ -2023,6 +2176,18 @@ footer
 
     /* Animation */
     transition: background-color .2s ease, color .2s ease;
+}
+
+.editProfileSettingsBtn:link,
+.editProfileSettingsBtn:visited {
+    color: white;
+}
+
+.editProfileSettingsBtn:hover
+{
+    color: black;
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.25);
 }
 
 #logoutBorder

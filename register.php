@@ -1,7 +1,5 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+
 
 session_start();
 require_once 'includes/connection.php'; // your database connection
@@ -63,30 +61,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <section id="registerLayout">
+    <a href="login.php">
+        <img id="registerLogo" src="img/Ascent Horizontal Text.svg" alt="site logo">
+    </a>
     <form method="POST" action="register.php">
-        <label>Team Abbreviation (5 chars max)</label>
-        <input 
-            type="text" 
-            name="team_name" 
-            maxlength="5" 
-            style="text-transform: uppercase;" 
-            required
-            id="teamNameInput"
-        >
+        <div class="editTeamCol">
+            <label>Email</label>
+            <input type="email" name="email" required>
+        </div>
+        <div class="editTeamCol">
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
 
-        <label>Pokémon Mascot</label>
-        <input 
-            type="text" 
-            name="team_mascot" 
-            maxlength="30" 
-            required
-        >
-
-        <label>Email</label>
-        <input type="email" name="email" required>
-
-        <label>Password</label>
-        <input type="password" name="password" required>
+        <div class="formRow">
+            <div class="editTeamCol">
+                <label>Team Abbreviation (5 chars max)</label>
+                <input 
+                    type="text" 
+                    name="team_name" 
+                    maxlength="5" 
+                    style="text-transform: uppercase;" 
+                    placeholder="Jolt"
+                    
+                    required
+                    id="teamNameInput">
+            </div>
+            <div class="editTeamCol">
+                <label>Pokémon Mascot</label>
+                <input 
+                    type="text" 
+                    name="team_mascot" 
+                    maxlength="30" 
+                    placeholder="Pikachu"
+                    required>
+            </div>
+        </div>
 
         <button type="submit">Register</button>
     </form>
