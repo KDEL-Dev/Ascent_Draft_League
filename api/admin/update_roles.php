@@ -25,6 +25,10 @@ if ($method === 'GET') {
         $userInfo[] = $row;
     }
 
+    // Added to fix default role
+    $row['role'] = $row['role'] ?? 'user';
+    $row['competitor'] = $row['competitor'] ?? 'no';
+
     echo json_encode($userInfo);
     $stmt->close();
 }

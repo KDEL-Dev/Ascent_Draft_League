@@ -10,7 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $team_name = strtoupper(trim($_POST['team_name'])); // force uppercase for abbreviation
     $team_mascot = ucfirst(strtolower(trim($_POST['team_mascot']))); // first letter uppercase
     $email = trim($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    $password = $_POST['password'] ?? '';
+    $password_confirm = $_POST['password_confirm'] ?? '';
+
+    if ($password !== $password_confirm) {
+        die("Passwords do not match.");
+    }
+
+    // Only hash after confirming
+    $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+    // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     // 2. Validate inputs
     if (strlen($team_name) > 5) {
@@ -34,16 +44,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 4. Insert into database
     $stmt = $conn->prepare("INSERT INTO users (team_name, team_mascot_pkmn, email, password) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $team_name, $team_mascot, $email, $password);
+    $stmt->bind_param("ssss", $team_name, $team_mascot, $email, $password_hashed);
 
-    if ($stmt->execute()) {
-        // 5. Store the user ID in session
-        $_SESSION['user_id'] = $conn->insert_id;
+    //ADDED BELOW
 
-        // 6. Redirect to index.php
+    if ($stmt->execute()) 
+    {
+        // 1. Store the user ID in session
+        $userId = $conn->insert_id;
+        $_SESSION['user_id'] = $userId;
+
+        // 2. Add the user to the current season in active_users
+        $seasonResult = $conn->query("SELECT season_id FROM seasons WHERE is_active = 1 LIMIT 1");
+        if ($seasonRow = $seasonResult->fetch_assoc()) {
+            $seasonId = $seasonRow['season_id'];
+
+            $insertActive = $conn->prepare("
+                INSERT INTO active_users (user_id, season_id, role, competitor)
+                VALUES (?, ?, 'user', 'no')
+            ");
+            $insertActive->bind_param("ii", $userId, $seasonId);
+            $insertActive->execute();
+            $insertActive->close();
+
+            // Optionally store role and season in session immediately
+            $_SESSION['role'] = 'user';
+            $_SESSION['season_id'] = $seasonId;
+        }
+
+        // 3. Redirect to index.php
         header("Location: index.php");
         exit;
-    } else {
+    } 
+    else 
+    {
         die("Database error: " . $conn->error);
     }
 }
@@ -72,6 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="editTeamCol">
             <label>Password</label>
             <input type="password" name="password" required>
+        </div>
+        <div class="editTeamCol">
+            <label>Confirm Password</label>
+            <input type="password" name="password_confirm" required>
         </div>
 
         <div class="formRow">

@@ -1,11 +1,13 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
+if (!isset($_SESSION['user_id'])) 
+    {
+        header("Location: login.php");
+        exit;
+    }
 
+    $seasonId = $_SESSION['season_id'] ?? null;
 $matchupId = $_GET['matchup_id'] ?? null;
 if (!$matchupId) {
     echo "Matchup not specified";
@@ -22,21 +24,21 @@ if (!$matchupId) {
 <title>Edit Matchup</title>
 </head>
 <body>
-
+<button id="hamburgerBtn">☰</button>
 <div class="pageLayout">
     <?php include 'includes/navbar.php'; ?>
 
     <div class="pageContent">
         <header class="headerCont">
-                <div class="seasonCont">
-                    <div class="seasonBtn">Season <?php echo htmlspecialchars($seasonId); ?></div>
-                </div>
-                <div class="pageNameCont">
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
-                    <div class="pageTitle"> Edit Match</div>
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
-                </div>
-            </header>
+
+            <?php include 'includes/season_setting_header.php';?>
+
+            <div class="pageNameCont">
+                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                <div class="pageTitle"> Edit Match</div>
+                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+            </div>
+        </header>
 
         <main>
             <section class="contentCont">

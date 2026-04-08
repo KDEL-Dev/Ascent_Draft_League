@@ -26,6 +26,8 @@ html, body
 /* Navbar and Main Page Split */
 /* ********************** */
 
+
+
 .pageLayout
 {
     display: flex;
@@ -66,6 +68,15 @@ html, body
 /************** 
 Navigation Menu 
 ***************/
+
+#hamburgerBtn {
+    display: none; /* hidden on desktop */
+    font-size: 2em;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
 
 .navLogo
 {
@@ -354,7 +365,7 @@ Navigation Menu
 
 /* HEADER CONTENT */
 
-#adminSettingIcon
+.adminSettingIcon
 {
     margin: 20px 20px 0 10px;
 
@@ -372,15 +383,15 @@ Navigation Menu
     justify-content: center; 
 }
 
-#adminSettingIcon img
+.adminSettingIcon img
 {
     width: 40px;
 }
 
-#adminSettingIcon:hover 
+.adminSettingIcon:hover 
 {
     border-radius: 10px;
-    border: 1px solid white;
+    border: 2px solid white;
 }
 
 /*********************
@@ -438,7 +449,7 @@ Navigation Menu
 
     color: white;
     font-family: "jura";
-    font-size: 2.5em;
+    font-size: 2em;
     text-align: center;
 }
 
@@ -501,9 +512,13 @@ main
 
 .newsContent
 {
+    margin: 10px;
+
     color: white;
     min-height: 200px;
     font-family: "jura";
+    
+    text-align: center;
 
     display: flex;
     justify-content: center;
@@ -881,15 +896,20 @@ footer
 #draftInfoCont
 {
     padding: 0px 50px 20px 50px;
-
     min-height: 350px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex: 1;
 }
 
 #currentPick
 {
     margin-top: 10px;
 
-    width: 300px;
+    max-width: 200px;
+    flex: 1;
     border: white 1px solid;
 
     display: flex;
@@ -911,7 +931,8 @@ footer
     flex: 1;
 
     font-family: "jura";
-    font-size: 1em;
+    font-size: 2em;
+    font-weight: bold;
     text-align: center;
 
     display: flex;
@@ -923,8 +944,8 @@ footer
 #previousPick
 {
     margin-top: 10px;
+    flex: 1;
 
-    width: 100%;
     border: 1px solid white;
     border-left: none;
 
@@ -944,6 +965,7 @@ footer
 #previousPickInfo
 {
     height: 100%;
+    flex: 1;
 
     font-family: "jura";
     font-size: 1em;
@@ -1025,18 +1047,22 @@ footer
     font-size: .75em;
 }
 
-#draftInfoCont
+
+
+#draftInfoTopCont
 {
+    flex: 1;
+
     display: flex;
     flex-direction: row;
-    flex: 1;
 }
 
 #draftOrderCont
 {
     margin-top: 10px;
 
-    width: 500px;
+    max-width:250px;
+    flex: 1;
     border: white 1px solid;
     border-left: none;
 
@@ -1074,6 +1100,7 @@ footer
 
 #draftOrderList li
 {
+    padding: 10px;
     list-style: none;
     border-bottom: 1px rgb(255, 255, 255) solid;
     border-right: 1px rgb(255, 255, 255) solid;
@@ -1098,7 +1125,7 @@ footer
     display: inline-block;
     width: 30px;       /* space for number */
     font-weight: bold;
-    text-align: right;
+    text-align: center;
 }
 
 #draftOrderBtnCont
@@ -1210,13 +1237,15 @@ footer
     min-width: 175px;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .adminDraftBtns
 {
     margin: 10px;
     padding: 10px;
+    width: 300px;
 
     border: solid 1px white;
     border-radius: 10px;
@@ -1592,6 +1621,7 @@ footer
 #whatIsCont
 {
     width: 80%;
+    text-align: center;
 
     display: flex;
     justify-content: left;
@@ -1986,6 +2016,7 @@ footer
 {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 
     
 }
@@ -2090,9 +2121,11 @@ footer
 
 #standingsCont table
 {
-    width: 600px;
+    max-width: 600px;
+    flex: 1;
+
     border-collapse: collapse;
-    font-size: 1.25em;
+    /* font-size: 1.25em; */
     table-layout: fixed;
 }
 
@@ -2113,10 +2146,15 @@ footer
 
 #standingsBody td
 {
-    padding: 20px;
+    
 }
 
-
+#standingsBody td#noMatches
+{
+    padding: 20px;
+    text-align: center;
+    font-size: 1em;
+}
 
 
 
@@ -2243,13 +2281,14 @@ footer
     margin: 0 20px 20px 20px;
     padding: 40px;
 
-    width: 900px;
+    width: 100%;
+    max-width: 900px;
     max-height: 600px;
+
     color: white;
     font-family: "jura";
     background-color: black;
     border-radius: 10px;
-    /* flex: 1; */
 
     display: flex;
     flex-direction: column;
@@ -2277,25 +2316,9 @@ footer
 .adminSettingsHeader
 {
     margin-bottom: 10px;
-
+    text-align: center;
     border-bottom: 2px white solid ;
 
-}
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.6);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.modalContent{
-    background:white;
-    padding:25px;
-    width:500px;
-    border-radius:8px;
 }
 
 .hidden{
@@ -2347,6 +2370,15 @@ footer
     text-decoration: underline;
 }
 
+#clearMatchupBtn:hover,
+#clearDraftBtn:hover
+{
+    background-color: rgb(255, 0, 0);
+    color: white;
+    /* font-weight: bold; */
+    box-shadow: none;
+}
+
 /**************************************
             Edit Role Page 
  *************************************/
@@ -2389,4 +2421,199 @@ footer
  {
     width: 100%;
     flex: 1;
+ }
+
+ /************************ 
+        TABLET View 
+ *************************/
+ @media (max-width: 1200px) 
+ {
+    #hamburgerBtn {
+        display: block;
+        margin: 10px;
+    }
+
+    /* Make navbar overlay instead of fixed column */
+    .navBar {
+        position: fixed;
+        left: -250px; /* hidden off screen */
+        top: 0;
+        height: 100vh;
+        z-index: 1000;
+
+        transition: left 0.3s ease;
+    }
+
+    /* When open */
+    .navBar.active {
+        left: 0;
+    }
+
+    /* Let page take full width */
+    .pageLayout {
+        flex-direction: column;
+    }
+
+
+    #miniStandingsCont,
+    #killLeaderBoardCont
+    {
+        display: none;
+    }
+
+    #overviewPageLayout
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+    aside
+    {
+        margin: 20px;
+    }
+
+    #replayCont
+    {
+        order: 1;
+
+        margin: 0;
+        min-height: 100px;
+        width: 100%;
+        flex: 1;
+    }
+
+    #noReplayText
+    {
+        margin-bottom: 20px;
+    }
+
+    main#mainSpaced
+    {
+        order: 2;
+    }
+
+    /* DRAFT PAGE */
+
+    #draftInfoCont
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    
+    #ppFlexRow
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #ppStatCont
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #draftOrderList
+    {
+        display: grid;
+        grid-template-columns: repeat(1,1fr);
+    }
+
+    /* Add New Matchup */
+
+    .pageLayout
+    {
+        flex: 1;
+        height: min-content;
+        
+    }
+
+    .teamSelectCont
+    {
+        flex: 1;
+
+        border-right: none;
+        border-bottom: 1px solid white;
+        text-align: center;
+    }
+
+    #add_matchup_form
+    {
+        text-align: center;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+  
+    .adminContentCont
+    {
+        max-height: min-content;
+    }
+
+   
+
+    .adminSettingsCont
+    {
+        margin: 20px;
+    }
+ }
+
+ /* PHONE VIEW */
+
+ @media (max-width: 600px)
+ {
+
+
+    #draftInfoTopCont {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #draftOrderCont {
+        order: 2; /* push below top cont */
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    #draftAdminBtnCont {
+        order: 3;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    #currentPick
+    {
+        max-width: 100%;
+    }
+
+    #previousPick
+    {
+        border-left: 1px solid white;
+    }
+
+    #ppStatCont
+    {
+        flex-direction: column;
+    }
+
+    #draftOrderCont
+    {
+        max-width: 100%;
+
+        border-left: 1px solid white;
+    }
+
+    #draftOrderList
+    {
+        
+
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        grid-auto-rows: 50px;   
+    }
+    
  }

@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    // NAVBAR
+    const hamburger = document.getElementById("hamburgerBtn");
+    const navbar = document.querySelector(".navBar");
+
+    hamburger.addEventListener("click", () => {
+        navbar.classList.toggle("active");
+    });
+
     // ------------
     // REGISTRATION
     // ------------
@@ -1120,7 +1128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!data || data.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="4" style="text-align:center; padding: 20px;">
+                        <td colspan="4" id="noMatches">
                             No matches have been played yet
                         </td>
                     </tr>
@@ -1146,6 +1154,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     await loadStandings();
+
+        console.log("Above role update")
+
+
+
+    // -------------
+    // CLEAR MATCHUP
+    // -------------
+    const clearMatchupBtn = document.getElementById('clearMatchupBtn');
+        if (clearMatchupBtn) 
+        {
+            clearMatchupBtn.addEventListener("click", async () => {
+                if(!confirm("Are you sure you want to delete all matchups? This cannot be undone!")) return;
+
+                try {
+                    const response = await fetch('/ascent_draft_league/api/matchup/delete_all_matchups.php', { method: 'POST' });
+                    const data = await response.json();
+                    if(!response.ok) throw new Error(data.error || "Failed to clear matchups");
+                    
+                    alert("All matchups cleared successfully.");
+                    location.reload(); // refresh the page to reflect changes
+                } catch (error) {
+                    console.error("Clear matchups error", error);
+                    alert("Error clearing matchups. Check console.");
+                }
+            });
+        }
+
     
     // -----------
     // ROLE UPDATE
@@ -1198,6 +1234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 roleTd.appendChild(roleSelect);
 
                 // Update role on change
+                const competitorValue = user.competitor ?? "no";
                 roleSelect.addEventListener("change", async () => {
                     await fetch("/ascent_draft_league/api/admin/update_roles.php", {
                         method: "POST",
@@ -1205,7 +1242,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         body: JSON.stringify({
                             user_id: user.id,
                             role: roleSelect.value,
-                            competitor: competitorSelect.value,
+                            competitor: competitorValue,
                             season_id: seasonId
                         })
                     });
@@ -1223,6 +1260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (c === user.competitor) option.selected = true;
                 competitorSelect.appendChild(option);
             });
+
             competitorSelect.addEventListener("change", async () => {
                 await fetch("/ascent_draft_league/api/admin/update_roles.php", {
                     method: "POST",
@@ -1253,28 +1291,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
         console.error("Failed to load users:", err);
     }
-    
-    // -------------
-    // CLEAR MATCHUP
-    // -------------
-    const clearMatchupBtn = document.getElementById('clearMatchupBtn');
-        if (clearMatchupBtn) 
-        {
-            clearMatchupBtn.addEventListener("click", async () => {
-                if(!confirm("Are you sure you want to delete all matchups? This cannot be undone!")) return;
 
-                try {
-                    const response = await fetch('/ascent_draft_league/api/matchup/delete_all_matchups.php', { method: 'POST' });
-                    const data = await response.json();
-                    if(!response.ok) throw new Error(data.error || "Failed to clear matchups");
-                    
-                    alert("All matchups cleared successfully.");
-                    location.reload(); // refresh the page to reflect changes
-                } catch (error) {
-                    console.error("Clear matchups error", error);
-                    alert("Error clearing matchups. Check console.");
-                }
-            });
-        }
+    // console.log("Above clear matchup")
+
+    
 
 });

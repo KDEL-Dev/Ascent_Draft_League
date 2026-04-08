@@ -7,6 +7,7 @@
 
         <div class="navBar">
             <div class="topNav">
+                <button id="hamburgerBtn">☰</button>
                 <div>
                     <a href="index.php"><img class="navLogo" src="img\Ascent White Full Text.svg" alt="site logo"></a>
                 </div>
@@ -57,15 +58,27 @@
                 </ul>
             </div>
             <div class="navSettingsCont">
-                <div id="profileName">Welcome: <br>
-                    <?= 
-                    ($_SESSION['team_name'] ?? 'Spectator') .' '. ($_SESSION['team_mascot_pkmn'] ?? 'No Mascot'); 
-                ?></div>
-                <div >
+                <?php
+                    if (session_status() === PHP_SESSION_NONE) 
+                    {
+                        session_start();
+                    }
+
+                    // Get team name or default to 'Spectator'
+                    $teamName = $_SESSION['team_name'] ?? 'Spectator';
+
+                    // Only show mascot if it exists
+                    $mascot = !empty($_SESSION['team_mascot_pkmn']) ? ' ' . $_SESSION['team_mascot_pkmn'] : '';
+                ?>
+                <div id="profileName">
+                    Welcome: <br>
+                    <?= $teamName . $mascot ?>
+                </div>
+                <!-- <div >
                     <a class="profileSettingsBtn" href="profile.php">Profile</a>
                 </div>
                 <div >
                     <a class="navAdminSettingsBtn" href="admin.php">Admin Settings</a>
-                </div>
+                </div> -->
             </div>
         </div>

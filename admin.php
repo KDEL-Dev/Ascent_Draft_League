@@ -1,13 +1,20 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) 
+    if (!isset($_SESSION['user_id'])) 
     {
         header("Location: login.php");
         exit;
     }
 
-    $seasonId = $_SESSION['season_id'] ?? 12;
+    if (!isset($_SESSION['user_id']) || 
+    !in_array($_SESSION['role'], ['admin', 'owner'])) 
+    {
+        header("Location: index.php");
+        exit;
+    }
+
+    $seasonId = $_SESSION['season_id'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -28,9 +35,9 @@ if (!isset($_SESSION['user_id']))
 
         <div class="pageContent">
             <header class="headerCont">
-                <div class="seasonCont">
-                    <div class="seasonBtn">Season <?php echo $seasonId; ?></div>
-                </div>
+
+                <?php include 'includes/season_setting_header.php';?>
+                
                 <div class="pageNameCont">
                     <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                     <div class="pageTitle"> Admin Settings</div>

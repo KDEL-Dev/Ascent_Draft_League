@@ -20,6 +20,8 @@ $seasonId = $_SESSION['season_id'] ?? 1;
 </head>
 <body data-team-name="<?php echo $teamName; ?>">
 
+<button id="hamburgerBtn">☰</button>
+
 <div class="pageLayout">
 
     <?php include 'includes/navbar.php'; ?>
@@ -27,9 +29,9 @@ $seasonId = $_SESSION['season_id'] ?? 1;
     <div class="pageContent">
 
         <header class="headerCont">
-            <div class="seasonCont">
-                <div class="seasonBtn">Season <?php echo $seasonId; ?></div>
-            </div>
+            
+            <?php include 'includes/season_setting_header.php';?>
+            
             <div class="pageNameCont">
                 <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 <div class="pageTitle">Draft</div>
@@ -43,73 +45,78 @@ $seasonId = $_SESSION['season_id'] ?? 1;
                 <header id="draftDashTitle">Draft Dashboard</header>
 
                 <section id="draftInfoCont">
-                    <section id="currentPick">
-                        <header>Current Pick</header>
-                        <section id="currentPickInfo">Stand By</section>
-                    </section>
-
-                    <section id="previousPick">
-                        <header>Previous Pick</header>
-                        <section id="previousPickInfo">
-                            <section id="ppTeamName">
-                                <!-- Dynamically Added -->
-                            </section>
-                            <section id="ppFlexRow">
-                                <section id="ppPkmnCont">
-                                    <section id="ppPkmnImgCont"></section>
-                                    
-                                </section>
-                                <section id="ppStatCont">
-                                    
-                                        <table class="ppStatTable">
-                                            <thead>
-                                                <th class="ppTH">hp</th>
-                                                <th class="ppTH">atk</th>
-                                                <th class="ppTH">def</th>                                               
-                                            </thead>
-                                            <tbody>
-                                                <td class="ppTD"></td>
-                                                <td class="ppTD"></td>
-                                                <td class="ppTD"></td>
-                                               
-                                            </tbody>
-                                        </table>
-                                  
-                                
-                                        <table class="ppStatTable">
-                                            <thead>
-                                                <th class="ppTH">sp.atk</th>
-                                                <th class="ppTH">sp.def</th>
-                                                <th class="ppTH">spe</th>
-                                            </thead>
-                                            <tbody>
-                                             
-                                                <td class="ppTD"></td>
-                                                <td class="ppTD"></td>
-                                                <td class="ppTD"></td>
-                                            </tbody>
-                                        </table>
-                                
-                                </section>
-                            </section>
-                            
-                            <section id="ppPkmnNameCont"></section>
+                    <section id="draftInfoTopCont">
+                        <section id="currentPick">
+                            <header>Current Pick</header>
+                            <section id="currentPickInfo">Stand By</section>
                         </section>
-                    </section>
-
-                    <section id="draftOrderCont">
-                        <header>Draft Order</header>
-                        <ul id="draftOrderList"></ul>
-                        <section id="draftOrderBtnCont">
-                            <button id="randomizeBtn">Randomize</button>
+                        <section id="previousPick">
+                            <header>Previous Pick</header>
+                            <section id="previousPickInfo">
+                                <section id="ppTeamName">
+                                    <!-- Dynamically Added -->
+                                </section>
+                                <section id="ppFlexRow">
+                                    <section id="ppPkmnCont">
+                                        <section id="ppPkmnImgCont"></section>
+                                        
+                                    </section>
+                                    <section id="ppStatCont">
+                                        
+                                            <table class="ppStatTable">
+                                                <thead>
+                                                    <th class="ppTH">hp</th>
+                                                    <th class="ppTH">atk</th>
+                                                    <th class="ppTH">def</th>                                               
+                                                </thead>
+                                                <tbody>
+                                                    <td class="ppTD"></td>
+                                                    <td class="ppTD"></td>
+                                                    <td class="ppTD"></td>
+                                                
+                                                </tbody>
+                                            </table>
+                                    
+                                    
+                                            <table class="ppStatTable">
+                                                <thead>
+                                                    <th class="ppTH">sp.atk</th>
+                                                    <th class="ppTH">sp.def</th>
+                                                    <th class="ppTH">spe</th>
+                                                </thead>
+                                                <tbody>
+                                                
+                                                    <td class="ppTD"></td>
+                                                    <td class="ppTD"></td>
+                                                    <td class="ppTD"></td>
+                                                </tbody>
+                                            </table>
+                                    
+                                    </section>
+                                </section>
+                                
+                                <section id="ppPkmnNameCont"></section>
+                            </section>
                         </section>
+
+                        <section id="draftOrderCont">
+                            <header>Draft Order</header>
+                            <ul id="draftOrderList"></ul>
+                    
+                        <?php if (in_array($_SESSION['role'], ['admin', 'owner'])): ?>
+                            <section id="draftOrderBtnCont">
+                                <button id="randomizeBtn">Randomize</button>
+                            </section>
+                        <?php endif; ?>
                     </section>
-                    <section id="draftAdminBtnCont">
-                        <button id="startDraftBtn" class="adminDraftBtns">Start Draft</button>
-                        <!-- Turning off skip for now -->
-                        <!-- <button id="skipPickBtn" class="adminDraftBtns" disabled>Skip</button> -->
-                        <button id="endDraftBtn" class="adminDraftBtns">End Draft</button>
-                    </section>
+                </section>
+                    <?php if (in_array($_SESSION['role'], ['admin', 'owner'])): ?>
+                        <section id="draftAdminBtnCont">
+                            <button id="startDraftBtn" class="adminDraftBtns">Start Draft</button>
+                            <!-- <button id="skipPickBtn" class="adminDraftBtns" disabled>Skip</button> -->
+                            <button id="endDraftBtn" class="adminDraftBtns">End Draft</button>
+                        </section>
+                    <?php endif; ?>
                 </section>
                 
             </section>

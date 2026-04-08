@@ -53,9 +53,9 @@
     <div class="pageContent">
          <header class="headerCont">
             <div class="seasonCont">
-                <div class="seasonBtn">
-                    Season <?php echo htmlspecialchars($seasonId); ?>
-                </div>
+
+                <?php include 'includes/season_setting_header.php';?>
+                
             </div>
             <div class="pageNameCont">
                 <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">

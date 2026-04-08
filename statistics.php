@@ -63,6 +63,8 @@
     <title>Ascent - Statistics</title>
 </head>
 <body>
+    <button id="hamburgerBtn">☰</button>
+    
 <div class="pageLayout">
 
     <?php include 'includes/navbar.php';?> 
@@ -70,11 +72,9 @@
     <div class="pageContent">
 
         <header class="headerCont">
-            <div class="seasonCont">
-                <div class="seasonBtn">
-                    Season <?php echo htmlspecialchars($seasonId); ?>
-                </div>
-            </div>
+
+            <?php include 'includes/season_setting_header.php';?>
+            
             <div class="pageNameCont">
                 <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
                 <div class="pageTitle">Statistics</div>
