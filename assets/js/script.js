@@ -342,7 +342,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     
     await loadDraftState();
-    setInterval(loadDraftState, 2000); //restore to 2000 later
+
+    // This was telling my draft auto update to always run in the background.
+    // setInterval(loadDraftState, 2000); 
+
+    // Testing this new method
+    draftInterval = setInterval(async () => {
+        const shouldContinue = await loadDraftState();
+
+        if (!shouldContinue && draftInterval) 
+        {
+            clearInterval(draftInterval);
+            draftInterval = null;
+        }
+    }, 2000);
+
+    
 
     // -------------------
     // RANDOMIZE DRAFT ORDER

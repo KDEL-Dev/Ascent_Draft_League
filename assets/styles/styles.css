@@ -374,7 +374,7 @@ Navigation Menu
 
 
     background-color: #000000;
-    /* border: 1px solid white; */
+    border: 3px solid rgba(255, 255, 255, .1);
     border-radius: 10px;
     cursor: pointer;
 
@@ -419,6 +419,9 @@ Navigation Menu
     color: white;
     background-color: black;
     border-radius: 10px;
+    border: solid 3px rgba(255, 255, 255, .1);
+    text-align: center;
+
     width: 250px;
     height: 50px;
     font-size: 1.25em;
@@ -437,6 +440,7 @@ Navigation Menu
     height: 80px;
     background-color: black;
     border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
     
     display: flex;
     justify-content: space-between;
@@ -492,6 +496,7 @@ main
     color: white;
     font-family: "zen dots";
     font-size: 1.5em;
+    text-align: center;
 
     display: flex;
     justify-content: center;
@@ -879,6 +884,8 @@ footer
     color: white;
     font-family: "jura";
     border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
 
     display: flex;
     flex-direction: column;
@@ -1161,9 +1168,12 @@ footer
 .metaCont
 {
     margin: 0 20px;
+    min-height: 200px;
+
     background-color: black;
     border-radius: 10px;
-    min-height: 200px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
 }
 
 .tierPoolTitle
@@ -1349,7 +1359,7 @@ footer
 .contentCont
 {
     margin: 0 20px 20px 20px;
-    
+    min-height: 100vh;
     padding: 40px;
 
 
@@ -1357,8 +1367,9 @@ footer
     font-family: "jura";
     background-color: black;
     border-radius: 10px;
-    min-height: 100vh;
+    border: 4px solid rgba(255, 255, 255, .1);
 
+    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -1384,11 +1395,14 @@ footer
 .teamName
 {
     width: 100%;
+    height: 50px;
+
     color: white;
     background-image: linear-gradient(to bottom, rgb(49, 49, 49), rgb(0, 0, 0));
     font-family: "jura";
     font-size: 1.5em;
-    height: 50px;
+    text-align: center;
+    
 
     display: flex;
     align-items: center;
@@ -1417,6 +1431,7 @@ footer
     height: 50px;
     padding: 0 0 0 20px ;
     /* background-image: linear-gradient(to right,black 20%,red); */
+    text-align: center;
 
     display: flex;
     justify-content: space-between;
@@ -2188,7 +2203,7 @@ footer
     font-family: "jura";
     background-color: black;
     border-radius: 10px;
-    /* flex: 1; */
+    border: 4px solid rgba(255, 255, 255, .1);
 
     display: flex;
     flex-direction: column;
@@ -2289,6 +2304,8 @@ footer
     font-family: "jura";
     background-color: black;
     border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
 
     display: flex;
     flex-direction: column;
@@ -2393,7 +2410,8 @@ footer
     font-family: "jura";
     background-color: black;
     border-radius: 10px;
-    /* flex: 1; */
+    border: 4px solid rgba(255, 255, 255, .1);
+
 
     display: flex;
     flex-direction: column;
@@ -2566,6 +2584,10 @@ footer
  @media (max-width: 600px)
  {
 
+    .pageNameCont
+    {
+        padding: 0 10px;
+    }
 
     #draftInfoTopCont {
         display: flex;
@@ -2615,5 +2637,40 @@ footer
         grid-template-columns: repeat(2,1fr);
         grid-auto-rows: 50px;   
     }
+
+    .teamName
+    {
+        padding: 5px;
+
+        font-size: 1.25em;
+    }
+
+    .pkmnNameTier
+    {
+        padding: 0;
+        flex: 1;
+
+
+    }
+
+    .pkmnNameTier div:first-child
+    {
+        flex: 1;
+
+        font-size: 16px;
+
+        display: flex;
+        justify-content: center;
+    }
+
+    .pkmnNameTier div:last-child
+    {
+        width: 30px;
+        
+        
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        font-size: .5em;
+    }
     
- }
+}
