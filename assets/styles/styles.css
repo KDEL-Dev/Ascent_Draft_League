@@ -486,6 +486,7 @@ main
     background-color: black;
     border-radius: 10px;
     min-height: 200px;
+    border: 4px solid rgba(255, 255, 255, .1);
 
 }
 
@@ -1770,61 +1771,113 @@ footer
     /* border: white 1px solid; */
 }
 
+.matchupTitle
+{
+    margin-bottom: 20px;
+
+    text-align: center;
+}
+
 .editDeleteMatchCont
 {
-    width: 650px;
+    width: 350px;
     min-height: 320px;
-    max-height: 560px;
-
     margin: 10px;
     padding: 10px;
 
-    border: rgb(138, 138, 138) 2px solid;
+    border: rgb(255, 255, 255, .25) 3px solid;
     border-radius: 10px;
-    /* background-image: linear-gradient(to top, rgb(48, 48, 48), rgb(22, 22, 22)); */
-    background-color: #272727;
+    background-image: linear-gradient(to top, rgb(48, 48, 48), rgb(22, 22, 22));
+    /* background-color: #272727; */
 
     text-align: end;
+
+    display: flex;
+    flex-direction: column;
 
     
 }
 
+.editDeleteBtnCont
+{
+
+    display: flex;
+    justify-content: end;
+}
+
 .editDeleteMatchCont button
 {
-    width: 75px;
-    margin-bottom: 10px;
-    margin-left: 10px;
+    width: 50px;
+    margin: 0 5px;
     padding: 5px;
 
 
-    background-image: linear-gradient(to top, #092017, #258662);
+    /* background-color: #000000; */
     border: none;
     color: white;
     cursor: pointer;
     border-radius: 5px;
 }
 
+.editMatchBtn
+{
+    background-color: rgb(211, 148, 12);
+}
+
+.deleteMatchBtn
+{
+    background-color: rgb(192, 18, 18);
+}
+
+.replayCont
+{
+    /* border-top: rgba(255, 255, 255, 0.25) 2px solid;
+    border-bottom: rgba(255, 255, 255, 0.25) 2px solid; */
+
+    background-image: radial-gradient(#258662, #000000 );
+    height: 50px;
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.replayCont:hover
+{
+    cursor: pointer;
+}
+
 .matchBox
 {
+    flex: 1;
+
     font-size: 1.1em;
     font-family: "jura";
 
 
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    /* justify-content: center; */
     align-items: stretch;
 }
 
 .matchUpPlayerInfo
 {
+    flex: 1;
     
-
 
     text-align: center;
     
     display: flex;
     flex-direction: column;
+}
+
+.matchUpPlayerInfo:first-child
+{
+    margin-bottom: 20px;
 }
 
 .matchUpStats
@@ -1852,11 +1905,11 @@ footer
 .matchName
 {
     width: 80%;
+    height: 30px;
 
     font-size: .75em;
-    text-align: left;
-    padding-left: 10px;
-    height: 50px;
+    text-align: center;
+    
 }
 
 .matchKill .matchDeath
@@ -1878,8 +1931,7 @@ footer
     padding: 0 10px;
 
     font-size: 2.5em;
-    border-top: white 1px solid;
-    border-bottom: white 1px solid;
+   
 
     display: flex;
     justify-content: center;
@@ -1888,24 +1940,12 @@ footer
 
 .matchResultCont
 {
-    font-size: 1.5em;
+    font-size: 1em;
+    font-weight: bold;
     border-top: 1px solid white;
 }
 
-.replayCont
-{
-    width: 100%;
-    height: 40px;
 
-    text-align: center;
-    font-family: "jura";
-    font-size: 2em;
-}
-
-.replayCont:hover
-{
-    cursor: pointer;
-}
 
 #emptyMatches
 {
@@ -1973,7 +2013,7 @@ footer
 
 .newMatchTable table,th,td
 {
-    padding: 10px;
+    padding: 5px;
 }
 
 #newMatchReplayCont

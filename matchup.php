@@ -88,9 +88,20 @@ while ($row = $result->fetch_assoc()) {
                                         ?>
                                         
                                         <section class="editDeleteMatchCont">
-                                            <button class="editMatchBtn" data-match-id="<?= $match['id'] ?>">Edit</button>
-                                            <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
-                                            <section class="matchBox">
+                                            <section class="editDeleteBtnCont">
+                                                <button class="editMatchBtn" data-match-id="<?= $match['id'] ?>">Edit</button>
+                                                <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
+                                            </section>
+                                            <section class="matchupTitle">
+                                                <h2>Team1 vs Team2</h2> 
+                                                <section class="replayCont">
+                                                    <a href="<?= htmlspecialchars($match['replay_link']) ?>" target="_blank">
+                                                        <h3>Watch Replay</h3>
+                                                    </a>
+                                                </section>
+                                            </section>
+                                            
+                                                <section class="matchBox">
                                                 <section class="matchUpPlayerInfo">
                                                     <table class="matchUpStats">
                                                         <tr>
@@ -116,7 +127,7 @@ while ($row = $result->fetch_assoc()) {
                                                     </table>
                                                 </section>
 
-                                                <section class="vsCont">VS</section>
+                                                
 
                                                 <section class="matchUpPlayerInfo">
                                                     <table class="matchUpStats">
@@ -142,11 +153,6 @@ while ($row = $result->fetch_assoc()) {
                                                         </tr>
                                                     </table>
                                                 </section>
-                                            </section>
-                                            <section class="replayCont">
-                                                <a href="<?= htmlspecialchars($match['replay_link']) ?>" target="_blank">
-                                                    Replay
-                                                </a>
                                             </section>
                                         </section>
                                     <?php endforeach; ?>
