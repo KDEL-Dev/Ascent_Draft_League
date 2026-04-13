@@ -241,80 +241,79 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .replace(/[^a-z0-9]/g, '');
             }
 
-            if (data.previous_pick  && data.previous_pick !== lastPreviousPick || data.previous_pick !== null ) 
-            {
+            if (data.previous_pick !== lastPreviousPick) {
 
-                if (data.previous_pick) 
-                {
-                    const pokeName = data.previous_pick.toLowerCase();
+    lastPreviousPick = data.previous_pick;
 
-                    const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
+    if (data.previous_pick) {
 
-                    const url1 = `${base}${pokeName}.png`;
+        const pokeName = data.previous_pick.toLowerCase();
 
-                    const url2 = `${base}${pokeName
-                        .replace('-galar', '-galarian')
-                        .replace('-hisui', '-hisuian')
-                        .replace('-paldea', '-paldean')
-                        .replace('-alola', '-alolan')
-                        .replace('-f', '-female')
-                    }.png`;
+        showdownId = pokeName.replace(/[^a-z0-9]/g, '');
 
-                    ppPkmnImgCont.innerHTML = `
-                        <img src="${url1}" width="200"
-                            onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
-                    `;
+        const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
 
-                    ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`;
-                    ppTeamName.innerHTML = `<div>${data.previous_team}</div>`;
+        const url1 = `${base}${pokeName}.png`;
 
-                    lastPreviousPick = data.previous_pick;
-                }
+        const url2 = `${base}${pokeName
+            .replace('-galar', '-galarian')
+            .replace('-hisui', '-hisuian')
+            .replace('-paldea', '-paldean')
+            .replace('-alola', '-alolan')
+            .replace('-f', '-female')
+        }.png`;
 
-                // Load pokedex and display stats
-                const dex = await loadPokedex();
-                const pkmnData = dex[showdownId];
+        ppPkmnImgCont.innerHTML = `
+            <img src="${url1}" width="200"
+                onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
+        `;
 
-                // Construct html table to put into draft info
-                if (pkmnData && pkmnData.baseStats) 
-                    {
-                    const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
-                    ppStatCont.innerHTML = `
-                        <table class="ppStatTable">
-                            <thead>
-                                <th class="ppTH">HP</th>
-                                <th class="ppTH">ATK</th>
-                                <th class="ppTH">DEF</th>
-                            </thead>
-                            <tbody>
-                                <td class="ppTD">${hp}</td>
-                                <td class="ppTD">${atk}</td>
-                                <td class="ppTD">${def}</td>
-                            </tbody>
-                        </table>
-                        <table class="ppStatTable">
-                            <thead>
-                                <th class="ppTH">SP.ATK</th>
-                                <th class="ppTH">SP.DEF</th>
-                                <th class="ppTH">SPE</th>
-                            </thead>
-                            <tbody>
-                                <td class="ppTD">${spa}</td>
-                                <td class="ppTD">${spd}</td>
-                                <td class="ppTD">${spe}</td>
-                            </tbody>
-                        </table>
-                    `;
-                }
-            }
-        
-            else 
-            {   // if empty just add a dash
-                if (!data.previous_pick) 
-                {
-                    previousPickEl.textContent = "-";
-                }
-            }
+        ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`;
+        ppTeamName.innerHTML = `<div>${data.previous_team}</div>`;
+
+        // Load pokedex + stats
+        const dex = await loadPokedex();
+        const pkmnData = dex[showdownId];
+
+        if (pkmnData && pkmnData.baseStats) {
+            const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
+
+            ppStatCont.innerHTML = `
+                <table class="ppStatTable">
+                    <thead>
+                        <th class="ppTH">HP</th>
+                        <th class="ppTH">ATK</th>
+                        <th class="ppTH">DEF</th>
+                    </thead>
+                    <tbody>
+                        <td class="ppTD">${hp}</td>
+                        <td class="ppTD">${atk}</td>
+                        <td class="ppTD">${def}</td>
+                    </tbody>
+                </table>
+                <table class="ppStatTable">
+                    <thead>
+                        <th class="ppTH">SP.ATK</th>
+                        <th class="ppTH">SP.DEF</th>
+                        <th class="ppTH">SPE</th>
+                    </thead>
+                    <tbody>
+                        <td class="ppTD">${spa}</td>
+                        <td class="ppTD">${spd}</td>
+                        <td class="ppTD">${spe}</td>
+                    </tbody>
+                </table>
+            `;
+        }
+
+    } else {
+        // CLEAR UI when null
+        ppPkmnImgCont.innerHTML = "";
+        ppPkmnNameCont.innerHTML = "<div>-</div>";
+        ppTeamName.innerHTML = "<div>-</div>";
+        ppStatCont.innerHTML = "";
+    }
+}
 
 
             if (data.draft_finished) {
@@ -440,6 +439,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // START DRAFT BUTTON
     // -------------------
     const startDraftBtn = document.getElementById('startDraftBtn');
+    const ppFlexRow = document.getElementById('ppFlexRow');
 
     if (startDraftBtn) {
         startDraftBtn.addEventListener("click", async () => {
@@ -455,7 +455,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (data.status === "success") 
                 {
                     alert("Draft Started!");
-
+                    ppFlexRow.style.visibility = 'visible';
                     await loadDraftState();
                 } 
                 else 

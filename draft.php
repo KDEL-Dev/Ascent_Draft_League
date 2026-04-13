@@ -93,7 +93,7 @@
                                     </section>
                                     <section id="ppStatCont">
                                         
-                                            <table class="ppStatTable">
+                                            <!-- <table class="ppStatTable">
                                                 <thead>
                                                     <th class="ppTH">hp</th>
                                                     <th class="ppTH">atk</th>
@@ -105,9 +105,9 @@
                                                     <td class="ppTD"></td>
                                                 
                                                 </tbody>
-                                            </table>
+                                            </table> -->
                                     
-                                    
+<!--                                     
                                             <table class="ppStatTable">
                                                 <thead>
                                                     <th class="ppTH">sp.atk</th>
@@ -120,7 +120,7 @@
                                                     <td class="ppTD"></td>
                                                     <td class="ppTD"></td>
                                                 </tbody>
-                                            </table>
+                                            </table> -->
                                     
                                     </section>
                                 </section>
