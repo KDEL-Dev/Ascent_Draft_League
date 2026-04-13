@@ -241,35 +241,35 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .replace(/[^a-z0-9]/g, '');
             }
 
-            if (data.previous_pick && data.previous_pick !== lastPreviousPick) 
+            if (data.previous_pick  && data.previous_pick !== lastPreviousPick || data.previous_pick !== null ) 
             {
 
-                if (data.previous_pick) {
+                if (data.previous_pick) 
+                {
+                    const pokeName = data.previous_pick.toLowerCase();
 
-                const pokeName = data.previous_pick.toLowerCase();
+                    const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
 
-                const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
+                    const url1 = `${base}${pokeName}.png`;
 
-                const url1 = `${base}${pokeName}.png`;
+                    const url2 = `${base}${pokeName
+                        .replace('-galar', '-galarian')
+                        .replace('-hisui', '-hisuian')
+                        .replace('-paldea', '-paldean')
+                        .replace('-alola', '-alolan')
+                        .replace('-f', '-female')
+                    }.png`;
 
-                const url2 = `${base}${pokeName
-                    .replace('-galar', '-galarian')
-                    .replace('-hisui', '-hisuian')
-                    .replace('-paldea', '-paldean')
-                    .replace('-alola', '-alolan')
-                    .replace('-f', '-female')
-                }.png`;
+                    ppPkmnImgCont.innerHTML = `
+                        <img src="${url1}" width="200"
+                            onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
+                    `;
 
-                ppPkmnImgCont.innerHTML = `
-                    <img src="${url1}" width="200"
-                        onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
-                `;
+                    ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`;
+                    ppTeamName.innerHTML = `<div>${data.previous_team}</div>`;
 
-                ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`;
-                ppTeamName.innerHTML = `<div>${data.previous_team}</div>`;
-
-                lastPreviousPick = data.previous_pick;
-            }
+                    lastPreviousPick = data.previous_pick;
+                }
 
                 // Load pokedex and display stats
                 const dex = await loadPokedex();
@@ -452,16 +452,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const data = await res.json();
 
-                if (data.status === "success") {
+                if (data.status === "success") 
+                {
                     alert("Draft Started!");
 
-                    
                     await loadDraftState();
-                    
-                } else {
+                } 
+                else 
+                {
                     alert("Error: " + data.error);
                 }
-            } catch (err) {
+            } 
+            catch(err) 
+            {
                 console.error(err);
             }
         });

@@ -414,6 +414,14 @@ Navigation Menu
     display: flex;
     align-items: center;
     justify-content: center; 
+
+    transition: all .25s ease;
+}
+
+#topAdminSettingBtn:hover
+{
+    border: 3px solid rgba(255, 255, 255, 1);
+
 }
 
 #topAdminSettingBtn img
@@ -429,7 +437,7 @@ Navigation Menu
 
     width: min-content;
     height: 50px;
-
+    position: relative;
 
     background-color: #000000;
     border: 3px solid rgba(255, 255, 255, .1);
@@ -442,11 +450,17 @@ Navigation Menu
     display: flex;
     align-items: center;
     justify-content: center;
+
+    transition: all .25s ease;
 }
+
+
 
 #topProfileSettingBtn:hover
 {
     /* Come back to add something */
+    border: 3px solid rgba(255, 255, 255, 1);
+
 }
 
 #topProfileSettingBtn img
@@ -471,7 +485,7 @@ Navigation Menu
 .adminSettingIcon:hover 
 {
     border-radius: 10px;
-    border: 2px solid white;
+
 }
 
 /*********************
@@ -2654,6 +2668,33 @@ footer
     color: white;
     /* font-weight: bold; */
     box-shadow: none;
+}
+
+#changePassBtn
+{
+    padding: 20px;
+    margin: 0 20px;
+    max-height: 20px;
+
+
+    background-color: black;
+    border: white 1px solid;
+    color: white;
+    font-family: "jura";
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#changePassBtn:hover
+{
+    background-color: white;
+    color: black;
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+
 }
 
 /**************************************

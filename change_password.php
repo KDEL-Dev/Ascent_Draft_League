@@ -101,7 +101,7 @@
                             <label for="confirm_password">Confirm New Password</label>
                             <input type="password" name="confirm_password" id="confirm_password" required>
                         </div>
-                        <button type="submit">Change Password</button>
+                        <button id="changePassBtn" type="submit">Change Password</button>
                     </form>
                     
                 </section>
