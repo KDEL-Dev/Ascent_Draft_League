@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'includes/connection.php'; // make sure the path is correct
 session_start();
 
@@ -9,13 +14,44 @@ if (!isset($_SESSION['user_id'])) {
 
 $seasonId = $_SESSION['season_id'] ?? null;
 
+if (!$seasonId) {
+    die("No season_id found in session");
+}
+
 // Fetch all matchups for this season
 $matchups = [];
-$sql = "SELECT * FROM matchup WHERE season_id = ? ORDER BY created_at DESC";
+$sql = "
+SELECT 
+    m.*,
+    u1.team_name AS team1_name,
+    u2.team_name AS team2_name
+FROM matchup m
+JOIN active_users au1 ON au1.id = m.player1_active_user_id
+JOIN active_users au2 ON au2.id = m.player2_active_user_id
+JOIN users u1 ON u1.id = au1.user_id
+JOIN users u2 ON u2.id = au2.user_id
+WHERE m.season_id = ?
+ORDER BY m.created_at DESC
+";
+
 $stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    die("SQL Prepare failed: " . $conn->error);
+}
+
 $stmt->bind_param("i", $seasonId);
-$stmt->execute();
+
+if (!$stmt->execute()) {
+    die("SQL Execute failed: " . $stmt->error);
+}
+
 $result = $stmt->get_result();
+
+if (!$result) {
+    die("Get result failed");
+}
+
 while ($row = $result->fetch_assoc()) {
     $matchups[] = $row;
 }
@@ -93,9 +129,13 @@ while ($row = $result->fetch_assoc()) {
                                                 <button class="deleteMatchBtn" data-match-id="<?= $match['id'] ?>">Delete</button>
                                             </section>
                                             <section class="matchupTitle">
-                                                <h2>Team1 vs Team2</h2> 
-                                                <section class="replayCont">
-                                                    <a href="<?= htmlspecialchars($match['replay_link']) ?>" target="_blank">
+                                                <h2>
+                                                    <?= htmlspecialchars($match['team1_name']) ?>
+                                                    vs
+                                                    <?= htmlspecialchars($match['team2_name']) ?>
+                                                </h2>
+                                                    <section class="replayCont">
+                                                    <a href="<?= htmlspecialchars($match['replay_link'] ?? '#') ?>" target="_blank">
                                                         <h3>Watch Replay</h3>
                                                     </a>
                                                 </section>
@@ -120,7 +160,9 @@ while ($row = $result->fetch_assoc()) {
                                                             </tr>
                                                         <?php endforeach; ?>
                                                         <tr>
-                                                            <td colspan="3" class="matchResultCont">
+                                                            <td colspan="3" class="matchResultCont 
+                                                                <?= $match['winner_active_user_id'] == $match['player1_active_user_id'] ? 'win' : 'loss' ?>">
+                                                                
                                                                 <?= $match['winner_active_user_id'] == $match['player1_active_user_id'] ? 'Win' : 'Loss' ?>
                                                             </td>
                                                         </tr>
@@ -147,7 +189,9 @@ while ($row = $result->fetch_assoc()) {
                                                             </tr>
                                                         <?php endforeach; ?>
                                                         <tr>
-                                                            <td colspan="3" class="matchResultCont">
+                                                            <td colspan="3" class="matchResultCont 
+                                                                <?= $match['winner_active_user_id'] == $match['player2_active_user_id'] ? 'win' : 'loss' ?>">
+                                                                
                                                                 <?= $match['winner_active_user_id'] == $match['player2_active_user_id'] ? 'Win' : 'Loss' ?>
                                                             </td>
                                                         </tr>

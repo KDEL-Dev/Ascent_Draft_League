@@ -114,14 +114,14 @@
 
                     <form method="POST" action="">
                         <div class="editTeamCol">
-                            <label for="">Team Name:</label>
+                            <label for="">Team Name (5 Char):</label>
                             <input type="text" name="team_name" oninput="this.value = this.value.toUpperCase()" maxlength="5" value="<?php echo htmlspecialchars($user['team_name'] ?? ''); ?>">
                         </div>
                         <div class="editTeamCol">
-                            <label for=""> Team Mascot: </label>
+                            <label for=""> Team Mascot (Pokemon Name): </label>
                             <input type="text" name="team_mascot" value="<?php echo htmlspecialchars($user['team_mascot_pkmn'] ?? ''); ?>"> 
                         </div>
-                        <div>
+                        <div id="saveNameMascotCont">
                             <button class="adminSettingsBtn" id="saveProfileChanges" type="submit">Save Changes</button>
                         </div>
                     </form>

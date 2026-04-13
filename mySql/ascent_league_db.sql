@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 08, 2026 at 04:14 AM
+-- Generation Time: Apr 13, 2026 at 03:39 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -43,7 +43,8 @@ CREATE TABLE `active_users` (
 INSERT INTO `active_users` (`id`, `user_id`, `role`, `draft_pick`, `season_id`, `competitor`) VALUES
 (3, 1, 'owner', 1, 1, 'no'),
 (9, 1, 'owner', 1, 999, 'yes'),
-(17, 9, 'user', 2, 999, 'yes');
+(17, 9, 'user', 2, 999, 'yes'),
+(18, 10, 'user', NULL, 999, 'no');
 
 -- --------------------------------------------------------
 
@@ -59,36 +60,6 @@ CREATE TABLE `drafted_pkmn` (
   `pick_number` int(11) NOT NULL,
   `drafted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `drafted_pkmn`
---
-
-INSERT INTO `drafted_pkmn` (`id`, `season_id`, `active_user`, `showdown_pkmn`, `pick_number`, `drafted_at`) VALUES
-(342, 999, 9, 7174, 1, '2026-04-07 18:31:44'),
-(343, 999, 17, 7400, 2, '2026-04-07 20:16:24'),
-(344, 999, 17, 7621, 3, '2026-04-07 20:16:27'),
-(345, 999, 9, 7724, 4, '2026-04-07 20:17:02'),
-(346, 999, 9, 7914, 5, '2026-04-07 20:17:07'),
-(347, 999, 17, 7440, 6, '2026-04-07 20:17:29'),
-(348, 999, 17, 7773, 7, '2026-04-07 20:17:39'),
-(349, 999, 9, 7527, 8, '2026-04-07 20:17:46'),
-(350, 999, 9, 7152, 9, '2026-04-07 20:17:48'),
-(351, 999, 17, 7316, 10, '2026-04-07 20:17:51'),
-(352, 999, 17, 7414, 11, '2026-04-07 20:17:54'),
-(353, 999, 9, 7747, 12, '2026-04-07 20:17:56'),
-(354, 999, 9, 7570, 13, '2026-04-07 20:18:01'),
-(355, 999, 17, 7799, 14, '2026-04-07 20:18:08'),
-(356, 999, 17, 7646, 15, '2026-04-07 20:18:10'),
-(357, 999, 9, 7551, 16, '2026-04-07 20:18:14'),
-(358, 999, 9, 7352, 17, '2026-04-07 20:18:16'),
-(359, 999, 17, 7653, 18, '2026-04-07 20:18:19'),
-(360, 999, 17, 7911, 19, '2026-04-07 20:18:26'),
-(361, 999, 9, 7837, 20, '2026-04-07 20:18:31'),
-(362, 999, 9, 7492, 21, '2026-04-07 20:18:34'),
-(363, 999, 17, 7861, 22, '2026-04-07 20:18:41'),
-(364, 999, 17, 7530, 23, '2026-04-07 20:18:44'),
-(365, 999, 9, 7544, 24, '2026-04-07 20:18:53');
 
 -- --------------------------------------------------------
 
@@ -114,7 +85,7 @@ CREATE TABLE `draft_info` (
 
 INSERT INTO `draft_info` (`id`, `season_id`, `current_pick`, `total_picks`, `direction`, `created_at`, `updated_at`, `draft_started`, `draft_finished`) VALUES
 (1, 12, 1, 0, 'up', '2026-02-23 21:47:29', '2026-03-03 20:03:38', 0, 0),
-(2, 999, 25, 24, 'up', '2026-03-03 20:47:36', '2026-04-08 00:18:53', 1, 1);
+(2, 999, 1, 0, 'up', '2026-03-03 20:47:36', '2026-04-13 03:39:19', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -172,7 +143,7 @@ CREATE TABLE `league_information` (
 --
 
 INSERT INTO `league_information` (`season_id`, `about`, `rules`, `news`) VALUES
-(999, 'This is the about section', 'Rules will be listed below:', 'Welcome to our first website version of our pokemon league! Now we will deploy this site online!');
+(999, 'The Ascent Draft League is a competitive Pokémon draft-style league focused on strategy, team building, and player skill. Each participant drafts a unique roster of Pokémon across multiple tiers, creating balanced and diverse teams for the season.\r\n\r\nThe league is structured into a Round Robin stage followed by a Knockout stage, where players compete in Best-of-One matches. Success depends on preparation, adaptability, and smart roster management, including limited mid-season trades.\r\n\r\nPlayers are responsible for scheduling their own matches and are expected to maintain clear communication and respectful conduct throughout the season. The Ascent Draft League is designed to deliver a competitive yet community-driven experience for all participants.', 'General Rules\r\nEach team consists of 12 Pokémon total, with 3 Pokémon selected from each tier.\r\nAll matches are Best of 1.\r\nPlayers are expected to complete all scheduled matches within the season timeframe.\r\nFollowing the draft, each player will be permitted to make up to 2 trades, replacing Pokémon with others from the same tier only, until the end of the following day.\r\nAt the start of each match, players are encouraged to share the battle link in the general Discord chat for community viewing.\r\nAfter each match, at least one participant must post the replay in the designated Discord replay channel.\r\nAll participants are expected to maintain respectful conduct at all times and contribute to a positive competitive environment.\r\nRound Robin Stage\r\nThe Round Robin stage will run for approximately 2–3 weeks, with final duration subject to adjustment based on league size and scheduling.\r\nEach player is required to face every other player at least once. If divisions are implemented, players must compete against all opponents within their division.\r\nPlayers are responsible for organizing their own match schedule.\r\nCommunication between opponents is strongly encouraged, preferably through Discord, to ensure timely scheduling and completion of matches.\r\nKnockout Stage Rules\r\nPrior to the start of the Knockout Stage, each player will be allowed to perform up to 2 Pokémon substitutions, replacing Pokémon with others from the same tier, to better prepare for matchups.\r\nAfter Round 1 of the Knockout Stage, players may make 1 Pokémon substitution between each subsequent match, including the Grand Finals reset if applicable.\r\nAny traded Pokémon must be communicated to the opponent at least 24 hours before the scheduled match time.\r\nOpponents may choose to accept the updated roster earlier than the 24-hour minimum if both parties agree.', 'Welcome to the inaugural season of the Ascent Draft League! Trainers have drafted their teams and the competition is officially underway. Stay active, schedule your matches, and submit replays after each battle. Good luck to all competitors—may the best strategist win!');
 
 -- --------------------------------------------------------
 
@@ -1204,13 +1175,6 @@ CREATE TABLE `matchup` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `matchup`
---
-
-INSERT INTO `matchup` (`id`, `season_id`, `player1_active_user_id`, `player2_active_user_id`, `winner_active_user_id`, `replay_link`, `created_at`) VALUES
-(19, 999, 9, 17, 9, 'https://replay.pokemonshowdown.com/gen9ou-2165091183', '2026-04-08 00:54:30');
-
 -- --------------------------------------------------------
 
 --
@@ -1226,24 +1190,6 @@ CREATE TABLE `match_pokemon_stats` (
   `used` tinyint(1) DEFAULT '0',
   `active_user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `match_pokemon_stats`
---
-
-INSERT INTO `match_pokemon_stats` (`id`, `matchup_id`, `roster_pkmn_id`, `kills`, `deaths`, `used`, `active_user_id`) VALUES
-(216, 19, 319, 1, 1, 1, 9),
-(217, 19, 323, 0, 1, 1, 9),
-(218, 19, 322, 0, 1, 1, 9),
-(219, 19, 307, 1, 1, 1, 9),
-(220, 19, 326, 1, 1, 1, 9),
-(221, 19, 314, 0, 1, 1, 9),
-(222, 19, 308, 1, 0, 1, 17),
-(223, 19, 316, 0, 0, 1, 17),
-(224, 19, 309, 1, 0, 1, 17),
-(225, 19, 325, 2, 1, 1, 17),
-(226, 19, 313, 0, 1, 1, 17),
-(227, 19, 320, 2, 1, 1, 17);
 
 -- --------------------------------------------------------
 
@@ -2155,36 +2101,6 @@ CREATE TABLE `roster_pkmn` (
   `is_active` tinyint(1) DEFAULT '1',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `roster_pkmn`
---
-
-INSERT INTO `roster_pkmn` (`id`, `active_user`, `showdown_pkmn`, `season_id`, `is_active`, `created_at`) VALUES
-(303, 9, 7174, 999, 1, '2026-04-07 18:31:44'),
-(304, 17, 7400, 999, 1, '2026-04-07 20:16:24'),
-(305, 17, 7621, 999, 1, '2026-04-07 20:16:27'),
-(306, 9, 7724, 999, 1, '2026-04-07 20:17:02'),
-(307, 9, 7914, 999, 1, '2026-04-07 20:17:07'),
-(308, 17, 7440, 999, 1, '2026-04-07 20:17:29'),
-(309, 17, 7773, 999, 1, '2026-04-07 20:17:39'),
-(310, 9, 7527, 999, 1, '2026-04-07 20:17:46'),
-(311, 9, 7152, 999, 1, '2026-04-07 20:17:48'),
-(312, 17, 7316, 999, 1, '2026-04-07 20:17:51'),
-(313, 17, 7414, 999, 1, '2026-04-07 20:17:54'),
-(314, 9, 7747, 999, 1, '2026-04-07 20:17:56'),
-(315, 9, 7570, 999, 1, '2026-04-07 20:18:01'),
-(316, 17, 7799, 999, 1, '2026-04-07 20:18:08'),
-(317, 17, 7646, 999, 1, '2026-04-07 20:18:10'),
-(318, 9, 7551, 999, 1, '2026-04-07 20:18:14'),
-(319, 9, 7352, 999, 1, '2026-04-07 20:18:16'),
-(320, 17, 7653, 999, 1, '2026-04-07 20:18:19'),
-(321, 17, 7911, 999, 1, '2026-04-07 20:18:26'),
-(322, 9, 7837, 999, 1, '2026-04-07 20:18:31'),
-(323, 9, 7492, 999, 1, '2026-04-07 20:18:34'),
-(324, 17, 7861, 999, 1, '2026-04-07 20:18:41'),
-(325, 17, 7530, 999, 1, '2026-04-07 20:18:44'),
-(326, 9, 7544, 999, 1, '2026-04-07 20:18:53');
 
 -- --------------------------------------------------------
 
@@ -3133,7 +3049,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `password`, `gamerTag`, `created_at`, `team_name`, `team_mascot_pkmn`) VALUES
 (1, 'truburd@gmail.com', '$2y$10$iX8FREJKG5Q.AeDt5nvR8eCmLLzTq40MkWyNAAoWn8OrlblqOHqRW', 'DZN', '2026-02-18 14:09:10', 'DAYZN', 'Corviknight'),
-(9, 'player2@gmail.com', '$2y$10$lTUpuVHpBcC4fY411mveVekeBSFYXStWKB/a5IJr3z1140ixCGLSa', NULL, '2026-04-07 14:41:49', 'MUNX', 'Munkidori');
+(9, 'player2@gmail.com', '$2y$10$lTUpuVHpBcC4fY411mveVekeBSFYXStWKB/a5IJr3z1140ixCGLSa', NULL, '2026-04-07 14:41:49', 'MUNX', 'Munkidori'),
+(10, 'player3@gmail.com', '$2y$10$csfT/9Y2KMIENMds3uTW5eJsbIM0Wx0pzR/OyUAs7fEX.tvzWFLVO', NULL, '2026-04-11 13:16:12', 'DB', 'Exploud');
 
 --
 -- Indexes for dumped tables
@@ -3243,13 +3160,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `active_users`
 --
 ALTER TABLE `active_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `drafted_pkmn`
 --
 ALTER TABLE `drafted_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=366;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=420;
 
 --
 -- AUTO_INCREMENT for table `draft_info`
@@ -3273,25 +3190,25 @@ ALTER TABLE `leagues`
 -- AUTO_INCREMENT for table `matchup`
 --
 ALTER TABLE `matchup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `match_pokemon_stats`
 --
 ALTER TABLE `match_pokemon_stats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
 
 --
 -- AUTO_INCREMENT for table `pkmn_tier`
 --
 ALTER TABLE `pkmn_tier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16779;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12399;
 
 --
 -- AUTO_INCREMENT for table `roster_pkmn`
 --
 ALTER TABLE `roster_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=387;
 
 --
 -- AUTO_INCREMENT for table `seasons`
@@ -3303,13 +3220,13 @@ ALTER TABLE `seasons`
 -- AUTO_INCREMENT for table `showdown_pkmn`
 --
 ALTER TABLE `showdown_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9672;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7920;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

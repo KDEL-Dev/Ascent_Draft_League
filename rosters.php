@@ -29,6 +29,7 @@ $stmt = $conn->prepare("
     JOIN users u
         ON au.user_id = u.id
     WHERE rp.season_id = ?
+    AND rp.is_active = 1
     ORDER BY u.team_name, pt.tier
 ");
 
@@ -91,41 +92,45 @@ unset($pokemonList); // break reference
             <div>
                 <main>
                     <section class="contentCont">
-
-                        <?php foreach ($teams as $teamName => $pokemonList): ?>
-                            <div class="teamCont">
-                                <div class="teamName"><?= htmlspecialchars($teamName); ?></div>
-                                <ul class="rosterPkmn">
-                                    <?php foreach ($pokemonList as $pkmn): ?>
-                                        <li class="pkmnNameTier">
-                                            <div><?= htmlspecialchars($pkmn['name']); ?></div>
-                                                                    
-                                            <?php  
-                                                $tierMap = [
-                                                    'OU' => 'ou',
-                                                    'UUBL' => 'ou',
-                                                    'UU' => 'uu',
-                                                    'RUBL' => 'uu',
-                                                    'RU' => 'ru',
-                                                    'NUBL' => 'ru',
-                                                    'NU' => 'nu',
-                                                    'PUBL' => 'nu',
-                                                    'PU' => 'nu',
-                                                    'ZUBL' => 'nu',
-                                                    'ZU' => 'nu'
-                                                ];
-                                                $tier = strtoupper($pkmn['tier']);
-                                                $baseTier = $tierMap[$tier] ?? 'default';
-                                            ?>
-                                            <div class="<?= $baseTier ?>-RosterColor">
-                                                <?= htmlspecialchars($tier); ?>
-                                            </div>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endforeach; ?>
-
+                        <?php if (!empty($teams)): ?>
+                            <?php foreach ($teams as $teamName => $pokemonList): ?>
+                                <div class="teamCont">
+                                    <div class="teamName"><?= htmlspecialchars($teamName); ?></div>
+                                    <ul class="rosterPkmn">
+                                        <?php foreach ($pokemonList as $pkmn): ?>
+                                            <li class="pkmnNameTier">
+                                                <div><?= htmlspecialchars($pkmn['name']); ?></div>
+                                              
+                                                <?php  
+                                                    $tierMap = [
+                                                        'OU' => 'ou',
+                                                        'UUBL' => 'ou',
+                                                        'UU' => 'uu',
+                                                        'RUBL' => 'uu',
+                                                        'RU' => 'ru',
+                                                        'NUBL' => 'ru',
+                                                        'NU' => 'nu',
+                                                        'PUBL' => 'nu',
+                                                        'PU' => 'nu',
+                                                        'ZUBL' => 'nu',
+                                                        'ZU' => 'nu'
+                                                    ];
+                                                    $tier = strtoupper($pkmn['tier']);
+                                                    $baseTier = $tierMap[$tier] ?? 'default';
+                                                ?>
+                                                <div class="<?= $baseTier ?>-RosterColor">
+                                                    <?= htmlspecialchars($tier); ?>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                             <section id="emptyMatches">
+                                No matches have been played yet
+                            </section>  
+                        <?php endif; ?>                  
                     </section>
                 </main>
                 <?php include 'includes/footer.php'; ?>

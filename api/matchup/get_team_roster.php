@@ -12,6 +12,7 @@ FROM roster_pkmn rp
 JOIN showdown_pkmn sp 
 ON sp.id = rp.showdown_pkmn
 WHERE rp.active_user = ?
+AND rp.is_active = 1
 ";
 
 $stmt = $conn->prepare($sql);

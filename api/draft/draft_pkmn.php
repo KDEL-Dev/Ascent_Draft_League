@@ -1,8 +1,8 @@
 <?php
 
     //Going to add error reporting by default
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    // error_reporting(E_ALL);
+    // ini_set('display_errors', 1);
 
     //starts and or resumes php session. If I don't have this db can't be accessed. So for this specifically my site won't know which player is making a draft pick.
     session_start();

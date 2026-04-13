@@ -1,14 +1,44 @@
 <?php
-session_start();
-require_once 'includes/connection.php';
+    session_start();
+    require_once 'includes/connection.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
+    }
 
-$teamName = htmlspecialchars($_SESSION['team_name']);
-$seasonId = $_SESSION['season_id'] ?? 1;
+    $seasonId = $_SESSION['season_id'] ?? null;
+
+    $draftFinished = 0;
+
+    if ($seasonId) 
+    {
+        $stmt = $conn->prepare("
+            SELECT draft_finished 
+            FROM draft_info 
+            WHERE season_id = ?
+            LIMIT 1
+        ");
+        $stmt->bind_param("i", $seasonId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if ($result) 
+        {
+            $draftFinished = (int)$result['draft_finished'];
+        }
+    }
+
+    if ($draftFinished == 1) 
+    {
+        header("Location: pokebox.php");
+        exit;
+    }
+
+    $teamName = htmlspecialchars($_SESSION['team_name']);
+    
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">

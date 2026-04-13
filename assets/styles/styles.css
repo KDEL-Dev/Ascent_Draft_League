@@ -22,9 +22,9 @@ html, body
 }
 
 
-/* ********************** */
+/******************************/
 /* Navbar and Main Page Split */
-/* ********************** */
+/******************************/
 
 
 
@@ -268,6 +268,7 @@ Navigation Menu
 
 #loginLayout
 {
+    padding: 20px;
     min-height: 100vh;
     gap: 20px;
 
@@ -282,7 +283,8 @@ Navigation Menu
 
 #loginLogo
 {
-    width: 450px;
+    width: 100%;
+    max-width: 450px;
     height: auto;
 }
 
@@ -291,8 +293,7 @@ Navigation Menu
     color: white;
     font-family: "jura";
     width: 100%;
-    gap: 20px
-    ;
+    gap: 20px;
 
     display: flex;
     flex-direction: column;
@@ -302,7 +303,10 @@ Navigation Menu
 
 .formInput
 {
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+    flex: 1;
+
     font-size: 1.5em;
 }
 
@@ -365,6 +369,15 @@ Navigation Menu
 
 /* HEADER CONTENT */
 
+#profileAndSettingCont
+{
+    margin: 20px 20px 0 0;
+    gap: 10px;
+
+    display: flex;
+    flex-direction: row;
+}
+
 .adminSettingIcon
 {
     margin: 20px 20px 0 10px;
@@ -382,6 +395,71 @@ Navigation Menu
     align-items: center;
     justify-content: center; 
 }
+
+#topAdminSettingBtn
+{
+    margin: 0;
+
+    width: 50px;
+    height: 50px;
+
+
+    background-color: #000000;
+    border: 3px solid rgba(255, 255, 255, .1);
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+#topAdminSettingBtn img
+{
+    width: 30px;
+    height: auto;
+}
+
+#topProfileSettingBtn
+{
+    margin: 0;
+    padding: 10px;
+
+    width: min-content;
+    height: 50px;
+
+
+    background-color: #000000;
+    border: 3px solid rgba(255, 255, 255, .1);
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    font-family: "zen dots";
+    font-size: 1.25em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#topProfileSettingBtn:hover
+{
+    /* Come back to add something */
+}
+
+#topProfileSettingBtn img
+{
+    margin-right: 5px;
+    width: 30px;
+    height: auto;
+}
+
+#topProfileSettingBtn p
+{
+    margin: 0;
+}
+
+
 
 .adminSettingIcon img
 {
@@ -414,7 +492,7 @@ Navigation Menu
 
 .seasonBtn
 {
-    margin: 20px 10px 0;
+    margin: 20px 10px 0 20px;
 
     color: white;
     background-color: black;
@@ -539,6 +617,8 @@ main
 
     background-color: black;
     border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
     
 }
 
@@ -621,13 +701,14 @@ aside
     font-family: "zen dots";
     
     border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
 
     display: flex;
     align-items: center;
     /* justify-content: center; */
     flex-direction: column;
 }
-
 
 
 #indexReplayTitle
@@ -744,6 +825,8 @@ aside
     font-family: "zen dots";
     font-size: 1.5em;
     border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
     
 
     display: flex;
@@ -813,6 +896,8 @@ aside
     color: white;
     font-family: "zen dots";
     font-size: 1.5em;
+        border: 4px solid rgba(255, 255, 255, .1);
+
 
     display: flex;
     align-items: center;
@@ -858,12 +943,14 @@ aside
 
 footer
 {
-    margin:0 20px;
+    margin: 0 20px;
+    padding-top: 10px;
 
     border-top: rgba(255, 255, 255, 20%) 1px solid;
     height: 30px;
     color: white;
     font-family: "jura";
+    text-align: center;
     
 
     display: flex;
@@ -1172,7 +1259,8 @@ footer
     min-height: 200px;
 
     background-color: black;
-    border-radius: 10px;
+    /* border-radius: 10px; */
+
     border: 4px solid rgba(255, 255, 255, .1);
 
 }
@@ -1383,7 +1471,7 @@ footer
     width: 450px;
     height: 650px;
     border: solid 1px white;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     overflow: hidden;
 
 
@@ -1437,6 +1525,11 @@ footer
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.pkmnNameTier div:first-child
+{
+    flex: 1;
 }
 
 
@@ -1636,7 +1729,9 @@ footer
 
 #whatIsCont
 {
+    padding: 0 20px;
     width: 80%;
+
     text-align: center;
 
     display: flex;
@@ -1708,6 +1803,7 @@ footer
 #ruleList
 {
     list-style: none;
+    padding: 0 20px;
 }
 
 
@@ -1821,12 +1917,25 @@ footer
 
 .editMatchBtn
 {
-    background-color: rgb(211, 148, 12);
+    /* background-color: rgb(211, 148, 12); */
+    background-image: linear-gradient(to bottom, rgb(211, 148, 12), rgb(95, 67, 6));
+}
+
+.editMatchBtn:hover
+{
+    /* background-image: none;
+    background-color: rgb(214, 165, 60); */
 }
 
 .deleteMatchBtn
 {
-    background-color: rgb(192, 18, 18);
+    /* background-color: rgb(192, 18, 18); */
+    background-image: linear-gradient(to bottom, rgb(192, 18, 18), rgb(97, 10, 10));
+}
+
+.deleteMatchBtn:hover
+{
+    /* background-color: rgb(233, 55, 55); */
 }
 
 .replayCont
@@ -1834,7 +1943,8 @@ footer
     /* border-top: rgba(255, 255, 255, 0.25) 2px solid;
     border-bottom: rgba(255, 255, 255, 0.25) 2px solid; */
 
-    background-image: radial-gradient(#258662, #000000 );
+    /* background-image: radial-gradient(#258662, #000000 ); */
+    background-color: #000000;
     height: 50px;
     
     border-top: 1px solid rgba(255, 255, 255, 0.25);
@@ -1886,6 +1996,8 @@ footer
     border-collapse: collapse;
     width: 100%;
 }
+
+
 
 .matchUpTeamName
 {
@@ -1945,10 +2057,22 @@ footer
     border-top: 1px solid white;
 }
 
+.matchResultCont.win {
+    background-color:rgb(35, 95, 35);
+    font-weight: bold;
+}
+
+.matchResultCont.loss {
+    background-color: rgb(100, 25, 25);
+    font-weight: bold;
+}
 
 
 #emptyMatches
 {
+    flex: 1;
+    text-align: center;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2057,7 +2181,7 @@ footer
 
 #edit_matchup_form
 {
-    width: 100%;
+    flex: 1;
 
     color: white;
 }
@@ -2065,6 +2189,7 @@ footer
 #edit_matchup_form table
 {
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 .editMatchRow
@@ -2072,16 +2197,23 @@ footer
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-
+    flex-direction: column;
     
 }
 
 .editMatchCol
 {
     margin-right: 20px;
+    flex: 1;
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
+}
+
+.editMatchCol h3
+{
+    text-align: center;
 }
 
 #editMatchReplaySect
@@ -2110,7 +2242,7 @@ footer
  .statsCont
  {
     width: 100%;
-    gap: 125px;
+    gap: 80px;
 
     display: flex;
     justify-content: center;
@@ -2131,7 +2263,8 @@ footer
  .statsBox th
  {
     border-bottom: none;
-    padding: 10px;
+    padding: 5px;
+    font-weight: normal;
  }
 
  .statsBox td:first-child
@@ -2141,7 +2274,7 @@ footer
 
  .statsBox td
  {
-    padding: 10px;
+    padding: 5px;
     border-bottom: none;
  }
 
@@ -2150,10 +2283,45 @@ footer
     min-width: 500px;
 }
 
+.statsBox table thead tr
+{
+    background-image: linear-gradient(to top, rgb(80, 80, 80), rgb(172, 183, 190));
+
+}
+
+.statsBoxTblBody td:first-child
+{
+    text-align: center;
+}
+
+/* .statsBoxTblBody tr
+{
+    background-color: rgb(20, 20, 20);
+} */
+
+.statsBoxTblBody td:nth-child(2)
+{
+    background-color: rgb(35, 95, 35);
+    font-weight: bold;
+}
+
+.statsBoxTblBody td:nth-child(3)
+{
+    background-color: rgb(100, 25, 25);
+    font-weight: bold;
+}
+
+.statsBoxTblBody td:last-child
+{
+    background-color: rgb(80, 80, 80);
+    font-weight: bold;
+}
+
 .statsNameBox
 {
     padding: 10px;
 
+    font-size: 1.5em;
     background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
@@ -2194,21 +2362,34 @@ footer
     padding: 10px;
 }
 
+#standingsBody tr
+{
+    font-weight: bold;
+    /* font-size: 1.25em; */
+}
+
 #standingsBody td:first-child
 {
-    font-size: 1.5em;
+    font-weight: normal;
 }
 
-#standingsBody td
+#standingsBody td:nth-child(3)
 {
-    
+    background-color: rgb(35, 95, 35);
+
 }
 
-#standingsBody td#noMatches
+#standingsBody td:last-child
+{
+    background-color: rgb(100, 25, 25);
+}
+
+#noMatches
 {
     padding: 20px;
     text-align: center;
     font-size: 1em;
+    background-color: #000000;
 }
 
 
@@ -2316,6 +2497,7 @@ footer
 .editTeamCol
 {
     margin-bottom: 10px;
+    text-align: center;
 
     display: flex;
     flex-direction: column;
@@ -2324,6 +2506,12 @@ footer
 #saveProfileChanges
 {
     font-size: 1em;
+}
+
+#saveNameMascotCont
+{
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -2480,6 +2668,50 @@ footer
     width: 100%;
     flex: 1;
  }
+
+ /************************
+        SWAP POKEMON 
+  ***********************/
+
+ .swapPkmnCol
+ {
+    margin-bottom: 10px;
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+ }
+
+ .swapPkmnCol input,
+ .swapPkmnCol select
+ {
+    margin: 5px 0;  
+ }
+
+ #confirmSwapBtn
+ {
+    padding: 10px;
+
+    font-family: "jura";
+    cursor: pointer;
+    border-radius: 10px;
+    background-image: linear-gradient(to top, #092017, #258662);
+    color: white;
+    border: none;
+    box-sizing: border-box;
+
+
+    display: inline-block;
+    
+    transition: transform 0.2s ease;
+}
+
+#confirmSwapBtn:hover
+{
+    transform: scale(1.05);
+}
+ 
 
  /************************ 
         TABLET View 

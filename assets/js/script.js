@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const hamburger = document.getElementById("hamburgerBtn");
     const navbar = document.querySelector(".navBar");
 
+    if(!hamburger)
+    {
+        return;
+    }
+
     hamburger.addEventListener("click", () => {
         navbar.classList.toggle("active");
     });
@@ -13,24 +18,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ------------
 
     const teamInput = document.getElementById('teamNameInput');
-    if(teamInput) {
+    if(teamInput) 
+    {
         teamInput.addEventListener('input', () => {
             teamInput.value = teamInput.value.toUpperCase();
         });
     }
 
-    // -------------------
-    // LOAD POKÉMON BY TIER
-    // -------------------
+    // ----------------------------
+    // LOAD POKÉMON BY TIER FROM DB
+    // ----------------------------
+
+
+    const isPokeboxPage = window.location.pathname.includes("pokebox.php");
+    const isDraftPage = window.location.pathname.includes("draft.php");
+    const isSwapPage = window.location.pathname.includes("swap.php");
+
+    // Get pokemon from db and store them in an array
     async function getShowdownDexFromDB() {
-        try {
+        try { // Use try catch when something may realistically fail or when you want something to not crash your site
             const response = await fetch('/ascent_draft_league/api/get_pkmn_by_tier.php');
             const pokedex = await response.json();
 
+            // Create empty arrays to hold pokemon
             let ouPokemon = [], uuPokemon = [], ruPokemon = [], nuPokemon = [];
 
             pokedex.forEach(pkmn => {
+                // Switch is just an if else statement.
                 switch (pkmn.tier) {
+                    // If pokemon is ou, uu, etc, push that pokemon into matching array. 
                     case "OU": case "UUBL": ouPokemon.push(pkmn); break;
                     case "UU": case "RUBL": uuPokemon.push(pkmn); break;
                     case "RU": case "NUBL": ruPokemon.push(pkmn); break;
@@ -48,21 +64,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    function displayList(list, elementId, clickable = false) {
+
+    // Display pokemon as buttons in html
+
+    //  elementId is id from draft.php
+    function displayList(list, elementId, clickable = false) 
+    {   // If container doesnt exist on page then return
         const container = document.getElementById(elementId);
         if (!container) return;
+
+        // Clear content in container
         container.innerHTML = "";
 
+        // Create li for each pokemon
         list.forEach(item => {
             const li = document.createElement("li");
             li.textContent = item.name;
 
+            // reminder: JSON is what contains info on whether or not it is drafted. 
             if (item.drafted) {
                 li.classList.add("drafted");
                 li.style.pointerEvents = 'none';
-            } else if (clickable) {
+            } 
+            else if (clickable) 
+            {
                 li.addEventListener("click", () => {
-                    console.log("Clicked Pokémon:", item);
+                    // console.log("Clicked Pokémon:", item);
                     draftPokemon(item);
                     li.classList.add("myPick");
                 });
@@ -72,12 +99,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // List functions
+
+    
     function displayOu(list) { displayList(list, 'listOfOuPkmn', true); }
     function displayUu(list) { displayList(list, 'listOfUuPkmn', true); }
     function displayRu(list) { displayList(list, 'listOfRuPkmn', true); }
     function displayNu(list) { displayList(list, 'listOfNuPkmn', true); }
 
-    await getShowdownDexFromDB();
+    if (isDraftPage) 
+    {
+        await getShowdownDexFromDB();
+    }
+
 
     // ------------------------------------------------
     // ADMIN BUTTONS FOR SHOWDOWN TO DB AND INSERT TIER
@@ -94,10 +128,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const response = await fetch('/ascent_draft_league/api/showdown_to_db/add_pokemon_to_db.php');
                 const data = await response.json();
 
-                console.log("Insert Pokémon response:", data);
+                // console.log("Insert Pokémon response:", data);
                 alert(`Inserted Pokémon: ${data.inserted}`);
-            } catch (err) {
-                console.error("Error inserting Pokémon:", err);
+            } 
+            catch (err) 
+            {
+                // console.error("Error inserting Pokémon:", err);
                 alert("Failed to insert Pokémon.");
             }
         })
@@ -124,52 +160,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     // DRAFT ORDER DISPLAY
     // -------------------
     const draftOrderList = document.getElementById("draftOrderList");
-    async function loadDraftOrder() {
-        try {
+    async function loadDraftOrder() 
+    {
+        try 
+        {
             const response = await fetch("/ascent_draft_league/api/draft/get_draft_order.php");
             const data = await response.json();
             renderDraftOrder(data);
-        } catch (err) {
+        } 
+        catch (err) 
+        {
             console.error("Failed to load draft order:", err);
         }
     }
 
-    function renderDraftOrder(list) {
-    if (!draftOrderList) return;
-    draftOrderList.innerHTML = "";
+    function renderDraftOrder(list) 
+    {
+        if (!draftOrderList) return;
+        draftOrderList.innerHTML = "";
 
-    list.forEach((teamName, index) => {
-        const li = document.createElement("li");
+        list.forEach((teamName, index) => {
+            const li = document.createElement("li");
 
-        // Add number + team name
-        li.innerHTML = `<span class="draftNumber">${index + 1}.</span> ${teamName}`;
+            // Add number + team name
+            li.innerHTML = `<span class="draftNumber">${index + 1}.</span> ${teamName}`;
 
-        draftOrderList.appendChild(li);
-    });
-}
+            draftOrderList.appendChild(li);
+        });
+    }
 
     // -------------------
-    // DRAFT STATE
+    //      DRAFT STATE
     // -------------------
 
     let draftInterval = null;
     let pokedexData = null;
     let showdownId = null;
 
-    async function loadPokedex() {
-        if (!pokedexData) {
+    async function loadPokedex() 
+    {
+        if (!pokedexData) 
+        {
             const res = await fetch('/ascent_draft_league/showdownData/pokedex.json');
             pokedexData = await res.json();
         }
         return pokedexData;
     }
 
-    // Moved outside of loadDraftState
     let lastPreviousPick = null;
 
     async function loadDraftState() 
     {
-        try {
+        try 
+        {
             const response = await fetch('/ascent_draft_league/api/draft_auto_update.php');
             const data = await response.json();
 
@@ -197,35 +240,38 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (data.previous_pick && data.previous_pick !== lastPreviousPick) 
             {
 
-                if (previousPickEl && data.previous_pick && data.previous_pick !== lastPreviousPick) {
+                if (data.previous_pick) {
 
-                    lastPreviousPick = data.previous_pick;
+                const pokeName = data.previous_pick.toLowerCase();
 
-                    // const pokeName = data.previous_pick.toLowerCase();
+                const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
 
-                    const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
+                const url1 = `${base}${pokeName}.png`;
 
-                    const url1 = `${base}${pokeName}.png`;
-                    const url2 = `${base}${pokeName
-                        .replace('-galar', '-galarian')
-                        .replace('-hisui', '-hisuian')
-                        .replace('-paldea', '-paldean')
-                        .replace('-alola', '-alolan')
-                        .replace('-f', '-female')
-                    }.png`;
+                const url2 = `${base}${pokeName
+                    .replace('-galar', '-galarian')
+                    .replace('-hisui', '-hisuian')
+                    .replace('-paldea', '-paldean')
+                    .replace('-alola', '-alolan')
+                    .replace('-f', '-female')
+                }.png`;
 
-                    ppPkmnImgCont.innerHTML = `
-                        <img src="${url1}" width="200"
-                            onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
-                    `;
-                    ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`
-                    ppTeamName.innerHTML = `<div>${data.previous_team}</div>`
-                }
+                ppPkmnImgCont.innerHTML = `
+                    <img src="${url1}" width="200"
+                        onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
+                `;
+
+                ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`;
+                ppTeamName.innerHTML = `<div>${data.previous_team}</div>`;
+
+                lastPreviousPick = data.previous_pick;
+            }
 
                 // Load pokedex and display stats
                 const dex = await loadPokedex();
                 const pkmnData = dex[showdownId];
 
+                // Construct html table to put into draft info
                 if (pkmnData && pkmnData.baseStats) 
                     {
                     const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
@@ -259,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         
             else 
-            {
+            {   // if empty just add a dash
                 if (!data.previous_pick) 
                 {
                     previousPickEl.textContent = "-";
@@ -268,7 +314,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             if (data.draft_finished) {
-                currentPickEl.textContent = "Draft Complete";
+                currentPickEl.textContent = "Stand-By";
                 toggleDraftButtons(false);
                 return;
             }
@@ -299,9 +345,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         {
             console.error("Failed to load draft state:", err);
         }
+
+        return true;
     }
 
-    function toggleDraftButtons(enable) {
+    function toggleDraftButtons(enable) 
+    {
         ['listOfOuPkmn','listOfUuPkmn','listOfRuPkmn','listOfNuPkmn'].forEach(id => {
             const container = document.getElementById(id);
             if (!container) return;
@@ -326,6 +375,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (data.status === "success") {
                 alert(`${pkmn.name} drafted successfully!`);
+
+                await getShowdownDexFromDB();
+                await loadDraftState();
+
                 document.querySelectorAll("li").forEach(li => {
                     if (li.textContent === pkmn.name) li.classList.add("drafted");
                 });
@@ -341,21 +394,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     
-    await loadDraftState();
+    // await loadDraftState();
 
     // This was telling my draft auto update to always run in the background.
     // setInterval(loadDraftState, 2000); 
 
     // Testing this new method
-    draftInterval = setInterval(async () => {
-        const shouldContinue = await loadDraftState();
 
-        if (!shouldContinue && draftInterval) 
-        {
-            clearInterval(draftInterval);
-            draftInterval = null;
-        }
-    }, 2000);
+    // draftInterval = setInterval(async () => {
+    //     const shouldContinue = await loadDraftState();
+
+    //     if (!shouldContinue && draftInterval) 
+    //     {
+    //         clearInterval(draftInterval);
+    //         draftInterval = null;
+    //     }
+    // }, 2000);
 
     
 
@@ -395,7 +449,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const data = await res.json();
 
                 if (data.status === "success") {
-                    alert("Draft started!");
+                    alert("Draft Started!");
+
+                    
+                    await loadDraftState();
+                    
                 } else {
                     alert("Error: " + data.error);
                 }
@@ -405,7 +463,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    await loadDraftOrder();
+    // await loadDraftOrder();
+
+    if (isDraftPage) 
+    {
+        await loadDraftState();
+        await loadDraftOrder();
+
+        draftInterval = setInterval(loadDraftState, 2000);
+    }
 
     // -------------------
     // CLEAR DRAFT BUTTON
@@ -420,16 +486,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if(!response.ok) throw new Error(data.error || "Failed to reset draft");
                 alert("Draft reset successfully.");
                 location.reload();
-            } catch (error) {
+            } 
+            catch (error) 
+            {
                 console.error("Draft reset error", error);
                 alert("Error resetting draft");
             }
         });
     }
 
-    // -------------------
-    // SKIP PICK
-    // -------------------
+    // -----------------------
+    //      SKIP PICK BUTTON
+    // -----------------------
 
     const skipBtn = document.getElementById("skipPickBtn");
 
@@ -452,7 +520,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 } else {
                     alert("Error: " + data.error);
                 }
-            } catch (err) {
+            } 
+            catch (err) 
+            {
                 console.error(err);
             }
         });
@@ -461,7 +531,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // -------------------
-    // ENHD DRAFT
+    // END DRAFT
     // -------------------
 
     const endDraftBtn = document.getElementById("endDraftBtn");
@@ -496,7 +566,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // -------------------
     // DRAFT RECAP
     // -------------------
+
+    // Adding color to tier badges
     const recapTableBody = document.getElementById("recapTableBody");
+    const recapFlexCont = document.getElementById("recapFlexCont");
 
     function displayDraftResults() {
         if (!recapTableBody) return;
@@ -504,8 +577,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         fetch('/ascent_draft_league/api/draft/get_draft_result.php')
         .then(res => res.json())
         .then(data => {
-            recapTableBody.innerHTML = "";
+            recapFlexCont.innerHTML = "";
 
+            // If data is empty, display message
+            if (!Array.isArray(data) || data.length === 0) 
+            {
+                recapFlexCont.innerHTML = 
+                        `<p id="noMatches">
+                            No matches have been played yet
+                        </p>`;
+                return;
+            }
+
+            // Dictionary. Converting tiers to class names
             const tierMap = {
             'OU': 'ou-RosterColor',
             'UUBL': 'ou-RosterColor',
@@ -520,7 +604,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             'ZU': 'nu-RosterColor'
         };
 
-
             data.forEach(pick => {
                 const tr = document.createElement("tr");
 
@@ -533,6 +616,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const tdTier = document.createElement("td");
                 tdTier.textContent = pick.tier;
 
+                // Adding color to badges using dictionary
                 const tierClass = tierMap[pick.tier.toUpperCase()];
                 if (tierClass) tdTier.classList.add(tierClass);
 
@@ -551,6 +635,269 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     displayDraftResults();
+    // ------------------
+    //      POKESWAP
+    //-------------------
+
+    async function getShowdownDexForSwap() {
+        try { // Use try catch when something may realistically fail or when you want something to not crash your site
+            const response = await fetch('/ascent_draft_league/api/get_pkmn_by_tier.php');
+            const pokedex = await response.json();
+
+            // Create empty arrays to hold pokemon
+            let ouPokemon = [], uuPokemon = [], ruPokemon = [], nuPokemon = [];
+
+            pokedex.forEach(pkmn => {
+                // Switch is just an if else statement.
+                switch (pkmn.tier) {
+                    // If pokemon is ou, uu, etc, push that pokemon into matching array. 
+                    case "OU": case "UUBL": ouPokemon.push(pkmn); break;
+                    case "UU": case "RUBL": uuPokemon.push(pkmn); break;
+                    case "RU": case "NUBL": ruPokemon.push(pkmn); break;
+                    case "NU": case "PUBL": nuPokemon.push(pkmn); break;
+                }
+            });
+
+            displaySwapOu(ouPokemon);
+            displaySwapUu(uuPokemon);
+            displaySwapRu(ruPokemon);
+            displaySwapNu(nuPokemon);
+        } 
+        catch (err) {
+            console.error("Failed to load Pokémon from DB:", err);
+        }
+    }
+
+    // Reusing the function from Draft Box but going to tweak it
+    function displayAvailablePkmnList(list, elementId) {
+        const container = document.getElementById(elementId);
+        // If container doesn't exist on the page, then return. 
+        // This will prevent site from breaking
+        if (!container) return;
+
+        // If any content is in the container, then remove it.
+        container.innerHTML = "";
+
+        // For each pokemon, create a button basically.
+        list.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item.name;
+
+            if (item.drafted) 
+            {
+                li.classList.add("drafted");
+                li.style.pointerEvents = 'none';
+            } 
+            else
+            {
+                li.addEventListener("click", () => {
+                    // console.log("Clicked Pokémon:", item);
+                    window.location.href = `swap.php?add=${item.id}`; // Adds id to the route    
+                });
+            }
+
+            container.appendChild(li);
+        });
+    }
+
+    function displaySwapOu(list) { displayAvailablePkmnList(list, 'listOfOuPkmn'); }
+    function displaySwapUu(list) { displayAvailablePkmnList(list, 'listOfUuPkmn'); }
+    function displaySwapRu(list) { displayAvailablePkmnList(list, 'listOfRuPkmn'); }
+    function displaySwapNu(list) { displayAvailablePkmnList(list, 'listOfNuPkmn'); }
+
+    // if (isSwapPage) 
+    // {
+    //     await getShowdownDexForSwap();
+    // }
+
+
+    // // SENDING TO FORM
+
+    // if (isSwapPage) {
+    //     await initSwapPage();
+    // }
+
+    
+
+    async function initSwapPage() {
+
+        // -------------------------
+        //      GET URL PARAM
+        // -------------------------
+        const params = new URLSearchParams(window.location.search);
+        const addId = params.get("add");
+
+        if (!addId) 
+        {
+            alert("No Pokémon selected.");
+            return;
+        }
+
+        // -------------------------
+        //       GET ELEMENTS
+        // -------------------------
+
+        const availablePkmnName = document.getElementById("availablePkmnName");
+        const availablePkmnIdInput = document.getElementById("availablePkmnId");
+        const select = document.getElementById("dropSelect");
+        const confirmBtn = document.getElementById("confirmSwapBtn");
+
+        if (!availablePkmnName || !availablePkmnIdInput || !select) 
+        {
+            console.error("Swap page missing elements");
+            return;
+        }
+
+        // -------------------------
+        //      LOAD FREE POKEMON
+        // -------------------------
+
+        let availablePkmn;
+
+        try {
+            const res = await fetch(`/ascent_draft_league/api/pokebox/get_pkmn_by_id.php?id=${addId}`);
+            availablePkmn = await res.json();
+
+            if (!availablePkmn || availablePkmn.error) {
+                alert("Failed to load free agent");
+                return;
+            }
+
+            availablePkmnName.value = availablePkmn.name;
+            availablePkmnIdInput.value = availablePkmn.id;
+
+        } 
+        catch (err) 
+        {
+            console.error("Available Pokemon error:", err);
+            return;
+        }
+
+        // console.log("FREE PKMN:", availablePkmn);
+
+        // -------------------------
+        //      LOAD USER ROSTER
+        // -------------------------
+
+        let roster;
+
+        const res = await fetch('/ascent_draft_league/api/user/get_user_roster.php');
+
+        if (!res.ok) {
+            console.error("Roster request failed:", res.status);
+            return;
+        }
+
+        roster = await res.json();
+
+        if (!Array.isArray(roster)) 
+        {
+            console.error("Roster is not an array:", roster);
+            return;
+        }
+
+        // -------------------------
+        //      FILTER AND POPULATE
+        // -------------------------
+
+        select.innerHTML = "";
+
+        function getTierGroup(tier) {
+        //  Created Dictionary similar to one to color tier badges 
+        const map = {
+            "OU": "OU", "UUBL": "OU",
+            "UU": "UU", "RUBL": "UU",
+            "RU": "RU", "NUBL": "RU",
+            "NU": "NU", "PUBL": "NU"
+        };
+        return map[tier] || null;
+}
+        // Finds group incoming pokemon belong to
+       const availablePkmnTierGroup = getTierGroup(availablePkmn.tier);
+
+       // Matches roster to tier of incoming Pokemon
+        const validRoster = roster.filter(p => {
+            return getTierGroup(p.tier) === availablePkmnTierGroup;
+        });
+
+
+        if (validRoster.length === 0) {
+            console.warn("No matching tier Pokémon found", {
+                roster,
+                availablePkmn
+            });
+        }
+
+        // Create dropdown
+        validRoster.forEach(p => {
+            const opt = document.createElement("option");
+            opt.value = p.roster_pkmn_id;
+            opt.textContent = p.name;
+            select.appendChild(opt);
+        });
+
+        // console.log("ROSTER:", roster);
+
+        // -------------------------
+        // STEP 6: SUBMIT SWAP
+        // -------------------------
+        if (isSwapPage && confirmBtn) 
+        {
+            confirmBtn.addEventListener("click", async () => {
+
+                const dropId = parseInt(select.value);
+                const addId = availablePkmn.id;
+
+                if (!dropId) {
+                    alert("Select a Pokémon to drop");
+                    return;
+                }
+
+                try {
+                    const res = await fetch('/ascent_draft_league/api/pokebox/swap_pkmn.php', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            add: addId,
+                            drop: dropId
+                        })
+                    });
+
+                    const data = await res.json();
+
+                    if (data.status === "success") {
+                        alert("Swap completed!");
+                        window.location.href = "pokebox.php";
+                    } else {
+                        alert(data.error || "Swap failed");
+                    }
+
+                } 
+                catch (err) 
+                {
+                    console.error("Swap failed:", err);
+                }
+            });
+        }
+    }
+
+    // if (isPokeboxPage) 
+    // {
+    //     await getShowdownDexForSwap();
+    //     await initSwapPage();
+    // }
+
+    if (isPokeboxPage) 
+    {
+        await getShowdownDexForSwap();
+    }
+
+    if (isSwapPage) {
+    await getShowdownDexForSwap();
+    await initSwapPage();
+}
 
     // -------------------
     // OVERVIEW PAGE
@@ -666,9 +1013,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // -------------------
-    // MATCHUP PAGE
-    // -------------------
+    // -----------------------
+    //      MATCHUP PAGE
+    // ----------------------
+
     async function loadActiveTeams() {
         const teamOne = document.getElementById('teamOneSelect');
         const teamTwo = document.getElementById('teamTwoSelect');
@@ -834,9 +1182,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         countEl.textContent = `Team ${team} (${currentCount} / 6 selected)`;
     }
 
-    // SUBMISSION
+    // ----------------------
+    //      SUBMISSION
+    // ----------------------
+
     const form = document.getElementById('add_matchup_form');
-    if (form) {
+    if (form) 
+    {
         form.addEventListener('submit', async e => {
             e.preventDefault();
 
@@ -892,9 +1244,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             });
 
-            console.log("Replay link being sent:", replayLink);
+            // console.log("Replay link being sent:", replayLink);
 
-            try {
+            try 
+            {
                 const res = await fetch('/ascent_draft_league/api/matchup/submit_matchup.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -908,7 +1261,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 } else {
                     alert("Error: " + data.message);
                 }
-            } catch(err) {
+            } 
+            catch(err) 
+            {
                 alert("Network or server error: " + err.message);
             }
         });
@@ -921,15 +1276,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         // DELETE MATCHUP
+
         document.addEventListener("click", async (e) => {
         if (!e.target.classList.contains("deleteMatchBtn")) return;
 
         const matchId = e.target.dataset.matchId;
+
         if (!matchId) return;
 
         if (!confirm("Are you sure you want to delete this matchup?")) return;
 
-        try {
+        try 
+        {
             const res = await fetch('/ascent_draft_league/api/matchup/delete_matchup.php', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -946,7 +1304,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 alert("Error deleting matchup: " + data.message);
             }
-        } catch (err) {
+        } 
+        catch (err) 
+        {
             console.error("Network error:", err);
             alert("Failed to delete matchup. Check console.");
         }
@@ -1020,12 +1380,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     loadEditMatchup();
 
-
-    // test
+    // -----------------------------
+    //      EDIT MATCHUP FORM
+    // -----------------------------
 
     const editForm = document.getElementById('edit_matchup_form');
 
-    if (editForm) {
+    if (editForm) 
+    {
         editForm.addEventListener('submit', async e => {
             e.preventDefault();
 
@@ -1079,13 +1441,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
+
     // ------------------
     //      STANDINGS
     // ------------------
 
-    async function loadStandings() 
-    {
+    
+
+
+    async function loadStandings() {
         const tbody = document.getElementById("standingsBody");
+        const standingsCont = document.getElementById("standingsCont");
+        
         if (!tbody) return;
 
         try {
@@ -1096,62 +1463,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!data || data.length === 0) 
             {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align:center; padding: 20px;">
+                standingsCont.innerHTML = 
+                        `<p id="noMatches">
                             No matches have been played yet
-                        </td>
-                    </tr>
-                `;
+                        </p>`;
                 return;
             }
 
             let rank = 1;
 
-            data.forEach(team => {
-                const tr = document.createElement("tr");
-
-                tr.innerHTML = `
-                    <td>${rank++}</td>
-                    <td>${team.team_name}</td>
-                    <td>${team.wins}</td>
-                    <td>${team.losses}</td>
-                    
-                `;
-
-                tbody.appendChild(tr);
-            });
-
-        } catch (err) {
-            console.error("Failed to load standings:", err);
-        }
-    }
-
-    loadStandings();
-
-
-    async function loadStandings() {
-        const tbody = document.getElementById("standingsBody");
-        if (!tbody) return;
-
-        try {
-            const res = await fetch('/ascent_draft_league/api/standings/get_standings.php');
-            const data = await res.json();
-
-            tbody.innerHTML = "";
-
-            if (!data || data.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" id="noMatches">
-                            No matches have been played yet
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            let rank = 1;
             data.forEach(team => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
@@ -1170,10 +1490,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadStandings();
 
-        console.log("Above role update")
-
-
-
+       
     // -------------
     // CLEAR MATCHUP
     // -------------

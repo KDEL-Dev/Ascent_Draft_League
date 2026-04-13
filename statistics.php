@@ -1,5 +1,10 @@
 <?php
+
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
     session_start();
+
 
     if (!isset($_SESSION['user_id'])) {
         header("Location: login.php");
@@ -16,6 +21,7 @@
     $sql = "
     SELECT 
         u.team_name,
+        u.team_mascot_pkmn,
         sd.name AS pokemon_name,
         SUM(mps.kills) AS total_kills,
         SUM(mps.deaths) AS total_deaths,
@@ -32,7 +38,7 @@
     JOIN matchup m 
         ON mps.matchup_id = m.id
     WHERE m.season_id = ?
-    GROUP BY u.team_name, sd.name
+    GROUP BY u.team_name, u.team_mascot_pkmn, sd.name
     ORDER BY u.team_name, total_kills DESC
     ";
 
@@ -47,7 +53,8 @@
     $teams = [];
 
     while ($row = $result->fetch_assoc()) {
-        $teams[$row['team_name']][] = $row;
+        $teams[$row['team_name']]['mascot'] = $row['team_mascot_pkmn'];
+        $teams[$row['team_name']]['pokemon'][] = $row;
     }
 ?>
 
@@ -88,7 +95,7 @@
                     <section class="statsCont">
 
                         <?php if (!empty($teams)): ?>
-                            <?php foreach ($teams as $teamName => $pokemonList): ?>
+                            <?php foreach ($teams as $teamName => $teamData): ?>
 
                                 <section class="statsBox">
                                     <table>
@@ -96,7 +103,7 @@
                                         <thead>
                                             <tr>
                                                 <th colspan="4" class="statsNameBox">
-                                                    <?= htmlspecialchars($teamName); ?>
+                                                    <?= htmlspecialchars($teamName . ' ' . $teamData['mascot']); ?>
                                                 </th>
                                             </tr>
                                             <tr>
@@ -107,8 +114,8 @@
                                             </tr>
                                         </thead>
 
-                                        <tbody>
-                                            <?php foreach ($pokemonList as $pkmn): ?>
+                                        <tbody class="statsBoxTblBody">
+                                            <?php foreach ($teamData['pokemon'] as $pkmn): ?>
                                                 <tr>
                                                     <td><?= htmlspecialchars($pkmn['pokemon_name']); ?></td>
                                                     <td><?= $pkmn['total_kills']; ?></td>

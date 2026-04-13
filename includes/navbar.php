@@ -1,8 +1,32 @@
 <?php
     if (session_status() === PHP_SESSION_NONE)
-        {
-            session_start();
+    {
+        session_start();
+    }
+
+    require_once 'includes/connection.php';
+
+    $seasonId = $_SESSION['season_id'] ?? null;
+
+    $draftFinished = 0;
+
+    if ($seasonId) 
+    {
+        $stmt = $conn->prepare("
+            SELECT draft_finished 
+            FROM draft_info 
+            WHERE season_id = ?
+            LIMIT 1
+        ");
+        $stmt->bind_param("i", $seasonId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if ($result) {
+            $draftFinished = (int)$result['draft_finished'];
         }
+    }
 ?>
 
         <div class="navBar">
@@ -22,11 +46,20 @@
                             <img src="img/icons/PokeBall_Icon.svg" class="navMainIcon" alt="pokeball ball icon"> Roster
                         </a>
                     </li>
-                    <li class="navMainBtns">
-                        <a href="draft.php">
-                            <img src="img\icons\Edit.svg" class="navMainIcon" alt="draft icon">Draft
-                        </a>
-                    </li>
+                    <?php if(!$draftFinished): ?> 
+                        <li class="navMainBtns">
+                            <a href="draft.php">
+                                <img src="img\icons\Edit.svg" class="navMainIcon" alt="draft icon">Draft
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if ($draftFinished): ?>
+                        <li class="navMainBtns">
+                            <a href="pokebox.php">
+                                <img src="img/icons/Edit.svg" class="navMainIcon" alt="pokebox icon">Pokebox
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li class="navMainBtns">
                         <a href="standings.php">
                             <img src="img/icons/standingsIcon.svg" class="navMainIcon" alt="standings icon">
@@ -41,7 +74,6 @@
                     <li class="navMainBtns">
                         <a href="matchup.php">
                             <img src="img\icons\icons8-battle-50.png" alt="">Matchups
-
                         </a>
                     </li>
                     <!-- <li class="navMainBtns">Playoffs</li> -->
@@ -56,29 +88,5 @@
                         </a>
                     </li>   
                 </ul>
-            </div>
-            <div class="navSettingsCont">
-                <?php
-                    if (session_status() === PHP_SESSION_NONE) 
-                    {
-                        session_start();
-                    }
-
-                    // Get team name or default to 'Spectator'
-                    $teamName = $_SESSION['team_name'] ?? 'Spectator';
-
-                    // Only show mascot if it exists
-                    $mascot = !empty($_SESSION['team_mascot_pkmn']) ? ' ' . $_SESSION['team_mascot_pkmn'] : '';
-                ?>
-                <div id="profileName">
-                    Welcome: <br>
-                    <?= $teamName . $mascot ?>
-                </div>
-                <!-- <div >
-                    <a class="profileSettingsBtn" href="profile.php">Profile</a>
-                </div>
-                <div >
-                    <a class="navAdminSettingsBtn" href="admin.php">Admin Settings</a>
-                </div> -->
             </div>
         </div>
