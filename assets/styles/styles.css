@@ -40,11 +40,13 @@ html, body
 .navBar
 {
     width: 250px;
-    /* min-height: 1050px; */
-    height: 100vh; /* added */
+    height: 100vh;
+    left: 0; /* testing */
+
     background-image: linear-gradient(to bottom, black 50%,#094D33);
     overflow-y: auto; /* if content of page exceeds height than this makes area scrollable */
-    
+
+    transition: left 0.3s ease; /* smooth slide */
 
     display: flex;
     justify-content: space-between;

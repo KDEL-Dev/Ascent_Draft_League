@@ -3,15 +3,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     // NAVBAR
     const hamburger = document.getElementById("hamburgerBtn");
     const navbar = document.querySelector(".navBar");
+    const page = document.querySelector(".pageContent");
 
-    if(!hamburger)
-    {
-        return;
+    if (hamburger && navbar && page) {
+
+        hamburger.addEventListener("click", () => {
+            navbar.classList.toggle("active");
+        });
+
+        page.addEventListener("click", () => {
+            navbar.classList.remove("active");
+        });
     }
 
-    hamburger.addEventListener("click", () => {
-        navbar.classList.toggle("active");
-    });
 
     // ------------
     // REGISTRATION
