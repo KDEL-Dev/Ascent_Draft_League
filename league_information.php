@@ -81,22 +81,24 @@
                                     <h2>What is Ascent Draft League?</h2>
                                     <p><?= htmlspecialchars($infoResult['about']) ?></p>                                
                                 </section>
-                                <section id="importantDatesCont" class="leagueInfoSect">
-                                   <h2>Important Dates</h2>
-                                    <table id="leagueDateTable">
-                                        <tr>
-                                            <th>Draft Date</th>
-                                            <td><?= htmlspecialchars($dateInfo['draft_date']) ?></td>    
-                                        </tr>
-                                        <tr>
-                                            <th>Season Start</th>
-                                            <td><?= htmlspecialchars($dateInfo['start_date']) ?></td>
-                                        </tr>
-                                    </table>
-                            
-
-                                </section>
+                                
                             </section>
+
+                            <section id="importantDatesCont" class="leagueInfoSect">
+                                   <h2>Important Dates</h2>
+                                   <section id="leagueInfoDateRow">
+                                        <section class="leagueInfoDateFlex">
+                                                <h3>Draft Date</h3>
+                                                <p><?= htmlspecialchars($dateInfo['draft_date']) ?></p> 
+                                        </section>   
+                                        
+                                        <section class="leagueInfoDateFlex">
+                                            <h3>Season Start</h3>
+                                            <p><?= htmlspecialchars($dateInfo['start_date']) ?></p>
+                                        </section>
+                                    </section>
+                            </section>
+
                             <section id="formatRulesCont" class="leagueInfoSect">
                                 <h2>Format and Rules</h2>
                                 <ul id="ruleList">

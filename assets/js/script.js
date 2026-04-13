@@ -574,6 +574,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Adding color to tier badges
     const recapTableBody = document.getElementById("recapTableBody");
     const recapFlexCont = document.getElementById("recapFlexCont");
+    const recapTable = document.getElementById("recapTable");
 
     function displayDraftResults() {
         if (!recapTableBody) return;
@@ -581,7 +582,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         fetch('/ascent_draft_league/api/draft/get_draft_result.php')
         .then(res => res.json())
         .then(data => {
-            recapFlexCont.innerHTML = "";
+            // recapFlexCont.innerHTML = "";
 
             // If data is empty, display message
             if (!Array.isArray(data) || data.length === 0) 
@@ -595,18 +596,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Dictionary. Converting tiers to class names
             const tierMap = {
-            'OU': 'ou-RosterColor',
-            'UUBL': 'ou-RosterColor',
-            'UU': 'uu-RosterColor',
-            'RUBL': 'uu-RosterColor',
-            'RU': 'ru-RosterColor',
-            'NUBL': 'ru-RosterColor',
-            'NU': 'nu-RosterColor',
-            'PUBL': 'nu-RosterColor',
-            'PU': 'nu-RosterColor',
-            'ZUBL': 'nu-RosterColor',
-            'ZU': 'nu-RosterColor'
-        };
+                'OU': 'ou-RosterColor',
+                'UUBL': 'ou-RosterColor',
+                'UU': 'uu-RosterColor',
+                'RUBL': 'uu-RosterColor',
+                'RU': 'ru-RosterColor',
+                'NUBL': 'ru-RosterColor',
+                'NU': 'nu-RosterColor',
+                'PUBL': 'nu-RosterColor',
+                'PU': 'nu-RosterColor',
+                'ZUBL': 'nu-RosterColor',
+                'ZU': 'nu-RosterColor'
+            };
 
             data.forEach(pick => {
                 const tr = document.createElement("tr");
@@ -634,6 +635,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 recapTableBody.appendChild(tr);
             });
+
+            recapTable.style.visibility = "visible";
         })
         .catch(err => console.error("Failed to load draft results:", err));
     }
@@ -1456,6 +1459,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadStandings() {
         const tbody = document.getElementById("standingsBody");
         const standingsCont = document.getElementById("standingsCont");
+        const standingsTable = document.getElementById("standingsTable");
         
         if (!tbody) return;
 
@@ -1486,6 +1490,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 `;
                 tbody.appendChild(tr);
             });
+
+            standingsTable.style.visibility = "visible"
 
         } catch (err) {
             console.error("Failed to load standings:", err);

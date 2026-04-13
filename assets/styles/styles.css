@@ -1415,6 +1415,7 @@ footer
     border: 1px solid white;
     /* collapse can only work on table elements */
     border-collapse: collapse;
+    visibility: hidden;
 }
 
 
@@ -1665,11 +1666,11 @@ footer
 
 #leagueInfoCont
 {
-    width: 100%;
-    
+    flex: 1;
+
     display: flex;
     /* align-items: center; */
-    
+    align-items: center;
     flex-direction: column;
 }
 
@@ -1723,7 +1724,7 @@ footer
 {
     border: white 2px solid;
     width: 300px;
-    min-height: 200px;
+    min-height: 150px;
     border-radius: 10px;
 
    
@@ -1732,8 +1733,7 @@ footer
 #whatIsCont
 {
     padding: 0 20px;
-    width: 80%;
-
+    flex: 1;
     text-align: center;
 
     display: flex;
@@ -1747,12 +1747,31 @@ footer
     text-align: center;
 }
 
+#leagueInfoDateRow
+{
+    flex: 1;
+    
+    display: flex;
+    flex-direction: row;
+}
 
+#leagueInfoDateRow section
+{
+    margin: 0 10px;
+}
+
+.leagueInfoDateFlex p
+{
+    margin: 10px 0;
+}
 
 #importantDatesCont
 {
-    margin-left: 20px;
-    flex: 1;
+    margin: 20px;
+    height: fit-content;
+    width: 100%;
+    /* flex: 1; */
+
 
     text-align: center;
 
@@ -1760,7 +1779,17 @@ footer
     /* justify-content: center; */
     align-items: center;
     flex-direction: column;
+    /* flex-wrap: wrap; */
 }
+
+/* #leagueInfoDateFlex
+{
+    flex: 1;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+} */
 
 #leagueDateTable
 {
@@ -2352,6 +2381,7 @@ footer
     border-collapse: collapse;
     /* font-size: 1.25em; */
     table-layout: fixed;
+    visibility: hidden;
 }
 
 #standingsHeader tr
