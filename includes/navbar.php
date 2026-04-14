@@ -41,11 +41,8 @@
                             <img src="img/icons/Grid.svg" class="navMainIcon" alt="Overview icon">Overview
                         </a>
                     </li>
-                    <li class="navMainBtns">
-                        <a href="rosters.php">
-                            <img src="img/icons/PokeBall_Icon.svg" class="navMainIcon" alt="pokeball ball icon"> Roster
-                        </a>
-                    </li>
+                    
+                    
                     <?php if(!$draftFinished): ?> 
                         <li class="navMainBtns">
                             <a href="draft.php">
@@ -61,6 +58,16 @@
                         </li>
                     <?php endif; ?>
                     <li class="navMainBtns">
+                        <a href="matchup.php">
+                            <img src="img\icons\icons8-battle-50.png" alt="">Matchups
+                        </a>
+                    </li>
+                    <li class="navMainBtns">
+                        <a href="rosters.php">
+                            <img src="img/icons/PokeBall_Icon.svg" class="navMainIcon" alt="pokeball ball icon"> Roster
+                        </a>
+                    </li>
+                    <li class="navMainBtns">
                         <a href="standings.php">
                             <img src="img/icons/standingsIcon.svg" class="navMainIcon" alt="standings icon">
                             Standings
@@ -71,22 +78,19 @@
                             <img src="img/icons/Bar_chart-2.svg" class="navMainIcon" alt="statistics icon"> Statistics
                         </a>
                     </li>
-                    <li class="navMainBtns">
-                        <a href="matchup.php">
-                            <img src="img\icons\icons8-battle-50.png" alt="">Matchups
-                        </a>
-                    </li>
+                    
                     <!-- <li class="navMainBtns">Playoffs</li> -->
-                    <li class="navMainBtns">
-                        <a href="league_information.php">
-                            <img src="img\icons\icons8-information-50.png" alt="">League Information
-                        </a>
-                    </li>
+                    
                     <li class="navMainBtns">
                         <a href="draft_recap.php">
                             <img src="img/icons/File text.svg" class="navMainIcon" alt="Draft Recap icon">Draft Recap
                         </a>
-                    </li>   
+                    </li> 
+                    <li class="navMainBtns">
+                        <a href="league_information.php">
+                            <img src="img\icons\icons8-information-50.png" alt="">League Information
+                        </a>
+                    </li>  
                 </ul>
             </div>
         </div>

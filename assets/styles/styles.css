@@ -312,6 +312,32 @@ Navigation Menu
     font-size: 1.5em;
 }
 
+.loginPageBtn
+{
+    width: 100%;
+    max-width: 100px;
+    height: 40px;
+
+
+    background-color: black;
+    border: white 1px solid;
+    color: white;
+    font-family: "jura";
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginPageBtn:hover
+{
+     background-color: white;
+    color: black;
+}
+
+
 /**************************************
             Registration Page
  *************************************/
@@ -486,6 +512,40 @@ Navigation Menu
 {
     border-radius: 10px;
 
+}
+
+#registerSubmitBtn
+{
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+}
+
+#registerSubmitBtn button
+{
+    padding: 20px;
+    margin: 0 20px;
+    max-height: 20px;
+
+
+    background-color: black;
+    border: white 1px solid;
+    color: white;
+    font-family: "jura";
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#registerSubmitBtn button:hover
+{
+    background-color: white;
+    color: black;
+    /* box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5); */
 }
 
 /*********************

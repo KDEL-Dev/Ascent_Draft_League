@@ -79,12 +79,12 @@ $conn->close();
             <input type="email" id="email" class="formInput" name="email" required>
             <label for="password">Password: </label>
             <input type="password" name="password" class="formInput" id="password" required>
-            <input type="submit" value="Login">
+            <input type="submit" class="loginPageBtn" value="Login">
         </form>
         <?php if (!empty($login_error)) : ?>
             <p style="color:red;"><?php echo $login_error; ?></p>
         <?php endif; ?>
-        <button><a href="register.php">Register</a></button>
+        <button class="loginPageBtn"><a href="register.php">Register</a></button>
         <!-- <button>Forgot password</button> -->
     </section>
 

@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 1. Store the user ID in session
         $userId = $conn->insert_id;
         $_SESSION['user_id'] = $userId;
+        $_SESSION['team_name'] = $team_name;
 
         // 2. Add the user to the current season in active_users
         $seasonResult = $conn->query("SELECT season_id FROM seasons WHERE is_active = 1 LIMIT 1");
@@ -135,8 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     required>
             </div>
         </div>
-
-        <button type="submit">Register</button>
+        <div id="registerSubmitBtn">
+            <button type="submit">Register</button>
+        </div>    
     </form>
 </section>
 </body>

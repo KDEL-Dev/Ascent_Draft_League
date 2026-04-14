@@ -1230,7 +1230,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const kills = row.querySelector(".killsInput")?.value ?? 0;
                 const deaths = row.querySelector(".deathsInput")?.value ?? 0;
 
-                stats.push({ 
+                stats.push(
+                { 
                     roster_pkmn_id: rosterId,
                     active_user_id: player1,
                     kills: parseInt(kills),
