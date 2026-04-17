@@ -4,7 +4,6 @@ header('Content-Type: application/json');
 require_once '../../includes/connection.php';
 session_start();
 
-// ✅ Auth check (NO redirects in API)
 if (!isset($_SESSION['user_id'])) {
     echo json_encode([
         "status" => "error",
@@ -13,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// ✅ Get JSON input
+
 $input = json_decode(file_get_contents("php://input"), true);
 
 if (!$input) {
@@ -38,15 +37,12 @@ if (!$matchupId) {
 
 try {
 
-    // 🔄 Start transaction (important!)
     $conn->begin_transaction();
 
-    // ✅ Update matchup replay link
     $stmt = $conn->prepare("UPDATE matchup SET replay_link = ? WHERE id = ?");
     $stmt->bind_param("si", $replayLink, $matchupId);
     $stmt->execute();
 
-    // ✅ Update each Pokémon's stats
     $stmtStats = $conn->prepare("
         UPDATE match_pokemon_stats 
         SET kills = ?, deaths = ?
@@ -62,7 +58,6 @@ try {
         $stmtStats->execute();
     }
 
-    // ✅ Commit
     $conn->commit();
 
     echo json_encode([
@@ -71,7 +66,6 @@ try {
 
 } catch (Exception $e) {
 
-    // ❌ Rollback on error
     $conn->rollback();
 
     echo json_encode([

@@ -49,9 +49,10 @@ try {
     }
     $prevStmt->close();
 
-    // ----------------- Snake draft logic -----------------
+    /****************
+        Snake Draft
+    *****************/
 
-    // 1️⃣ Get current pick
     $pickRes = mysqli_query($conn, "
     SELECT current_pick, draft_started, total_picks 
     FROM draft_info 
@@ -76,7 +77,6 @@ try {
     exit;
 }
 
-    // 2️⃣ Draft order
     $usersRes = mysqli_query($conn, "
         SELECT user_id
         FROM active_users
@@ -94,7 +94,6 @@ try {
         exit;
     }
 
-    // 3️⃣ Snake math
     $round = ceil($currentPick / $playerCount);
     $indexInRound = ($currentPick - 1) % $playerCount;
 
@@ -106,7 +105,6 @@ try {
 
     $activeUserId = $users[$activeUserIndex] ?? null;
 
-    // 4️⃣ Current player team name
     if ($activeUserId) {
         $tagRes = mysqli_query($conn, "SELECT team_name FROM users WHERE id = $activeUserId LIMIT 1");
         $tagRow = mysqli_fetch_assoc($tagRes);
@@ -115,7 +113,6 @@ try {
         }
     }
 
-    // ----------------- Count drafted Pokémon for this user -----------------
     if ($user_id) {
         $myDraftRes = mysqli_query($conn, "
             SELECT COUNT(*) AS drafted_count

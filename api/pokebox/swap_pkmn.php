@@ -23,9 +23,6 @@
         exit;
     }
 
-    /**
-     * STEP 1: GET FREE AGENT
-     */
     $stmt = $conn->prepare("
         SELECT s.id, s.name, t.tier
         FROM showdown_pkmn s
@@ -44,9 +41,6 @@
         exit;
     }
 
-    /**
-     * STEP 2: GET DROP + VERIFY OWNERSHIP
-     */
     $stmt = $conn->prepare("
         SELECT rp.id AS roster_id, s.id, t.tier
         FROM roster_pkmn rp
@@ -70,9 +64,7 @@
         exit;
     }
 
-    /**
-     * STEP 3: TIER GROUP CHECK
-     */
+  
     function getTierGroup($tier) {
         $groups = [
             "OU" => "OU", "UUBL" => "OU",
@@ -94,9 +86,6 @@
         exit;
     }
 
-    /**
-     * STEP 4: CHECK IF ADD POKEMON ALREADY IN ROSTER
-     */
     $stmt = $conn->prepare("
         SELECT rp.id
         FROM roster_pkmn rp
@@ -117,14 +106,11 @@
         exit;
     }
 
-    /**
-     * STEP 5: SWAP TRANSACTION
-     */
+   
     $conn->begin_transaction();
 
     try {
 
-        // deactivate drop
         $stmt = $conn->prepare("
             UPDATE roster_pkmn
             SET is_active = 0
@@ -139,7 +125,6 @@
         }
         $stmt->close();
 
-        // get active_user id properly (SAFE)
         $stmt = $conn->prepare("
             SELECT id 
             FROM active_users
@@ -155,7 +140,6 @@
             throw new Exception("Active user not found");
         }
 
-        // insert new pokemon
         $stmt = $conn->prepare("
             INSERT INTO roster_pkmn (active_user, showdown_pkmn, season_id, is_active)
             VALUES (?, ?, ?, 1)
