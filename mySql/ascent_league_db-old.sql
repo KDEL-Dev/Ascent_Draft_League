@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.1.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Apr 24, 2026 at 01:32 PM
--- Server version: 11.8.6-MariaDB-log
--- PHP Version: 7.2.34
+-- Host: localhost:3306
+-- Generation Time: Apr 24, 2026 at 01:33 PM
+-- Server version: 5.7.24
+-- PHP Version: 8.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `u682900385_ascentDb`
+-- Database: `ascent_league_db`
 --
 
 -- --------------------------------------------------------
@@ -32,9 +32,9 @@ CREATE TABLE `active_users` (
   `user_id` int(11) NOT NULL,
   `role` enum('owner','admin','user') NOT NULL DEFAULT 'user',
   `draft_pick` int(11) DEFAULT NULL,
-  `season_id` int(11) NOT NULL DEFAULT 1,
+  `season_id` int(11) NOT NULL DEFAULT '1',
   `competitor` enum('yes','no') NOT NULL DEFAULT 'no'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `active_users`
@@ -42,13 +42,10 @@ CREATE TABLE `active_users` (
 
 INSERT INTO `active_users` (`id`, `user_id`, `role`, `draft_pick`, `season_id`, `competitor`) VALUES
 (3, 1, 'owner', 1, 1, 'no'),
-(9, 1, 'owner', 3, 999, 'yes'),
-(17, 9, 'user', 2, 999, 'no'),
+(9, 1, 'owner', 1, 999, 'yes'),
+(17, 9, 'user', 2, 999, 'yes'),
 (18, 10, 'user', NULL, 999, 'no'),
-(19, 11, 'user', 2, 999, 'no'),
-(20, 12, 'user', NULL, 999, 'no'),
-(21, 13, 'admin', 1, 999, 'yes'),
-(22, 14, 'user', 2, 999, 'yes');
+(19, 11, 'user', NULL, 999, 'no');
 
 -- --------------------------------------------------------
 
@@ -62,22 +59,8 @@ CREATE TABLE `drafted_pkmn` (
   `active_user` int(11) NOT NULL,
   `showdown_pkmn` int(11) NOT NULL,
   `pick_number` int(11) NOT NULL,
-  `drafted_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `drafted_pkmn`
---
-
-INSERT INTO `drafted_pkmn` (`id`, `season_id`, `active_user`, `showdown_pkmn`, `pick_number`, `drafted_at`) VALUES
-(471, 999, 9, 7519, 1, '2026-04-19 05:41:22'),
-(472, 999, 21, 7173, 2, '2026-04-19 14:34:33'),
-(473, 999, 21, 7264, 3, '2026-04-19 14:34:41'),
-(474, 999, 21, 7160, 4, '2026-04-19 14:38:18'),
-(475, 999, 22, 7849, 5, '2026-04-19 14:44:08'),
-(476, 999, 21, 7171, 6, '2026-04-19 14:44:20'),
-(477, 999, 21, 7492, 7, '2026-04-19 14:44:36'),
-(478, 999, 22, 7905, 8, '2026-04-19 14:44:50');
+  `drafted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -88,14 +71,14 @@ INSERT INTO `drafted_pkmn` (`id`, `season_id`, `active_user`, `showdown_pkmn`, `
 CREATE TABLE `draft_info` (
   `id` int(11) NOT NULL,
   `season_id` int(11) NOT NULL,
-  `current_pick` int(11) DEFAULT 1,
+  `current_pick` int(11) DEFAULT '1',
   `total_picks` int(11) NOT NULL,
   `direction` enum('up','down') DEFAULT 'up',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `draft_started` tinyint(1) DEFAULT 0,
-  `draft_finished` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `draft_started` tinyint(1) DEFAULT '0',
+  `draft_finished` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `draft_info`
@@ -103,7 +86,7 @@ CREATE TABLE `draft_info` (
 
 INSERT INTO `draft_info` (`id`, `season_id`, `current_pick`, `total_picks`, `direction`, `created_at`, `updated_at`, `draft_started`, `draft_finished`) VALUES
 (1, 12, 1, 0, 'up', '2026-02-23 21:47:29', '2026-03-03 20:03:38', 0, 0),
-(2, 999, 9, 36, 'up', '2026-03-03 20:47:36', '2026-04-19 14:45:02', 0, 0);
+(2, 999, 1, 24, 'up', '2026-03-03 20:47:36', '2026-04-14 15:46:15', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -113,9 +96,9 @@ INSERT INTO `draft_info` (`id`, `season_id`, `current_pick`, `total_picks`, `dir
 
 CREATE TABLE `format_rules` (
   `id` int(11) NOT NULL,
-  `content` text DEFAULT NULL,
+  `content` text,
   `season_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `format_rules`
@@ -134,7 +117,7 @@ CREATE TABLE `leagues` (
   `league_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `leagues`
@@ -151,17 +134,17 @@ INSERT INTO `leagues` (`league_id`, `name`, `created`) VALUES
 
 CREATE TABLE `league_information` (
   `season_id` int(11) NOT NULL,
-  `about` text DEFAULT NULL,
-  `rules` text DEFAULT NULL,
-  `news` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `about` text,
+  `rules` text,
+  `news` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `league_information`
 --
 
 INSERT INTO `league_information` (`season_id`, `about`, `rules`, `news`) VALUES
-(999, 'The Ascent Draft League is a competitive Pokémon draft-style league focused on strategy, team building, and player skill. Each participant drafts a unique roster of Pokémon across multiple tiers, creating balanced and diverse teams for the season.\r\n\r\nThe league is structured into a Round Robin stage followed by a Knockout stage, where players compete in Best-of-One matches. Success depends on preparation, adaptability, and smart roster management, including limited mid-season trades.\r\n\r\nPlayers are responsible for scheduling their own matches and are expected to maintain clear communication and respectful conduct throughout the season. The Ascent Draft League is designed to deliver a competitive yet community-driven experience for all participants.', 'General Rules\r\nEach team consists of 12 Pokémon total, with 3 Pokémon selected from each tier.\r\nAll matches are Best of 1.\r\nPlayers are expected to complete all scheduled matches within the season timeframe.\r\nFollowing the draft, each player will be permitted to make up to 2 trades, replacing Pokémon with others from the same tier only, until the end of the following day.\r\nAt the start of each match, players are encouraged to share the battle link in the general Discord chat for community viewing.\r\nAfter each match, at least one participant must post the replay in the designated Discord replay channel.\r\nAll participants are expected to maintain respectful conduct at all times and contribute to a positive competitive environment.\r\nRound Robin Stage\r\nThe Round Robin stage will run for approximately 2–3 weeks, with final duration subject to adjustment based on league size and scheduling.\r\nEach player is required to face every other player at least once. If divisions are implemented, players must compete against all opponents within their division.\r\nPlayers are responsible for organizing their own match schedule.\r\nCommunication between opponents is strongly encouraged, preferably through Discord, to ensure timely scheduling and completion of matches.\r\nKnockout Stage Rules\r\nPrior to the start of the Knockout Stage, each player will be allowed to perform up to 2 Pokémon substitutions, replacing Pokémon with others from the same tier, to better prepare for matchups.\r\nAfter Round 1 of the Knockout Stage, players may make 1 Pokémon substitution between each subsequent match, including the Grand Finals reset if applicable.\r\nAny traded Pokémon must be communicated to the opponent at least 24 hours before the scheduled match time.\r\nOpponents may choose to accept the updated roster earlier than the 24-hour minimum if both parties agree.', 'Welcome to the inaugural season of the Ascent Draft League! Trainers have drafted their teams and the competition is officially underway. Stay active, schedule your matches, and submit replays after each battle. Good luck to all competitors—may the best strategist win! ');
+(999, 'The Ascent Draft League is a competitive Pokémon draft-style league focused on strategy, team building, and player skill. Each participant drafts a unique roster of Pokémon across multiple tiers, creating balanced and diverse teams for the season.\r\n\r\nThe league is structured into a Round Robin stage followed by a Knockout stage, where players compete in Best-of-One matches. Success depends on preparation, adaptability, and smart roster management, including limited mid-season trades.\r\n\r\nPlayers are responsible for scheduling their own matches and are expected to maintain clear communication and respectful conduct throughout the season. The Ascent Draft League is designed to deliver a competitive yet community-driven experience for all participants.', 'General Rules\r\nEach team consists of 12 Pokémon total, with 3 Pokémon selected from each tier.\r\nAll matches are Best of 1.\r\nPlayers are expected to complete all scheduled matches within the season timeframe.\r\nFollowing the draft, each player will be permitted to make up to 2 trades, replacing Pokémon with others from the same tier only, until the end of the following day.\r\nAt the start of each match, players are encouraged to share the battle link in the general Discord chat for community viewing.\r\nAfter each match, at least one participant must post the replay in the designated Discord replay channel.\r\nAll participants are expected to maintain respectful conduct at all times and contribute to a positive competitive environment.\r\nRound Robin Stage\r\nThe Round Robin stage will run for approximately 2–3 weeks, with final duration subject to adjustment based on league size and scheduling.\r\nEach player is required to face every other player at least once. If divisions are implemented, players must compete against all opponents within their division.\r\nPlayers are responsible for organizing their own match schedule.\r\nCommunication between opponents is strongly encouraged, preferably through Discord, to ensure timely scheduling and completion of matches.\r\nKnockout Stage Rules\r\nPrior to the start of the Knockout Stage, each player will be allowed to perform up to 2 Pokémon substitutions, replacing Pokémon with others from the same tier, to better prepare for matchups.\r\nAfter Round 1 of the Knockout Stage, players may make 1 Pokémon substitution between each subsequent match, including the Grand Finals reset if applicable.\r\nAny traded Pokémon must be communicated to the opponent at least 24 hours before the scheduled match time.\r\nOpponents may choose to accept the updated roster earlier than the 24-hour minimum if both parties agree.', 'Welcome to the inaugural season of the Ascent Draft League! Trainers have drafted their teams and the competition is officially underway. Stay active, schedule your matches, and submit replays after each battle. Good luck to all competitors—may the best strategist win!');
 
 -- --------------------------------------------------------
 
@@ -176,7 +159,7 @@ CREATE TABLE `legacy_stats_playoffs` (
   `win` varchar(4) DEFAULT NULL,
   `loss` varchar(4) DEFAULT NULL,
   `season` int(2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `legacy_stats_playoffs`
@@ -282,7 +265,7 @@ CREATE TABLE `legacy_stats_seasons` (
   `win` varchar(4) DEFAULT NULL,
   `loss` varchar(4) DEFAULT NULL,
   `season` varchar(2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `legacy_stats_seasons`
@@ -1190,16 +1173,8 @@ CREATE TABLE `matchup` (
   `player2_active_user_id` int(11) NOT NULL,
   `winner_active_user_id` int(11) DEFAULT NULL,
   `replay_link` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `matchup`
---
-
-INSERT INTO `matchup` (`id`, `season_id`, `player1_active_user_id`, `player2_active_user_id`, `winner_active_user_id`, `replay_link`, `created_at`) VALUES
-(32, 999, 21, 9, 21, 'asd', '2026-04-19 14:48:26'),
-(33, 999, 21, 22, 21, 'sadf', '2026-04-19 14:49:29');
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1211,22 +1186,11 @@ CREATE TABLE `match_pokemon_stats` (
   `id` int(11) NOT NULL,
   `matchup_id` int(11) NOT NULL,
   `roster_pkmn_id` int(11) NOT NULL,
-  `kills` int(11) DEFAULT 0,
-  `deaths` int(11) DEFAULT 0,
-  `used` tinyint(1) DEFAULT 0,
+  `kills` int(11) DEFAULT '0',
+  `deaths` int(11) DEFAULT '0',
+  `used` tinyint(1) DEFAULT '0',
   `active_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `match_pokemon_stats`
---
-
-INSERT INTO `match_pokemon_stats` (`id`, `matchup_id`, `roster_pkmn_id`, `kills`, `deaths`, `used`, `active_user_id`) VALUES
-(372, 33, 448, 1, 1, 1, 21),
-(373, 33, 450, 0, 0, 1, 21),
-(374, 33, 446, 0, 0, 1, 21),
-(375, 33, 452, 3, 0, 1, 22),
-(376, 33, 449, 0, 1, 1, 22);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1239,8 +1203,8 @@ CREATE TABLE `pkmn_tier` (
   `showdown_pkmn_id` int(11) NOT NULL,
   `season_id` int(11) NOT NULL,
   `tier` varchar(10) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pkmn_tier`
@@ -2135,23 +2099,9 @@ CREATE TABLE `roster_pkmn` (
   `active_user` int(11) NOT NULL,
   `showdown_pkmn` int(11) NOT NULL,
   `season_id` int(11) DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT 1,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `roster_pkmn`
---
-
-INSERT INTO `roster_pkmn` (`id`, `active_user`, `showdown_pkmn`, `season_id`, `is_active`, `created_at`) VALUES
-(445, 9, 7519, 999, 1, '2026-04-19 05:41:22'),
-(446, 21, 7173, 999, 1, '2026-04-19 14:34:33'),
-(447, 21, 7264, 999, 1, '2026-04-19 14:34:41'),
-(448, 21, 7160, 999, 1, '2026-04-19 14:38:18'),
-(449, 22, 7849, 999, 1, '2026-04-19 14:44:08'),
-(450, 21, 7171, 999, 1, '2026-04-19 14:44:20'),
-(451, 21, 7492, 999, 1, '2026-04-19 14:44:36'),
-(452, 22, 7905, 999, 1, '2026-04-19 14:44:50');
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2166,9 +2116,9 @@ CREATE TABLE `seasons` (
   `start_date` date DEFAULT NULL,
   `playoff_date` datetime DEFAULT NULL,
   `created` datetime NOT NULL,
-  `is_active` tinyint(1) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT '0',
   `draft_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `seasons`
@@ -2192,8 +2142,8 @@ CREATE TABLE `showdown_pkmn` (
   `form` varchar(100) DEFAULT NULL,
   `type1` varchar(20) NOT NULL,
   `type2` varchar(20) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `showdown_pkmn`
@@ -3089,23 +3039,20 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `gamerTag` varchar(50) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `team_name` varchar(5) NOT NULL,
   `team_mascot_pkmn` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `gamerTag`, `created_at`, `team_name`, `team_mascot_pkmn`) VALUES
-(1, 'truburd@gmail.com', '$2y$10$g6T5t5n9fMplpOKB6QwjUuZ0x9/v5EEnmWIAhaX6yzjmemrBVDJnK', 'DZN', '2026-02-18 14:09:10', 'DAYZN', 'Okidogi'),
+(1, 'truburd@gmail.com', '$2y$10$iX8FREJKG5Q.AeDt5nvR8eCmLLzTq40MkWyNAAoWn8OrlblqOHqRW', 'DZN', '2026-02-18 14:09:10', 'DAYZN', 'Corviknight'),
 (9, 'player2@gmail.com', '$2y$10$lTUpuVHpBcC4fY411mveVekeBSFYXStWKB/a5IJr3z1140ixCGLSa', NULL, '2026-04-07 14:41:49', 'MUNX', 'Munkidori'),
 (10, 'player3@gmail.com', '$2y$10$csfT/9Y2KMIENMds3uTW5eJsbIM0Wx0pzR/OyUAs7fEX.tvzWFLVO', NULL, '2026-04-11 13:16:12', 'DB', 'Exploud'),
-(11, 'K.liburd7@gmail.com', '$2y$10$uXiWQO3jb86/szeSGCulA.UXzHmb.GuN5X.5knRGh7dIJN0NoaKby', NULL, '2026-04-14 14:23:06', 'KRL', 'Krookodile'),
-(12, 'sgspete@gmail.com', '$2y$10$L6yvHVBZyiZeu9Q4L8dAD.XoFUL4klvUGqNAsYF/82WBTC1tY6fWy', NULL, '2026-04-14 18:29:23', 'SGS', 'Volcarona'),
-(13, 'webdev@humber.ca', '$2y$10$95.z5o3JlndtnDt3pL1Cs.06zlwL8DGFdHU2TWoJVBLiZtyAEH1f.', NULL, '2026-04-16 15:59:41', 'DEV', 'Galvantula'),
-(14, 'sean.doyle@humber.ca', '$2y$10$4be0QswwlSAg2Uw.gR6NSOPsGYvIUNQRb98hBnDcRnzNO8Wrl2XK2', NULL, '2026-04-19 14:29:35', 'PROFD', 'Pikachu');
+(11, 'random@gmail.com', '$2y$10$sruOEcMvMa.3H957etyivu2J30npWA0jiRGpLDHJziS5SeWGjoMdm', NULL, '2026-04-14 16:09:51', 'MURDA', 'Murkrow');
 
 --
 -- Indexes for dumped tables
@@ -3215,13 +3162,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `active_users`
 --
 ALTER TABLE `active_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `drafted_pkmn`
 --
 ALTER TABLE `drafted_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=479;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `draft_info`
@@ -3245,13 +3192,13 @@ ALTER TABLE `leagues`
 -- AUTO_INCREMENT for table `matchup`
 --
 ALTER TABLE `matchup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `match_pokemon_stats`
 --
 ALTER TABLE `match_pokemon_stats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=377;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pkmn_tier`
@@ -3263,7 +3210,7 @@ ALTER TABLE `pkmn_tier`
 -- AUTO_INCREMENT for table `roster_pkmn`
 --
 ALTER TABLE `roster_pkmn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `seasons`
@@ -3281,7 +3228,7 @@ ALTER TABLE `showdown_pkmn`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables

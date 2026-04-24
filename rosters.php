@@ -84,9 +84,9 @@ unset($pokemonList); // break reference
                 <?php include 'includes/season_setting_header.php';?>
                 
                 <div class="pageNameCont">
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <img src="img/icons/PokeBall_Icon-color.svg" alt="pokeball icon">
                     <div class="pageTitle"> Rosters</div>
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <img src="img/icons/PokeBall_Icon-color.svg" alt="pokeball icon">
                 </div>
             </header>
             <div>

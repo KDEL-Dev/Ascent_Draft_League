@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const li = document.createElement("li");
 
             // Add number + team name
-            li.innerHTML = `<span class="draftNumber">${index + 1}.</span> ${teamName}`;
+            li.innerHTML = `<span class="draftNumber">${index + 1}</span> <span class="draftTeam">${teamName}</span>`;
 
             draftOrderList.appendChild(li);
         });
@@ -241,79 +241,79 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .replace(/[^a-z0-9]/g, '');
             }
 
-            if (data.previous_pick !== lastPreviousPick) {
+            if (data.previous_pick !== lastPreviousPick) 
+            {
+                lastPreviousPick = data.previous_pick;
 
-    lastPreviousPick = data.previous_pick;
+            if (data.previous_pick) {
 
-    if (data.previous_pick) {
+                const pokeName = data.previous_pick.toLowerCase();
 
-        const pokeName = data.previous_pick.toLowerCase();
+                showdownId = pokeName.replace(/[^a-z0-9]/g, '');
 
-        showdownId = pokeName.replace(/[^a-z0-9]/g, '');
+                const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
 
-        const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
+                const url1 = `${base}${pokeName}.png`;
 
-        const url1 = `${base}${pokeName}.png`;
+                const url2 = `${base}${pokeName
+                    .replace('-galar', '-galarian')
+                    .replace('-hisui', '-hisuian')
+                    .replace('-paldea', '-paldean')
+                    .replace('-alola', '-alolan')
+                    .replace('-f', '-female')
+                }.png`;
 
-        const url2 = `${base}${pokeName
-            .replace('-galar', '-galarian')
-            .replace('-hisui', '-hisuian')
-            .replace('-paldea', '-paldean')
-            .replace('-alola', '-alolan')
-            .replace('-f', '-female')
-        }.png`;
+                ppPkmnImgCont.innerHTML = `
+                    <img src="${url1}" width="200"
+                        onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
+                `;
 
-        ppPkmnImgCont.innerHTML = `
-            <img src="${url1}" width="200"
-                onerror="this.onerror=null; this.src='${url2}'; this.onerror=function(){this.style.display='none'};">
-        `;
+                ppPkmnNameCont.innerHTML = `<h3>${data.previous_pick}</h3>`;
+                ppTeamName.innerHTML = `<h3>${data.previous_team}</h3>`;
 
-        ppPkmnNameCont.innerHTML = `<div>${data.previous_pick}</div>`;
-        ppTeamName.innerHTML = `<div>${data.previous_team}</div>`;
+                // Load pokedex + stats
+                const dex = await loadPokedex();
+                const pkmnData = dex[showdownId];
 
-        // Load pokedex + stats
-        const dex = await loadPokedex();
-        const pkmnData = dex[showdownId];
+                if (pkmnData && pkmnData.baseStats) {
+                    const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
 
-        if (pkmnData && pkmnData.baseStats) {
-            const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
+                    ppStatCont.innerHTML = `
+                        <table class="ppStatTable">
+                            <thead>
+                                <th class="ppTH">HP</th>
+                                <th class="ppTH">ATK</th>
+                                <th class="ppTH">DEF</th>
+                            </thead>
+                            <tbody>
+                                <td class="ppTD">${hp}</td>
+                                <td class="ppTD">${atk}</td>
+                                <td class="ppTD">${def}</td>
+                            </tbody>
+                        </table>
+                        <table class="ppStatTable">
+                            <thead>
+                                <th class="ppTH">SP.ATK</th>
+                                <th class="ppTH">SP.DEF</th>
+                                <th class="ppTH">SPE</th>
+                            </thead>
+                            <tbody>
+                                <td class="ppTD">${spa}</td>
+                                <td class="ppTD">${spd}</td>
+                                <td class="ppTD">${spe}</td>
+                            </tbody>
+                        </table>
+                    `;
+                }
 
-            ppStatCont.innerHTML = `
-                <table class="ppStatTable">
-                    <thead>
-                        <th class="ppTH">HP</th>
-                        <th class="ppTH">ATK</th>
-                        <th class="ppTH">DEF</th>
-                    </thead>
-                    <tbody>
-                        <td class="ppTD">${hp}</td>
-                        <td class="ppTD">${atk}</td>
-                        <td class="ppTD">${def}</td>
-                    </tbody>
-                </table>
-                <table class="ppStatTable">
-                    <thead>
-                        <th class="ppTH">SP.ATK</th>
-                        <th class="ppTH">SP.DEF</th>
-                        <th class="ppTH">SPE</th>
-                    </thead>
-                    <tbody>
-                        <td class="ppTD">${spa}</td>
-                        <td class="ppTD">${spd}</td>
-                        <td class="ppTD">${spe}</td>
-                    </tbody>
-                </table>
-            `;
+            } else {
+                // CLEAR UI when null
+                ppPkmnImgCont.innerHTML = "";
+                ppPkmnNameCont.innerHTML = "<h3>-</h3>";
+                ppTeamName.innerHTML = "<h3>-</h3>";
+                ppStatCont.innerHTML = "";
+            }
         }
-
-    } else {
-        // CLEAR UI when null
-        ppPkmnImgCont.innerHTML = "";
-        ppPkmnNameCont.innerHTML = "<div>-</div>";
-        ppTeamName.innerHTML = "<div>-</div>";
-        ppStatCont.innerHTML = "";
-    }
-}
 
 
             if (data.draft_finished) {

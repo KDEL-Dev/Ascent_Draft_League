@@ -70,8 +70,103 @@
         </header>
 
         <main>
+
+            <section class="draftCont">
+                <!-- DRAFT ORDER -->
+                <section id="draftOrderCont">
+                    <header>Draft Order</header>
+                    <ul id="draftOrderList"></ul>
+                    <section>
+                        <?php if (in_array($_SESSION['role'], ['admin', 'owner'])): ?>
+                            <section id="draftOrderBtnCont">
+                                <button id="randomizeBtn">Randomize</button>
+                            </section>
+                        <?php endif; ?>
+                    </section>
+                </section>
+                <section>
+                    <?php if (in_array($_SESSION['role'], ['admin', 'owner'])): ?>
+                        <section id="draftAdminBtnCont">
+                            <button id="startDraftBtn" class="adminDraftBtns">Start Draft</button>
+                            <button id="endDraftBtn" class="adminDraftBtns">End Draft</button>
+                        </section>
+                    <?php endif; ?>
+                </section>
+            </section>
+            <section class="draftCont">
+                <!-- PREVIOUS DRAFT PICK -->
+                <section id="previousPick">
+                    <header>Drafted</header>
+                    <section id="previousPickInfo">
+                        <section id="ppTeamName"></section>
+                        <section id="ppPkmnCont">
+                            <section id="ppPkmnImgCont">
+                                <img src="https://img.pokemondb.net/sprites/scarlet-violet/normal/clefable.png">
+                                <section id="ppTeamName"></section>
+                            </section>             
+                        </section>
+                        <section class="ppFlexCol">
+                            <section id="ppPkmnNameCont"></section>
+                            <section id="ppPkmnType">
+                                <p>Fairy</p>
+                            </section>
+                            <section id="ppStatCont"></section>
+                        </section>
+                    </section>
+                </section>
+
+                <!-- CURRENT DRAFT PICK AND DRAFT INFO -->
+                 <section id="draftConsoleSticky">
+                    <section id="currentPick">
+                        <header>Current Pick</header>
+                        <section id="currentPickInfo">Stand By</section>
+                    </section>
+                    <section id="yourDraftCont">
+                        <section>
+                            <header id="yourDraftTeamName">
+                                Your Draft Information
+                                <!-- Switch this to team name -->
+                            </header>
+                        </section>
+                        <section id="yourDraftInfo">
+                            <section id="yourDraftCountCont">
+                                <section>
+                                    <p>Roster Counter</p>
+                                </section>
+                                <section>
+                                    <h2><span id="yourTeamCount">0</span>0/12</h2>
+                                </section>
+                            </section>
+                            <section id="yourDraft">
+                                <div class="yourPicks" id="yourOu">
+                                    <p>OU</p>
+                                    <p>Zamazenta</p>
+                                    <p>OU</p>
+                                </div>
+                                <div class="yourPicks" id="yourUu">
+                                    <p>UU</p>
+                                    <p>UU</p>
+                                    <p>UU</p>
+                                </div>
+                                <div class="yourPicks" id="yourRu">
+                                    <p>RU</p>
+                                    <p>RU</p>
+                                    <p>RU</p>
+                                </div>
+                                <div class="yourPicks" id="yourNu">
+                                    <p>Tauros-Paldea-Blaze</p>
+                                    <p>NU</p>
+                                    <p>NU</p>
+                                </div>
+                            </section>
+                        </section>
+                    </section>
+                </section>
+              
+            </section>
+
             <!-- ---------------- DRAFT DASHBOARD ---------------- -->
-            <section id="draftCont">
+            <!-- <section id="draftCont">
                 <header id="draftDashTitle">Draft Dashboard</header>
 
                 <section id="draftInfoCont">
@@ -84,44 +179,13 @@
                             <header>Previous Pick</header>
                             <section id="previousPickInfo">
                                 <section id="ppTeamName">
-                                    <!-- Dynamically Added -->
                                 </section>
                                 <section id="ppFlexRow">
                                     <section id="ppPkmnCont">
                                         <section id="ppPkmnImgCont"></section>
                                         
-                                    </section>
+                                        </section>
                                     <section id="ppStatCont">
-                                        
-                                            <!-- <table class="ppStatTable">
-                                                <thead>
-                                                    <th class="ppTH">hp</th>
-                                                    <th class="ppTH">atk</th>
-                                                    <th class="ppTH">def</th>                                               
-                                                </thead>
-                                                <tbody>
-                                                    <td class="ppTD"></td>
-                                                    <td class="ppTD"></td>
-                                                    <td class="ppTD"></td>
-                                                
-                                                </tbody>
-                                            </table> -->
-                                    
-<!--                                     
-                                            <table class="ppStatTable">
-                                                <thead>
-                                                    <th class="ppTH">sp.atk</th>
-                                                    <th class="ppTH">sp.def</th>
-                                                    <th class="ppTH">spe</th>
-                                                </thead>
-                                                <tbody>
-                                                
-                                                    <td class="ppTD"></td>
-                                                    <td class="ppTD"></td>
-                                                    <td class="ppTD"></td>
-                                                </tbody>
-                                            </table> -->
-                                    
                                     </section>
                                 </section>
                                 
@@ -143,13 +207,12 @@
                     <?php if (in_array($_SESSION['role'], ['admin', 'owner'])): ?>
                         <section id="draftAdminBtnCont">
                             <button id="startDraftBtn" class="adminDraftBtns">Start Draft</button>
-                            <!-- <button id="skipPickBtn" class="adminDraftBtns" disabled>Skip</button> -->
                             <button id="endDraftBtn" class="adminDraftBtns">End Draft</button>
                         </section>
                     <?php endif; ?>
                 </section>
                 
-            </section>
+            </section> -->
 
             <!-- ---------------- POKEMON TIERS ---------------- -->
             <section class="metaCont">
