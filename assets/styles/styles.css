@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Zen+Dots&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Jura:wght@300..700&family=Zen+Dots&display=swap');
 
 /* Below prevents my content from becoming bigger than container. Had an issue with roster page specifically where contents of each team box was bigger than container itself */
 *  
@@ -19,6 +19,14 @@ html, body
     margin: 0;
 
     background-color: #101010;
+}
+
+/* TIER COLORS */
+:root {
+    --tier-ou: rgb(80, 0, 0);
+    --tier-uu: rgb(145, 63, 8);
+    --tier-ru: rgb(122, 120, 0);
+    --tier-nu: rgb(0, 88, 0);
 }
 
 
@@ -1044,9 +1052,9 @@ footer
 }
 
 
-/* ------------------
-/***** DRAFT *******/
-/*******************/
+/********************
+       DRAFT     
+*********************/
 
 .draftCont
 {
@@ -1088,9 +1096,9 @@ footer
 {
     margin: 10px 20px;
 
-    max-width: 200px;
-    flex: 1;
-    border: white 1px solid;
+    width: 150px;
+    
+    border: rgba(255, 255, 255, 0.5) 3px solid;
     border-radius: 20px;
 
     display: flex;
@@ -1103,7 +1111,7 @@ footer
 
     border-radius: 20px 20px 0 0;
     text-align: center;
-    border-bottom: 1px white solid;
+    border-bottom: 1px rgba(255, 255, 255, 0.5) solid;
     background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
@@ -1121,6 +1129,36 @@ footer
     justify-content: center;
     align-items: center;
     
+}
+
+/* PREVIOUS PICK */
+
+
+
+.draftPickCont
+{
+    margin: 0 20px 20px 20px;
+    min-height: 200px;
+
+    background-color: black;
+    color: white;
+    font-family: "jura";
+    border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, .1);
+
+    display: flex;
+    justify-content: center;
+    
+}
+
+#previousPickWidth
+{
+    max-width: 1200px;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items:  stretch;
 }
 
 #previousPick
@@ -1142,6 +1180,8 @@ footer
     border-radius: 20px 20px 0 0;
     text-align: center;
     border-bottom: 1px rgba(255, 255, 255, 0.5) solid;
+    font-size: 1.25em;
+    font-weight: bold;
     background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 }
 
@@ -1153,8 +1193,8 @@ footer
     font-size: 1em;
 
     display: flex;          
-    justify-content: center;     
-    align-items: center;         
+    justify-content: space-between;     
+    align-items: flex-end;         
     
 }
 
@@ -1165,7 +1205,8 @@ footer
     width: 200px;
     height: 250px;
 
-    background-color: red;  
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 0 0 0 20px ; 
 
     display: flex;
     align-items: center;
@@ -1197,44 +1238,82 @@ footer
 .ppFlexCol
 {
     /* flex: 1; */
-    height: 250px;
+    margin: 0 10px 10px 0;
+
 
     display: flex;
     flex-direction: column;
+    justify-items: flex-end;
 }
 
 #ppPkmnCont
-{
+{   
+    position: relative;
         
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
 }
 
 #ppPkmnNameCont h3
 {
     margin: 0;
 
-    font-size: 3em;
+    font-family: "fjalla one";
+    font-size: 2em;
 }
 
 #ppPkmnImgCont img
 {
-    width: 250px;    
+    width: 250px; 
+    margin: 0 50px;
+    position: relative;   
+    z-index: 2;
+}
+
+#ppPkmnTierBg
+{
+    margin: 0;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-family: "fjalla one";
+    font-size: 12em;
+    opacity: 0.5;
+}
+
+#ppPkmnType
+{
+    gap: 10px;
+    margin: 10px 0;
+    flex: 1;
+
+    display: flex;
+    
 }
 
 #ppPkmnType p
 {
     margin: 0;
-    margin-bottom: 10px;
+    padding: 5px 0;
+    flex: 1;
+    
+    text-align: center;
+    font-weight: bold;
+    border: 2px solid white;
+    border-radius: 20px;
 }
 
 #ppStatCont
 {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
 }
 
@@ -1243,6 +1322,7 @@ footer
     margin-bottom: 10px;
 
     border-collapse: collapse;
+    
 }
 
 .ppTH
@@ -1250,8 +1330,9 @@ footer
     width: 80px;
 
     font-size: .75em;
-    background-color: white;
-    color: black;
+    font-family: "jura";
+    background-color: #3a3a3a;
+    color: white;
 }
 
 
@@ -1261,7 +1342,9 @@ footer
 {
     width: 80px;
 
-    font-size: .75em;
+    font-size: 1.25em;
+    font-weight: bold;
+    font-family: "jura";
 }
 
 
@@ -1293,7 +1376,7 @@ footer
     padding:  10px;
 
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.25em;
     font-weight: bold;
     background-image: linear-gradient(to top, black,rgb(53, 53, 53));
     border-right: 1px solid rgba(255, 255, 255, 0.5);
@@ -1342,10 +1425,8 @@ footer
 
     font-weight: bold;
     text-align: center;
-    border-bottom: white solid 1px;
+    border-bottom: rgba(255, 255, 255, 0.5) solid 1px;
     border-right: black solid 1px;
-    background-image: linear-gradient(to bottom, yellow, orange);
-    color: black;
 
     display: flex;
     align-items: center;
@@ -1398,16 +1479,19 @@ footer
 
 #draftConsoleSticky
 {
-    display: flex;
+    width: 100%;
     
+    display: flex;
+    flex-direction: row;
 }
 
 #yourDraftCont
 {
     margin: 10px;
+    flex: 1;
 
     border-radius: 20px;
-    border: 1px solid white;
+    border: 3px solid rgba(255, 255, 255, 0.5);
 
     display: flex;
     flex-direction: column;
@@ -1419,7 +1503,7 @@ footer
 
     border-radius: 20px 20px 0 0;
     text-align: center;
-    border-bottom: 1px white solid;
+    border-bottom: 1px rgba(255, 255, 255, 0.5) solid;
     background-image: linear-gradient(to top, black,rgb(53, 53, 53));
 
     display: flex;
@@ -1438,6 +1522,7 @@ footer
 #yourDraftCountCont
 {
     margin-right: 20px;
+    width: 200px;
 
     display: flex;
     flex-direction: column;
@@ -1448,6 +1533,9 @@ footer
 #yourDraftCountCont p
 {
     margin: 0;
+    margin-bottom: 10px;
+
+    text-align: center;
 }
 
 
@@ -1455,35 +1543,45 @@ footer
 {
     margin: 0;
 
-    font-size: 3em;
+    font-family: "Fjalla One";
+    font-size: 2em;
 }
 
 #yourDraft
 {
-    width: fit-content;
+    width: 100%;
     flex: 1;
 
-    border: white 1px solid;
+    border: rgba(255, 255, 255, 0.50) 2px solid;
     border-radius: 20px;
 
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#yourDraft p {
+    color: white;
+    font-weight: bold;
 }
 
 
 .yourPicks
 {
     margin: 10px;
+    flex: 1 1 calc(50% - 20px);
 
     display: flex; 
     flex-direction: column;
 
 }
 
+
+
 .yourPicks p
 {
     margin: 5px 0;
     padding: 0 20px;
-    min-width: 175px;
     
     border-radius: 20px;
     font-weight: bold;
@@ -1492,26 +1590,53 @@ footer
     font-size: 1.25em;
 }
 
-#yourOu p
+.rosterTierText 
 {
-    background-color: rgb(133, 41, 41);
+    font-weight: bold;
 }
 
-#yourUu p
-{
-    background-color: rgb(172, 110, 40);
+.type-badge {
+    margin: 0;
+    padding: 5px 10px;
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 20px;
+    /* border: 2px solid rgba(255,255,255,0.5); */
+    color: white;
 }
 
-#yourRu p
-{
-    background-color: rgb(221, 205, 59);
-}
+/* AI generated colors for Pokemon Types */
+.type-fire { background: #F08030; }
+.type-water { background: #6890F0; }
+.type-grass { background: #78C850; }
+.type-electric { background: #F8D030; color: black; }
+.type-ice { background: #98D8D8; color: black; }
+.type-fighting { background: #C03028; }
+.type-poison { background: #A040A0; }
+.type-ground { background: #E0C068; color: black; }
+.type-flying { background: #A890F0; }
+.type-psychic { background: #F85888; }
+.type-bug { background: #A8B820; }
+.type-rock { background: #B8A038; }
+.type-ghost { background: #705898; }
+.type-dragon { background: #7038F8; }
+.type-dark { background: #705848; }
+.type-steel { background: #B8B8D0; color: black; }
+.type-fairy { background: #EE99AC; color: black; }
+.type-normal { background: #A8A878; }
 
-#yourNu p
-{
-    background-color: rgb(116, 202, 94);
-}
+/* Built for background tier display in Drafted */
+.tier-text-ou { color: var(--tier-ou); background: none !important; }
+.tier-text-uu { color: var(--tier-uu); background: none !important; }
+.tier-text-ru { color: var(--tier-ru); background: none !important; }
+.tier-text-nu { color: var(--tier-nu); background: none !important; }
 
+/* Built for your Draft Area */
+.rosterTierText[data-tier="ou"] { background: var(--tier-ou); }
+.rosterTierText[data-tier="uu"] { background: var(--tier-uu); }
+.rosterTierText[data-tier="ru"] { background: var(--tier-ru); }
+.rosterTierText[data-tier="nu"] { background: var(--tier-nu); }
 
 
 /* POKEBOX DRAFT */
@@ -1624,7 +1749,6 @@ footer
 {
     color: black;
     background-color: white;
-
 }
 
 /******************************* 
@@ -1810,27 +1934,18 @@ footer
     align-items: center;
 }
 
-/* .ou-RosterColor
-{
-    background-color: rgb(65, 0, 0);
-    font-weight: bold;  
-} */
 
-.ou-RosterColor {
-    background-color: rgb(80, 0, 0);
+
+.rosterColor {
     font-weight: bold;
-
     position: relative;
     overflow: hidden;
 }
 
-.ou-RosterColor::after {
-    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
+.rosterColor::after {
+    content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
 
     background: linear-gradient(
         270deg,
@@ -1839,87 +1954,15 @@ footer
         rgba(255,255,255,0.05) 30%,
         rgba(255,255,255,0) 50%
     );
+
     pointer-events: none;
 }
 
-.uu-RosterColor
-{
-    background-color: rgb(145, 63, 8);
-    font-weight: bold;
-
-    position: relative;
-    overflow: hidden;
-}
-
-.uu-RosterColor::after {
-    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background: linear-gradient(
-        270deg,
-        rgba(255,255,255,0.2) 0%,
-        rgba(255,255,255,0.1) 15%,
-        rgba(255,255,255,0.05) 30%,
-        rgba(255,255,255,0) 50%
-    );
-    pointer-events: none;
-}
-.ru-RosterColor
-{
-    background-color: rgb(122, 120, 0);
-    font-weight: bold;
-
-    position: relative;
-    overflow: hidden;
-}
-
-.ru-RosterColor::after {
-    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background: linear-gradient(
-        270deg,
-        rgba(255,255,255,0.2) 0%,
-        rgba(255,255,255,0.1) 15%,
-        rgba(255,255,255,0.05) 30%,
-        rgba(255,255,255,0) 50%
-    );
-    pointer-events: none;
-}
-.nu-RosterColor
-{
-    background-color: rgb(0, 88, 0);
-    font-weight: bold;
-
-    position: relative;
-    overflow: hidden;
-}
-
-.nu-RosterColor::after {
-    content: ""; /* nothing works unless this is here. After creates the element but unless there's content, nothing will show */
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background: linear-gradient(
-        270deg,
-        rgba(255,255,255,0.2) 0%,
-        rgba(255,255,255,0.1) 15%,
-        rgba(255,255,255,0.05) 30%,
-        rgba(255,255,255,0) 50%
-    );
-    pointer-events: none;
-}
+/* only color differs */
+.ou-RosterColor { background-color: var(--tier-ou); }
+.uu-RosterColor { background-color: var(--tier-uu); }
+.ru-RosterColor { background-color: var(--tier-ru); }
+.nu-RosterColor { background-color: var(--tier-nu); }
 
 /**************************************
             League Information

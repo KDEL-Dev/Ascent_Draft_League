@@ -30,11 +30,17 @@ $response = [
 try {
     // ----------------- Previous pick -----------------
     $prevStmt = $conn->prepare("
-        SELECT u.team_name, sp.name AS pokemon_name
+        SELECT 
+            u.team_name,
+            sp.name AS pokemon_name,
+            pt.tier AS tier
         FROM drafted_pkmn dp
         JOIN showdown_pkmn sp ON dp.showdown_pkmn = sp.id
         JOIN active_users au ON dp.active_user = au.id
         JOIN users u ON au.user_id = u.id
+        LEFT JOIN pkmn_tier pt 
+            ON pt.showdown_pkmn_id = sp.id 
+            AND pt.season_id = dp.season_id
         WHERE dp.season_id = ?
         ORDER BY dp.pick_number DESC
         LIMIT 1;
@@ -46,9 +52,40 @@ try {
     if ($row = $prevResult->fetch_assoc()) {
         $response['previous_team'] = $row['team_name'];
         $response['previous_pick'] = $row['pokemon_name'];
+        $response['previous_tier'] = $row['tier'];
     }
     $prevStmt->close();
 
+    //---------------------
+    // User Drafted Roster
+    //---------------------
+
+    $response['myPicks'] = [];
+
+    if ($user_id) 
+    {
+        $myPicksRes = mysqli_query($conn, "
+            SELECT 
+                sp.name,
+                pt.tier
+            FROM drafted_pkmn dp
+            JOIN showdown_pkmn sp ON dp.showdown_pkmn = sp.id
+            JOIN active_users au ON dp.active_user = au.id
+            LEFT JOIN pkmn_tier pt 
+                ON pt.showdown_pkmn_id = sp.id 
+                AND pt.season_id = dp.season_id
+            WHERE dp.season_id = $season_id
+            AND au.user_id = $user_id
+            ORDER BY dp.pick_number ASC
+        ");
+
+        while ($row = mysqli_fetch_assoc($myPicksRes)) 
+        {
+            $response['myPicks'][] = $row;
+        }
+    }
+
+    
     /****************
         Snake Draft
     *****************/
@@ -116,8 +153,10 @@ try {
     if ($user_id) {
         $myDraftRes = mysqli_query($conn, "
             SELECT COUNT(*) AS drafted_count
-            FROM drafted_pkmn
-            WHERE season_id = $season_id AND active_user = $user_id
+            FROM drafted_pkmn dp
+            JOIN active_users au ON dp.active_user = au.id
+            WHERE dp.season_id = $season_id
+            AND au.user_id = $user_id
         ");
         $myDraftRow = mysqli_fetch_assoc($myDraftRes);
         $response['myDraftedCount'] = $myDraftRow['drafted_count'] ?? 0;

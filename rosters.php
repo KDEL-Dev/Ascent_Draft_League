@@ -118,7 +118,7 @@ unset($pokemonList); // break reference
                                                     $tier = strtoupper($pkmn['tier']);
                                                     $baseTier = $tierMap[$tier] ?? 'default';
                                                 ?>
-                                                <div class="<?= $baseTier ?>-RosterColor">
+                                                <div class="rosterColor <?= $baseTier ?>-RosterColor">
                                                     <?= htmlspecialchars($tier); ?>
                                                 </div>
                                             </li>

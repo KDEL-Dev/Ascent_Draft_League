@@ -104,8 +104,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // List functions
-
-    
     function displayOu(list) { displayList(list, 'listOfOuPkmn', true); }
     function displayUu(list) { displayList(list, 'listOfUuPkmn', true); }
     function displayRu(list) { displayList(list, 'listOfRuPkmn', true); }
@@ -226,6 +224,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const ppPkmnNameCont = document.getElementById("ppPkmnNameCont");
             const ppTeamName = document.getElementById("ppTeamName");
             const ppStatCont = document.getElementById("ppStatCont");
+            const ppPkmnTierBg = document.getElementById("ppPkmnTierBg")
 
             if (!currentPickEl && !previousPickEl) return;
             
@@ -271,11 +270,55 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ppPkmnNameCont.innerHTML = `<h3>${data.previous_pick}</h3>`;
                 ppTeamName.innerHTML = `<h3>${data.previous_team}</h3>`;
 
+                
+
+                // Added tier
+                let rawTier = (data.previous_tier ?? "").toLowerCase().trim();
+
+                const tierMap = {
+                    ou: "ou",
+                    uubl: "ou",
+
+                    uu: "uu",
+                    rubl: "uu",
+
+                    ru: "ru",
+                    nubl: "ru",
+
+                    nu: "nu",
+                    zu: "nu",
+                    pu: "nu",
+                    zubl: "nu"
+                };
+
+                let tier = tierMap[rawTier] ?? "nu";
+
+                ppPkmnTierBg.textContent = data.previous_tier ?? "-";
+                ppPkmnTierBg.className = "";
+                ppPkmnTierBg.classList.add(`tier-text-${tier}`);
+
                 // Load pokedex + stats
                 const dex = await loadPokedex();
                 const pkmnData = dex[showdownId];
+                const ppPkmnType = document.getElementById("ppPkmnType");
 
-                if (pkmnData && pkmnData.baseStats) {
+                if (pkmnData.types && ppPkmnType) {
+                    ppPkmnType.innerHTML = "";
+
+                    pkmnData.types.forEach(type => {
+                        const p = document.createElement("p");
+                        p.textContent = type;
+
+                        const cleanType = type.toLowerCase();
+
+                        p.classList.add("type-badge", `type-${cleanType}`);
+
+                        ppPkmnType.appendChild(p);
+                    });
+                }
+
+                if (pkmnData && pkmnData.baseStats) 
+                {
                     const { hp, atk, def, spa, spd, spe } = pkmnData.baseStats;
 
                     ppStatCont.innerHTML = `
@@ -336,6 +379,56 @@ document.addEventListener("DOMContentLoaded", async () => {
             const myTeamName = document.body.dataset.teamName;
             const MAX_POKEMON_PER_USER = data.maxPokemon ?? 12; //CHANGED TO 12
 
+            const teamCountEl = document.getElementById("yourTeamCount");
+
+            if (teamCountEl) 
+            {
+                teamCountEl.textContent = data.myDraftedCount ?? 0;
+            }
+
+            // To add pokemon to the yourPicks section
+
+            function fillTier(container, picks, tierKey, labelText) {
+    if (!container) return;
+
+    const slots = container.querySelectorAll("p");
+
+    slots.forEach((slot, index) => {
+        if (picks[index]) {
+            slot.textContent = picks[index].name;
+        } else {
+            slot.textContent = labelText; // fallback placeholder
+        }
+    });
+}
+
+const tierMap = {
+    ou: "ou", uubl: "ou",
+    uu: "uu", rubl: "uu",
+    ru: "ru", nubl: "ru",
+    nu: "nu", zu: "nu", pu: "nu", zubl: "nu"
+};
+
+const grouped = {
+    ou: [],
+    uu: [],
+    ru: [],
+    nu: []
+};
+
+if (data.myPicks) {
+    data.myPicks.forEach(pkmn => {
+        const rawTier = (pkmn.tier ?? "").toLowerCase().trim();
+        const tier = tierMap[rawTier] ?? "nu";
+
+        grouped[tier].push(pkmn);
+    });
+}
+
+fillTier(document.getElementById("yourOu"), grouped.ou, "ou", "OU / UUBL");
+fillTier(document.getElementById("yourUu"), grouped.uu, "uu", "UU / RUBL");
+fillTier(document.getElementById("yourRu"), grouped.ru, "ru", "RU / NUBL");
+fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
 
             const canDraft =
                 (myTeamName === data.current_player) &&

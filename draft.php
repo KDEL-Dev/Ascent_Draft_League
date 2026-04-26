@@ -63,7 +63,7 @@
             <?php include 'includes/season_setting_header.php';?>
             
             <div class="pageNameCont">
-                <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                <img src="img/icons/PokeBall_Icon-color-filled.svg" alt="pokeball icon">
                 <div class="pageTitle">Draft</div>
                 <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
             </div>
@@ -93,71 +93,77 @@
                     <?php endif; ?>
                 </section>
             </section>
-            <section class="draftCont">
-                <!-- PREVIOUS DRAFT PICK -->
-                <section id="previousPick">
-                    <header>Drafted</header>
-                    <section id="previousPickInfo">
-                        <section id="ppTeamName"></section>
-                        <section id="ppPkmnCont">
-                            <section id="ppPkmnImgCont">
-                                <img src="https://img.pokemondb.net/sprites/scarlet-violet/normal/clefable.png">
-                                <section id="ppTeamName"></section>
-                            </section>             
-                        </section>
-                        <section class="ppFlexCol">
-                            <section id="ppPkmnNameCont"></section>
-                            <section id="ppPkmnType">
-                                <p>Fairy</p>
+            <section class="draftPickCont">
+                <section id="previousPickWidth">
+                    <!-- PREVIOUS DRAFT PICK -->
+                    <section id="previousPick">
+                        <header>Drafted</header>
+                        <section id="previousPickInfo">
+                            <section id="ppTeamName"></section>
+                            <section id="ppPkmnCont">
+                                <section id="ppPkmnImgCont">
+                                </section> 
+                                <section>
+                                    <h2 id="ppPkmnTierBg"></h2>
+                                </section>            
                             </section>
-                            <section id="ppStatCont"></section>
+                            <section class="ppFlexCol">
+                                <section id="ppPkmnNameCont"></section>
+                                <section id="ppPkmnType">
+                                    <!-- Dynamically created -->
+                                </section>
+                                <section id="ppStatCont"></section>
+                            </section>
                         </section>
                     </section>
-                </section>
+                
+            
 
-                <!-- CURRENT DRAFT PICK AND DRAFT INFO -->
-                 <section id="draftConsoleSticky">
-                    <section id="currentPick">
-                        <header>Current Pick</header>
-                        <section id="currentPickInfo">Stand By</section>
-                    </section>
-                    <section id="yourDraftCont">
-                        <section>
-                            <header id="yourDraftTeamName">
-                                Your Draft Information
-                                <!-- Switch this to team name -->
-                            </header>
+                    <!-- CURRENT DRAFT PICK AND DRAFT INFO -->
+                    <section id="draftConsoleSticky">
+                        <section id="currentPick">
+                            <header>Current Pick</header>
+                            <section id="currentPickInfo">Stand By</section>
                         </section>
-                        <section id="yourDraftInfo">
-                            <section id="yourDraftCountCont">
-                                <section>
-                                    <p>Roster Counter</p>
-                                </section>
-                                <section>
-                                    <h2><span id="yourTeamCount">0</span>0/12</h2>
-                                </section>
+                        <section id="yourDraftCont">
+                            <section>
+                                <header id="yourDraftTeamName">
+                                    Your Draft Information
+                                    <!-- Switch this to team name -->
+                                </header>
                             </section>
-                            <section id="yourDraft">
-                                <div class="yourPicks" id="yourOu">
-                                    <p>OU</p>
-                                    <p>Zamazenta</p>
-                                    <p>OU</p>
-                                </div>
-                                <div class="yourPicks" id="yourUu">
-                                    <p>UU</p>
-                                    <p>UU</p>
-                                    <p>UU</p>
-                                </div>
-                                <div class="yourPicks" id="yourRu">
-                                    <p>RU</p>
-                                    <p>RU</p>
-                                    <p>RU</p>
-                                </div>
-                                <div class="yourPicks" id="yourNu">
-                                    <p>Tauros-Paldea-Blaze</p>
-                                    <p>NU</p>
-                                    <p>NU</p>
-                                </div>
+                            <section id="yourDraftInfo">
+                                <section id="yourDraftCountCont">
+                                    <section>
+                                        <p>Roster Counter</p>
+                                    </section>
+                                    <section>
+                                        <h2><span id="yourTeamCount">0</span> / 12</h2>
+                                    </section>
+                                </section>
+                                <section id="yourDraft">
+                                    <div class="yourPicks" id="yourOu">
+                                        <p class="rosterTierText" data-tier="ou">OU / UUBL</p>
+                                        <p class="rosterTierText" data-tier="ou">OU / UUBL</p>
+                                        <p class="rosterTierText" data-tier="ou">OU / UUBL</p>
+                
+                                    </div>
+                                    <div class="yourPicks" id="yourUu">
+                                        <p class="rosterTierText" data-tier="uu">UU / RUBL</p>
+                                        <p class="rosterTierText" data-tier="uu">UU / RUBL</p>
+                                        <p class="rosterTierText" data-tier="uu">UU / RUBL</p>
+                                    </div>
+                                    <div class="yourPicks" id="yourRu">
+                                        <p class="rosterTierText" data-tier="ru">RU / NUBL</p>
+                                        <p class="rosterTierText" data-tier="ru">RU / NUBL</p>
+                                        <p class="rosterTierText" data-tier="ru">RU / NUBL</p>
+                                    </div>
+                                    <div class="yourPicks" id="yourNu">
+                                        <p class="rosterTierText" data-tier="nu">NU / BELOW</p>
+                                        <p class="rosterTierText" data-tier="nu">NU / BELOW</p>
+                                        <p class="rosterTierText" data-tier="nu">NU / BELOW</p>
+                                    </div>
+                                </section>
                             </section>
                         </section>
                     </section>
