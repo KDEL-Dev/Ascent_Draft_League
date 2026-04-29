@@ -2552,10 +2552,17 @@ footer
 /**************************************
             Edit Matchup Page 
  *************************************/
+ #editMatchFormCont
+ {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+ }
 
 #edit_matchup_form
 {
-    flex: 1;
+    min-width: fit-content;
 
     color: white;
 }

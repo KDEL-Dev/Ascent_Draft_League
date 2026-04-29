@@ -64,6 +64,8 @@ while ($row = $result->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/Ascent-White.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/Ascent-White.png">
     <script src="assets/js/script.js"></script>
 
     <title>Ascent - Matchups</title>
@@ -80,9 +82,9 @@ while ($row = $result->fetch_assoc()) {
                 <?php include 'includes/season_setting_header.php';?>
                 
                 <div class="pageNameCont">
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <img src="img/icons/PokeBall_Icon-color.svg" alt="pokeball icon">
                     <div class="pageTitle"> Match Ups</div>
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <img src="img/icons/PokeBall_Icon-color.svg" alt="pokeball icon">
                 </div>
             </header>
             <div>
@@ -145,7 +147,7 @@ while ($row = $result->fetch_assoc()) {
                                                 <section class="matchUpPlayerInfo">
                                                     <table class="matchUpStats">
                                                         <tr>
-                                                            <th colspan="3" class="matchUpTeamName"> Team 1</th>
+                                                            <th colspan="3" class="matchUpTeamName"> <?= htmlspecialchars($match['team1_name']) ?></th>
                                                         </tr>
                                                         <tr class="matchUpHeader">
                                                             <th >Name</th>
@@ -174,7 +176,7 @@ while ($row = $result->fetch_assoc()) {
                                                 <section class="matchUpPlayerInfo">
                                                     <table class="matchUpStats">
                                                         <tr>
-                                                            <th colspan="3" class="matchUpTeamName"> Team 2</th>
+                                                            <th colspan="3" class="matchUpTeamName"> <?= htmlspecialchars($match['team2_name']) ?></th>
                                                         </tr>
                                                         <tr class="matchUpHeader">
                                                             <th>Name</th>

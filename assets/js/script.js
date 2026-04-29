@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Get pokemon from db and store them in an array
     async function getShowdownDexFromDB() {
         try { // Use try catch when something may realistically fail or when you want something to not crash your site
-            const response = await fetch('/ascent_draft_league/api/get_pkmn_by_tier.php');
+            const response = await fetch('api/get_pkmn_by_tier.php');
             const pokedex = await response.json();
 
             // Create empty arrays to hold pokemon
@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     case "NU": case "PUBL": nuPokemon.push(pkmn); break;
                 }
             });
+
+            // Alphabetical Sort
+            ouPokemon.sort((a, b) => a.name.localeCompare(b.name));
+            uuPokemon.sort((a, b) => a.name.localeCompare(b.name));
+            ruPokemon.sort((a, b) => a.name.localeCompare(b.name));
+            nuPokemon.sort((a, b) => a.name.localeCompare(b.name));
 
             displayOu(ouPokemon);
             displayUu(uuPokemon);
@@ -103,6 +109,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    
+
     // List functions
     function displayOu(list) { displayList(list, 'listOfOuPkmn', true); }
     function displayUu(list) { displayList(list, 'listOfUuPkmn', true); }
@@ -127,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Insert Pokémon into DB
         insertPokemonBtn.addEventListener("click", async () => {
             try {
-                const response = await fetch('/ascent_draft_league/api/showdown_to_db/add_pokemon_to_db.php');
+                const response = await fetch('api/showdown_to_db/add_pokemon_to_db.php');
                 const data = await response.json();
 
                 // console.log("Insert Pokémon response:", data);
@@ -146,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Insert Pokémon tiers
         insertPkmnTierBtn.addEventListener("click", async () => {
             try {
-                const response = await fetch('/ascent_draft_league/api/showdown_to_db/insert_current_pokemon_tier.php');
+                const response = await fetch('api/showdown_to_db/insert_current_pokemon_tier.php');
                 const data = await response.json();
 
                 console.log("Insert tiers response:", data);
@@ -166,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     {
         try 
         {
-            const response = await fetch("/ascent_draft_league/api/draft/get_draft_order.php");
+            const response = await fetch("api/draft/get_draft_order.php");
             const data = await response.json();
             renderDraftOrder(data);
         } 
@@ -203,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     {
         if (!pokedexData) 
         {
-            const res = await fetch('/ascent_draft_league/showdownData/pokedex.json');
+            const res = await fetch('showdownData/pokedex.json');
             pokedexData = await res.json();
         }
         return pokedexData;
@@ -215,7 +223,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     {
         try 
         {
-            const response = await fetch('/ascent_draft_league/api/draft_auto_update.php');
+            const response = await fetch('api/draft_auto_update.php');
             const data = await response.json();
 
             const currentPickEl = document.getElementById("currentPickInfo");
@@ -479,7 +487,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!confirm(`Draft ${pkmn.name}?`)) return;
 
         try {
-            const response = await fetch("/ascent_draft_league/api/draft/draft_pkmn.php", {
+            const response = await fetch("api/draft/draft_pkmn.php", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ showdown_pkmn: pkmn.id })
@@ -535,7 +543,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         randomizeBtn.addEventListener("click", async () => {
             if (!confirm("Randomize draft order?")) return;
             try {
-                const response = await fetch("/ascent_draft_league/api/randomize_draft.php");
+                const response = await fetch("api/randomize_draft.php");
                 const data = await response.json();
                 if (data.error) return alert("Randomization failed: " + data.error);
                 renderDraftOrder(data);
@@ -557,7 +565,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!confirm("Start draft for ALL users?")) return;
 
             try {
-                const res = await fetch('/ascent_draft_league/api/draft/start_draft.php', {
+                const res = await fetch('api/draft/start_draft.php', {
                     method: 'POST'
                 });
 
@@ -599,7 +607,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         clearDraftBtn.addEventListener("click", async () => {
             if(!confirm("Are you sure you want to reset the draft?")) return;
             try {
-                const response = await fetch('/ascent_draft_league/api/draft/clear_draft.php', { method: 'POST' });
+                const response = await fetch('api/draft/clear_draft.php', { method: 'POST' });
                 const data = await response.json();
                 if(!response.ok) throw new Error(data.error || "Failed to reset draft");
                 alert("Draft reset successfully.");
@@ -624,7 +632,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!confirm("Skip the current pick?")) return;
 
             try {
-                const res = await fetch('/ascent_draft_league/api/draft/skip_pick.php', {
+                const res = await fetch('api/draft/skip_pick.php', {
                     method: 'POST'
                 });
 
@@ -659,7 +667,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!confirm("End the draft for all users?")) return;
 
             try {
-                const res = await fetch('/ascent_draft_league/api/draft/end_draft.php', {
+                const res = await fetch('api/draft/end_draft.php', {
                     method: 'POST'
                 });
 
@@ -784,7 +792,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function displayDraftResults() {
         if (!recapTableBody) return;
 
-        fetch('/ascent_draft_league/api/draft/get_draft_result.php')
+        fetch('api/draft/get_draft_result.php')
         .then(res => res.json())
         .then(data => {
             // recapFlexCont.innerHTML = "";
@@ -853,7 +861,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function getShowdownDexForSwap() {
         try { // Use try catch when something may realistically fail or when you want something to not crash your site
-            const response = await fetch('/ascent_draft_league/api/get_pkmn_by_tier.php');
+            const response = await fetch('api/get_pkmn_by_tier.php');
             const pokedex = await response.json();
 
             // Create empty arrays to hold pokemon
@@ -933,7 +941,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     {
         try 
         {
-            const res = await fetch('/ascent_draft_league/api/pokebox/get_swaps_remaining.php');
+            const res = await fetch('api/pokebox/get_swaps_remaining.php');
             const data = await res.json();
 
             const movesEl = document.getElementById("movesRemaining");
@@ -1017,7 +1025,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         let availablePkmn;
 
         try {
-            const res = await fetch(`/ascent_draft_league/api/pokebox/get_pkmn_by_id.php?id=${addId}`);
+            const res = await fetch(`api/pokebox/get_pkmn_by_id.php?id=${addId}`);
             availablePkmn = await res.json();
 
             if (!availablePkmn || availablePkmn.error) {
@@ -1043,7 +1051,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         let roster;
 
-        const res = await fetch('/ascent_draft_league/api/user/get_user_roster.php');
+        const res = await fetch('api/user/get_user_roster.php');
 
         if (!res.ok) {
             console.error("Roster request failed:", res.status);
@@ -1120,7 +1128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
                 try {
-                    const res = await fetch('/ascent_draft_league/api/pokebox/swap_pkmn.php', {
+                    const res = await fetch('api/pokebox/swap_pkmn.php', {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -1219,7 +1227,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const homeRoster = document.getElementById('homePkmnList');
             if (!homeRoster) return;
 
-            fetch('/ascent_draft_league/api/overview/get_active_user_roster.php')
+            fetch('api/overview/get_active_user_roster.php')
             .then(res => res.json())
             .then(data => {
                 homeRoster.innerHTML = "";
@@ -1317,7 +1325,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!teamOne || !teamTwo) return;
 
         try {
-            const res = await fetch('/ascent_draft_league/api/matchup/get_active_teams.php');
+            const res = await fetch('api/matchup/get_active_teams.php');
             const teams = await res.json();
             teams.forEach(team => {
                 const option1 = document.createElement('option');
@@ -1382,10 +1390,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             try 
             {
                 
-                const res1 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
+                const res1 = await fetch(`api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
                 const team1Pkmn = await res1.json();
 
-                const res2 = await fetch(`/ascent_draft_league/api/matchup/get_team_roster.php?active_user_id=${team2Id}`);
+                const res2 = await fetch(`api/matchup/get_team_roster.php?active_user_id=${team2Id}`);
                 const team2Pkmn = await res2.json();
 
                 renderPokemonSelection('team1Container', team1Pkmn, 1);
@@ -1543,7 +1551,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             try 
             {
-                const res = await fetch('/ascent_draft_league/api/matchup/submit_matchup.php', {
+                const res = await fetch('api/matchup/submit_matchup.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ player1, player2, stats, replayLink, winner: winnerValue })
@@ -1552,7 +1560,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (data.status === "success") {
                     alert("Matchup saved!");
-                    window.location.href = '/ascent_draft_league/matchup.php';
+                    window.location.href = 'matchup.php';
                 } else {
                     alert("Error: " + data.message);
                 }
@@ -1583,7 +1591,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try 
         {
-            const res = await fetch('/ascent_draft_league/api/matchup/delete_matchup.php', {
+            const res = await fetch('api/matchup/delete_matchup.php', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ matchup_id: matchId })
@@ -1618,7 +1626,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!matchId) return;
 
         // redirect to edit page
-        window.location.href = `/ascent_draft_league/edit_matchup.php?matchup_id=${matchId}`;
+        window.location.href = `edit_matchup.php?matchup_id=${matchId}`;
     });
 
 
@@ -1626,7 +1634,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (typeof matchupId === "undefined") return;
 
         try {
-            const res = await fetch(`/ascent_draft_league/api/matchup/get_matchup.php?matchup_id=${matchupId}`);
+            const res = await fetch(`api/matchup/get_matchup.php?matchup_id=${matchupId}`);
             const data = await res.json();
 
             if (data.status !== "success") {
@@ -1715,7 +1723,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             try {
-                const res = await fetch('/ascent_draft_league/api/matchup/update_matchup.php', {
+                const res = await fetch('api/matchup/update_matchup.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -1725,7 +1733,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (result.status === "success") {
                     alert("Matchup updated!");
-                    window.location.href = '/ascent_draft_league/matchup.php';
+                    window.location.href = 'matchup.php';
                 } else {
                     alert("Error: " + result.message);
                 }
@@ -1752,7 +1760,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!tbody) return;
 
         try {
-            const res = await fetch('/ascent_draft_league/api/standings/get_standings.php');
+            const res = await fetch('api/standings/get_standings.php');
             const data = await res.json();
 
             tbody.innerHTML = "";
@@ -1799,7 +1807,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if(!confirm("Are you sure you want to delete all matchups? This cannot be undone!")) return;
 
                 try {
-                    const response = await fetch('/ascent_draft_league/api/matchup/delete_all_matchups.php', { method: 'POST' });
+                    const response = await fetch('api/matchup/delete_all_matchups.php', { method: 'POST' });
                     const data = await response.json();
                     if(!response.ok) throw new Error(data.error || "Failed to clear matchups");
                     
@@ -1827,7 +1835,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const seasonId = editRolePageEl.dataset.season;
 
     try {
-        const response = await fetch("/ascent_draft_league/api/admin/update_roles.php");
+        const response = await fetch("api/admin/update_roles.php");
         const users = await response.json();
 
         users.forEach(user => {
@@ -1866,7 +1874,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // Update role on change
                 const competitorValue = user.competitor ?? "no";
                 roleSelect.addEventListener("change", async () => {
-                    await fetch("/ascent_draft_league/api/admin/update_roles.php", {
+                    await fetch("api/admin/update_roles.php", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({
@@ -1892,7 +1900,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             competitorSelect.addEventListener("change", async () => {
-                await fetch("/ascent_draft_league/api/admin/update_roles.php", {
+                await fetch("api/admin/update_roles.php", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({

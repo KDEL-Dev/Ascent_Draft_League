@@ -51,6 +51,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/Ascent-White.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/Ascent-White.png">
     <script src="assets/js/script.js"></script>
 
     <title>Ascent - League Information</title>
@@ -67,9 +69,9 @@
                 <?php include 'includes/season_setting_header.php';?>
                 
                 <div class="pageNameCont">
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <img src="img/icons/PokeBall_Icon-color.svg" alt="pokeball icon">
                     <div class="pageTitle"> League Information</div>
-                    <img src="img/icons/PokeBall_Icon.svg" alt="pokeball icon">
+                    <img src="img/icons/PokeBall_Icon-color.svg" alt="pokeball icon">
                 </div>
             </header>
             <div>

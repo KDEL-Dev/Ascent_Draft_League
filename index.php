@@ -116,6 +116,8 @@ if (!isset($_SESSION['user_id']))
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/Ascent-White.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/Ascent-White.png">
     <script src="assets/js/script.js"></script>
 
     <title>Ascent - Overview</title>

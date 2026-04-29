@@ -42,5 +42,5 @@ if ($stmt->execute()) {
 $stmt->close();
 $conn->close();
 
-header("Location: /ascent_draft_league/admin.php?swaps=updated");
+header("Location: ../../admin.php?swaps=updated");
 exit;

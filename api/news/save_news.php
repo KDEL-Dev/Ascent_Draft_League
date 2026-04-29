@@ -19,6 +19,6 @@
     $stmt->bind_param("si", $news, $seasonId);
     $stmt->execute();
 
-    header("Location: /ascent_draft_league/index.php");
+    header("Location: ../../index.php");
     exit;
 ?>

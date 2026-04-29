@@ -24,6 +24,8 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/Ascent-White.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/Ascent-White.png">
     <script src="assets/js/script.js"></script>
 
     <title>Ascent - Admin Settings</title>
@@ -47,15 +49,17 @@ session_start();
             <div class="pageLayout">
                 <main class="centerMain">
                     <section class="adminContentCont">
-                        <div class="adminSettingsCont">
-                            <div class="adminSettingsHeader">Database</div>
-                            <div>
-                                <button id="insertPokemonBtn" class="adminSettingsBtn">Update Pokemon Database</button>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'owner'): ?>
+                            <div class="adminSettingsCont">
+                                <div class="adminSettingsHeader" >Database</div>
+                                <div>
+                                    <button id="insertPokemonBtn" class="adminSettingsBtn">Update Pokemon Database</button>
+                                </div>
+                                <div>
+                                    <button id="insertPkmnTierBtn" class="adminSettingsBtn">Insert Current Pokémon Tiers</button>
+                                </div>
                             </div>
-                            <div>
-                                <button id="insertPkmnTierBtn" class="adminSettingsBtn">Insert Current Pokémon Tiers</button>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                         <div class="adminSettingsCont">
                             <div class="adminSettingsHeader">Pre-Draft Resets</div>
                             <div>
@@ -69,7 +73,7 @@ session_start();
                         <div class="adminSettingsCont">
                             <div class="adminSettingsHeader">League Management</div>
                              <div>
-                                <a href="/ascent_draft_league/edit_role.php" class="adminSettingsBtn">Users Management</a>
+                                <a href="edit_role.php" class="adminSettingsBtn">Users Management</a>
                             </div>
                             <div>
                                 <p class="adminSectionTitle">Ovewview/League Information</p>
