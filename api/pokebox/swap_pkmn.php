@@ -23,6 +23,29 @@
         exit;
     }
 
+    // Master Kill Switch - Turn off swap for everyone
+
+    $stmt = $conn->prepare("
+        SELECT swaps_enabled
+        FROM draft_info
+        WHERE season_id = ?
+        LIMIT 1
+    ");
+    $stmt->bind_param("i", $seasonId);
+    $stmt->execute();
+    $settings = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if (!$settings || $settings['swaps_enabled'] == 0) {
+        echo json_encode([
+            "status" => "error",
+            "error" => "Swaps are currently disabled"
+        ]);
+        exit;
+    }
+
+    // Grabbing pokemon tier i believe
+    
     $stmt = $conn->prepare("
         SELECT s.id, s.name, t.tier
         FROM showdown_pkmn s
@@ -106,6 +129,30 @@
         exit;
     }
 
+    $stmt = $conn->prepare("
+        SELECT swaps_remaining, id
+        FROM active_users
+        WHERE user_id = ? AND season_id = ?
+        LIMIT 1
+    ");
+    $stmt->bind_param("ii", $userId, $seasonId);
+    $stmt->execute();
+    $userData = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if (!$userData) {
+        echo json_encode(["status" => "error", "error" => "User not found"]);
+        exit;
+    }
+
+    if ($userData['swaps_remaining'] <= 0) {
+        echo json_encode([
+            "status" => "error",
+            "error" => "No swaps remaining"
+        ]);
+        exit;
+    }
+
    
     $conn->begin_transaction();
 
@@ -152,6 +199,19 @@
         );
         $stmt->execute();
         $stmt->close();
+
+        // added swap remaining
+
+        $stmt = $conn->prepare("
+            UPDATE active_users
+            SET swaps_remaining = swaps_remaining - 1
+            WHERE id = ?
+        ");
+        $stmt->bind_param("i", $userData['id']);
+        $stmt->execute();
+        $stmt->close();
+
+        // ends here
 
         $conn->commit();
 

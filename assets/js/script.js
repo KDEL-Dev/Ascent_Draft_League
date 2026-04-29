@@ -929,9 +929,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     //     await initSwapPage();
     // }
 
+    async function loadSwapsRemaining(confirmBtn = null) 
+    {
+        try 
+        {
+            const res = await fetch('/ascent_draft_league/api/pokebox/get_swaps_remaining.php');
+            const data = await res.json();
+
+            const movesEl = document.getElementById("movesRemaining");
+
+            if (movesEl) {
+                movesEl.textContent = data.swaps_remaining ?? 0;
+            }
+
+            if (data.swaps_remaining <= 0) {
+                if (confirmBtn) confirmBtn.disabled = true;
+            }
+
+        } 
+        catch (err) 
+        {
+            console.error("Failed to load swaps remaining:", err);
+        }
+    }
+
+    // CHECK SWAP STATUUS
+    async function checkSwapStatus() 
+    {
+        try {
+            const res = await fetch('api/pokebox/get_swap_status.php');
+            const data = await res.json();
+
+            const lockedMsg = document.getElementById("swapLockedMsg");
+            const confirmBtn = document.getElementById("confirmSwapBtn");
+
+            if (!data.swaps_enabled) {
+                if (lockedMsg) lockedMsg.style.display = "block";
+                if (confirmBtn) confirmBtn.disabled = true;
+            } else {
+                if (lockedMsg) lockedMsg.style.display = "none";
+            }
+
+        } catch (err) {
+            console.error("Failed to check swap status:", err);
+        }
+    }
+
     
 
-    async function initSwapPage() {
+    async function initSwapPage() 
+    {
 
         // -------------------------
         //      GET URL PARAM
@@ -959,6 +1006,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Swap page missing elements");
             return;
         }
+
+        await loadSwapsRemaining(confirmBtn);
         
 
         // -------------------------
@@ -1051,6 +1100,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // console.log("ROSTER:", roster);
 
+        // GET SWAP STATUS
+
+    
+
         // -------------------------
         // STEP 6: SUBMIT SWAP
         // -------------------------
@@ -1082,6 +1135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     if (data.status === "success") {
                         alert("Swap completed!");
+                        await loadSwapsRemaining(confirmBtn);
                         window.location.href = "pokebox.php";
                     } else {
                         alert(data.error || "Swap failed");
@@ -1092,6 +1146,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 {
                     console.error("Swap failed:", err);
                 }
+
+                
             });
         }
     }
@@ -1110,7 +1166,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isSwapPage) {
     await getShowdownDexForSwap();
     await initSwapPage();
+    await checkSwapStatus();
 }
+
+    // TOGGLE SWAP BUTTONS
+
+    document.getElementById("toggleSwapsBtn")?.addEventListener("click", async () => {
+        const res = await fetch('api/pokebox/toggle_swaps.php');
+        const data = await res.json();
+
+        if (data.status === "success") {
+            alert("Swap setting updated");
+        }
+    });
+
+    // RESET SWAP NUMBER
+
+    document.getElementById("resetSwapsBtn")?.addEventListener("click", async () => {
+        const value = document.getElementById("swapResetValue").value;
+
+        if (!value) {
+            alert("Enter a value");
+            return;
+        }
+
+        const res = await fetch('api/pokebox/reset_swaps.php', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ value })
+        });
+
+        const data = await res.json();
+
+        if (data.status === "success") {
+            alert("Swaps reset for all users");
+        }
+    });
+
+
+
+    
+
+    
 
     // -------------------
     // OVERVIEW PAGE

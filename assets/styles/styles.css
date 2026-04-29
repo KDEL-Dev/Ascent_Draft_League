@@ -2899,9 +2899,8 @@ footer
     margin: 0 20px 20px 20px;
     padding: 40px;
 
-    width: 100%;
-    max-width: 900px;
-    max-height: 600px;
+    flex: 1;
+    height: fit-content;
 
     color: white;
     font-family: "jura";
@@ -2911,18 +2910,19 @@ footer
 
 
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
     flex-wrap: wrap;
  }
 
 .adminSettingsCont
 {
     padding: 20px;
-    margin: 0 20px;
+    margin: 20px;
 
     border: white 1px solid;
-    height: 400px;
+    min-height: 200px;
+    width: 300px;
     color: white;
     font-size: 2em;
     font-family: "jura";
@@ -3113,7 +3113,27 @@ footer
 {
     transform: scale(1.05);
 }
- 
+
+#swapLockedMsg {
+    display: none;
+}
+
+#swapLockedMsg p
+{
+    margin: 0;
+    padding: 15px 0;
+
+    color: red;
+    font-weight: bold;
+    font-family: "Jura";
+    font-size: 1.1em;
+
+    border-top: red 3px dashed;
+    border-bottom: red 3px dashed;
+
+}
+
+
 
  /************************ 
         TABLET View 

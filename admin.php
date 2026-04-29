@@ -48,31 +48,31 @@ session_start();
                 <main class="centerMain">
                     <section class="adminContentCont">
                         <div class="adminSettingsCont">
-                            <div class="adminSettingsHeader">League Initial Setup</div>
+                            <div class="adminSettingsHeader">Database</div>
                             <div>
                                 <button id="insertPokemonBtn" class="adminSettingsBtn">Update Pokemon Database</button>
                             </div>
                             <div>
                                 <button id="insertPkmnTierBtn" class="adminSettingsBtn">Insert Current Pokémon Tiers</button>
                             </div>
-                            <div>
-                                <p class="adminSectionTitle">Resets</p>
-                            </div>
+                        </div>
+                        <div class="adminSettingsCont">
+                            <div class="adminSettingsHeader">Pre-Draft Resets</div>
                             <div>
                                 <button id="clearMatchupBtn" class="adminSettingsBtn">Clear All Matchups</button>
                             </div>
                             <div>
                                 <button id="clearDraftBtn" class="adminSettingsBtn">Reset Draft & Rosters</button>
                             </div>
-                           
                         </div>
+
                         <div class="adminSettingsCont">
                             <div class="adminSettingsHeader">League Management</div>
                              <div>
                                 <a href="/ascent_draft_league/edit_role.php" class="adminSettingsBtn">Users Management</a>
                             </div>
                             <div>
-                                <p class="adminSectionTitle">Written Content Update</p>
+                                <p class="adminSectionTitle">Ovewview/League Information</p>
                             </div>
                             <div>
                                 <button class="adminSettingsBtn">
@@ -83,6 +83,18 @@ session_start();
                                 <button class="adminSettingsBtn" id="updateLeagueInfoBtn">
                                     <a href="edit_league_info.php">Update - League Information </a>
                                 </button>
+                            </div>
+                            
+                        </div>
+                        <div class="adminSettingsCont">
+                            <div class="adminSettingsHeader">Transactions</div>
+                                <div>
+                                    <button id="toggleSwapsBtn" class="adminSettingsBtn" >Toggle Swaps</button>
+                                </div>
+                            <div>
+                                <a href="edit_swaps.php" class="adminSettingsBtn">
+                                    Reset Swap Count
+                                </a>
                             </div>
                         </div>
                     </section>

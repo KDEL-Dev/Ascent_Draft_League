@@ -44,6 +44,12 @@
         <section>
             <main class="centerMain">
                 <section class="shortContentCont">
+                    <section id="swapLockedMsg">
+                        <p>Swaps are not permitted at this time</p>
+                    </section>
+                    <section id="swapTransactionsCont">
+                        <p>Transactions Remaining: <span id="movesRemaining"></span></p>
+                    </section>
                     <section class="swapPkmnCol">
                         <label>Selected Pokemon:</label>
                         <input id="availablePkmnName" type="text" disabled>
