@@ -36,6 +36,6 @@
         $stmt->execute();
     }
 
-    header("Location: /ascent_draft_league/league_information.php");
+    header("Location: ../../league_information.php");
     exit;
 ?>

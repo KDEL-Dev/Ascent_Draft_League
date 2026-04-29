@@ -1058,7 +1058,7 @@ footer
 
 .draftCont
 {
-    margin: 0 20px 20px 20px;
+    margin: 0 20px ;
 
     min-height: 200px;
     background-color: black;
@@ -1477,6 +1477,8 @@ footer
     background-color: white;
 }
 
+
+
 #draftConsoleSticky
 {
     width: 100%;
@@ -1749,6 +1751,43 @@ footer
 {
     color: black;
     background-color: white;
+}
+
+/* 
+    DRAFT TOGGLE BUTTONS
+*/
+
+.draftTogglesCont
+{
+    margin: 10px 20px ;
+    flex: 1;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.draftTogglesCont button
+{
+    padding: 10px;
+
+    font-family: "jura";
+    font-weight: bold;
+    border-radius: 10px;
+    background-image: linear-gradient(to top, #092017, #258662);
+    color: white;
+    border: none;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    display: inline-block;
+    
+}
+
+.draftTogglesCont button.active
+{
+    background-image: linear-gradient(to top, #FFAE52, #FFE284);
+    color: black;
+
 }
 
 /******************************* 

@@ -93,6 +93,20 @@
                     <?php endif; ?>
                 </section>
             </section>
+
+            <section class="draftTogglesCont">
+                <section>
+                    <button id="draftMainDisplay">Draft Team View</button>
+                    <button id="draftDisplayAllBtn">Display All Tiers</button> 
+                </section>
+                <section>
+                    <button id="displayOuBtn">Display OU </button>
+                    <button id="displayUuBtn">Display UU </button>
+                    <button id="displayRuBtn">Display RU </button>
+                    <button id="displayNuBtn">Display NU </button>
+                </section>
+            </section>
+
             <section class="draftPickCont">
                 <section id="previousPickWidth">
                     <!-- PREVIOUS DRAFT PICK -->

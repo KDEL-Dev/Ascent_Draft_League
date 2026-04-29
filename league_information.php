@@ -51,7 +51,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/styles/styles.css">
-    <script src="/ascent_draft_league/assets/js/script.js"></script>
+    <script src="assets/js/script.js"></script>
 
     <title>Ascent - League Information</title>
 </head>

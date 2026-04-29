@@ -252,9 +252,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const base = "https://img.pokemondb.net/sprites/scarlet-violet/normal/";
 
-                const url1 = `${base}${pokeName}.png`;
+                // const url1 = `${base}${pokeName}.png`;
 
-                const url2 = `${base}${pokeName
+                // const url2 = `${base}${pokeName
+                //     .replace('-galar', '-galarian')
+                //     .replace('-hisui', '-hisuian')
+                //     .replace('-paldea', '-paldean')
+                //     .replace('-alola', '-alolan')
+                //     .replace('-f', '-female')
+
+                // }.png`;
+
+                const cleanName = pokeName
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')   // fixes "iron hands" → "iron-hands"
+                    .replace(/^-|-$/g, '');        // trims extra dashes
+
+                const url1 = `${base}${cleanName}.png`;
+
+                const url2 = `${base}${cleanName
                     .replace('-galar', '-galarian')
                     .replace('-hisui', '-hisuian')
                     .replace('-paldea', '-paldean')
@@ -375,6 +391,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (currentPickEl) currentPickEl.textContent = data.current_player ?? "Waiting...";
             // if (previousPickEl) previousPickEl.textContent = data.previous_pick ?? "-";
+            
 
             const myTeamName = document.body.dataset.teamName;
             const MAX_POKEMON_PER_USER = data.maxPokemon ?? 12; //CHANGED TO 12
@@ -389,61 +406,62 @@ document.addEventListener("DOMContentLoaded", async () => {
             // To add pokemon to the yourPicks section
 
             function fillTier(container, picks, tierKey, labelText) {
-    if (!container) return;
+            if (!container) return;
 
-    const slots = container.querySelectorAll("p");
+            const slots = container.querySelectorAll("p");
 
-    slots.forEach((slot, index) => {
-        if (picks[index]) {
-            slot.textContent = picks[index].name;
-        } else {
-            slot.textContent = labelText; // fallback placeholder
+            slots.forEach((slot, index) => {
+                if (picks[index]) {
+                    slot.textContent = picks[index].name;
+                } else {
+                    slot.textContent = labelText; // fallback placeholder
+                }
+            });
         }
-    });
-}
 
-const tierMap = {
-    ou: "ou", uubl: "ou",
-    uu: "uu", rubl: "uu",
-    ru: "ru", nubl: "ru",
-    nu: "nu", zu: "nu", pu: "nu", zubl: "nu"
-};
+        const tierMap = {
+            ou: "ou", uubl: "ou",
+            uu: "uu", rubl: "uu",
+            ru: "ru", nubl: "ru",
+            nu: "nu", zu: "nu", pu: "nu", zubl: "nu"
+        };
 
-const grouped = {
-    ou: [],
-    uu: [],
-    ru: [],
-    nu: []
-};
+        const grouped = {
+            ou: [],
+            uu: [],
+            ru: [],
+            nu: []
+        };
 
-if (data.myPicks) {
-    data.myPicks.forEach(pkmn => {
-        const rawTier = (pkmn.tier ?? "").toLowerCase().trim();
-        const tier = tierMap[rawTier] ?? "nu";
-
-        grouped[tier].push(pkmn);
-    });
-}
-
-fillTier(document.getElementById("yourOu"), grouped.ou, "ou", "OU / UUBL");
-fillTier(document.getElementById("yourUu"), grouped.uu, "uu", "UU / RUBL");
-fillTier(document.getElementById("yourRu"), grouped.ru, "ru", "RU / NUBL");
-fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
-
-            const canDraft =
-                (myTeamName === data.current_player) &&
-                (data.myDraftedCount < MAX_POKEMON_PER_USER);
-
-            toggleDraftButtons(canDraft);
-
-        } 
-        catch (err) 
+        if (data.myPicks) 
         {
-            console.error("Failed to load draft state:", err);
+            data.myPicks.forEach(pkmn => {
+                const rawTier = (pkmn.tier ?? "").toLowerCase().trim();
+                const tier = tierMap[rawTier] ?? "nu";
+
+                grouped[tier].push(pkmn);
+            });
         }
 
-        return true;
-    }
+            fillTier(document.getElementById("yourOu"), grouped.ou, "ou", "OU / UUBL");
+            fillTier(document.getElementById("yourUu"), grouped.uu, "uu", "UU / RUBL");
+            fillTier(document.getElementById("yourRu"), grouped.ru, "ru", "RU / NUBL");
+            fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
+
+                    const canDraft =
+                        (myTeamName === data.current_player) &&
+                        (data.myDraftedCount < MAX_POKEMON_PER_USER);
+
+                    toggleDraftButtons(canDraft);
+
+                } 
+                catch (err) 
+                {
+                    console.error("Failed to load draft state:", err);
+                }
+
+                return true;
+            }
 
     function toggleDraftButtons(enable) 
     {
@@ -661,7 +679,98 @@ fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
         });
     }
 
-    
+    // ---------------------
+    // DRAFT DISPLAY BUTTONS
+    // ---------------------
+
+    // elements
+        const draftPickCont = document.querySelector(".draftPickCont");
+        const metaConts = document.querySelectorAll(".metaCont");
+
+        const btnDraft = document.querySelector("#draftMainDisplay");
+        const btnAll = document.querySelector("#draftDisplayAllBtn");
+        const btnOu = document.querySelector("#displayOuBtn");
+        const btnUu = document.querySelector("#displayUuBtn");
+        const btnRu = document.querySelector("#displayRuBtn");
+        const btnNu = document.querySelector("#displayNuBtn");
+
+        const allButtons = document.querySelectorAll(".draftTogglesCont button");
+
+        if (btnDraft && btnAll && btnOu && btnUu && btnRu && btnNu) 
+        {
+    // ---------------- state ----------------
+            let activeView = "default";
+
+            function hideAll() {
+                draftPickCont.style.display = "none";
+                metaConts.forEach(cont => cont.style.display = "none");
+            }
+
+            function resetActive() {
+                allButtons.forEach(b => b.classList.remove("active"));
+            }
+
+            function showDefault() {
+                draftPickCont.style.display = "flex";
+                metaConts.forEach(cont => cont.style.display = "flex");
+                resetActive();
+                activeView = "default";
+            }
+
+            function showDraft() {
+                hideAll();
+                draftPickCont.style.display = "flex";
+            }
+
+            function showAllTiers() {
+                hideAll();
+                metaConts.forEach(cont => cont.style.display = "flex");
+            }
+
+            function showTier(tierClass) {
+                hideAll();
+                metaConts.forEach(cont => {
+                    if (cont.querySelector("." + tierClass)) {
+                        cont.style.display = "flex";
+                    }
+                });
+            }
+
+            function setActive(button) {
+                resetActive();
+                if (button) button.classList.add("active");
+            }
+
+            btnDraft.addEventListener("click", () => {
+                if (activeView === "draft") return showDefault();
+                showDraft();
+                setActive(btnDraft);
+                activeView = "draft";
+            });
+
+            btnAll.addEventListener("click", () => {
+                if (activeView === "all") return showDefault();
+                showAllTiers();
+                setActive(btnAll);
+                activeView = "all";
+            });
+
+            function handleTier(button, name) {
+                button.addEventListener("click", () => {
+                    if (activeView === name) return showDefault();
+                    showTier(name);
+                    setActive(button);
+                    activeView = name;
+                });
+            }
+
+            handleTier(btnOu, "ouPool");
+            handleTier(btnUu, "uuPool");
+            handleTier(btnRu, "ruPool");
+            handleTier(btnNu, "nuPool");
+
+            showDefault();
+        }
 
     // -------------------
     // DRAFT RECAP
@@ -850,6 +959,7 @@ fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
             console.error("Swap page missing elements");
             return;
         }
+        
 
         // -------------------------
         //      LOAD FREE POKEMON
@@ -1031,23 +1141,7 @@ fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
     // LEAGUE INFORMATION
     // -------------------
 
-    function loadRulesFormatFromDb() {
-        const ruleList = document.getElementById("ruleList");
-        if (!ruleList) return;
-
-        fetch('/ascent_draft_league/api/league_information/get_league_information.php')
-        .then(res => res.json())
-        .then(data => {
-            ruleList.innerHTML = "";
-            data.rules?.forEach(rule => {
-                const li = document.createElement("li");
-                li.textContent = rule;
-                ruleList.appendChild(li);
-            });
-        })
-        .catch(err => console.error("Rules failed to load:", err));
-    }
-    loadRulesFormatFromDb();
+    
 
     const updateLeagueInfoBtn = document.getElementById("updateLeagueInfoBtn");
     const modal = document.getElementById("editLeagueInfoModal");
@@ -1066,7 +1160,7 @@ fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
     }
 
     function loadLeagueInfo() {
-        fetch('/ascent_draft_league/api/league_information/get_league_information.php')
+        fetch('api/league_information/get_league_information.php')
         .then(res => res.json())
         .then(data => {
             const draftDate = document.getElementById("draftDate");
@@ -1094,7 +1188,7 @@ fillTier(document.getElementById("yourNu"), grouped.nu, "nu", "NU / BELOW");
         leagueInfoForm.addEventListener("submit", function(e){
             e.preventDefault();
             const formData = new FormData(this);
-            fetch('/ascent_draft_league/api/league_information/update_league_information.php', {
+            fetch('api/league_information/update_league_information.php', {
                 method:"POST",
                 body:formData
             })
