@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     case "OU": case "UUBL": ouPokemon.push(pkmn); break;
                     case "UU": case "RUBL": uuPokemon.push(pkmn); break;
                     case "RU": case "NUBL": ruPokemon.push(pkmn); break;
-                    case "NU": case "PUBL": nuPokemon.push(pkmn); break;
+                    case "NU": case "PUBL": case "PU" : case "ZUBL" : nuPokemon.push(pkmn); break;
                 }
             });
 

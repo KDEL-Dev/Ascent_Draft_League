@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="login.php">
         <img id="registerLogo" src="img/Ascent Horizontal Text.svg" alt="site logo">
     </a>
-    <form method="POST" action="register.php">
+    <form method="POST" action="register.php" id="registerForm">
         <div class="editTeamCol">
             <label>Email</label>
             <input type="email" name="email" required>
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="password" name="password_confirm" required>
         </div>
 
-        <div class="formRow">
+        <div class="formFlex">
             <div class="editTeamCol">
                 <label>Team Abbreviation (5 chars max)</label>
                 <input 

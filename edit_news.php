@@ -56,7 +56,7 @@
                     <section class="contentBtnCont">
                         <a id="newMatchBtn" href="admin.php">Return</a>
                     </section>
-                    <form id="editLeagueInfoForm" action="/ascent_draft_league/api/news/save_news.php" method="post">
+                    <form id="editLeagueInfoForm" action="api/news/save_news.php" method="post">
                         <div class="editTeamCol">
                             <label for="news">News</label>
                             <textarea name="news" id="news" rows="5" style="width: 100%;"><?= htmlspecialchars($infoResult['news']) ?></textarea>

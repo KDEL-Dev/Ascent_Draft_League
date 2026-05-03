@@ -354,7 +354,8 @@ Navigation Menu
 
 #registerLayout 
 {
-    min-height: 100vh;
+    min-height: 100dvh;
+    flex: 1;
     gap: 20px;
 
     color: white;
@@ -368,28 +369,20 @@ Navigation Menu
     
 }
 
+
+
 #registerForm 
 {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-#registerForm input 
-{
-    padding: 10px;
-    font-size: 1.2em;
-    width: 300px;
-}
+   margin: 0 10px;
+}    
 
 #registerForm button 
 {
     padding: 10px;
-    font-size: 1.2em;
     cursor: pointer;
 }
 
-.formRow
+.formFlex
 {
     gap: 20px;
 
@@ -399,7 +392,8 @@ Navigation Menu
 
 #registerLogo
 {
-    width: 500px;
+    width: 100%;
+    max-width: 450px; /* or whatever looks good */
     height: auto;
 }
 
@@ -3280,7 +3274,9 @@ footer
     }
  }
 
- /* PHONE VIEW */
+ /***************
+    PHONE VIEW 
+ ****************/
 
  @media (max-width: 600px)
  {
@@ -3372,6 +3368,18 @@ footer
         writing-mode: vertical-lr;
         text-orientation: upright;
         font-size: .5em;
+    }
+
+    /* ---------------
+        REGISTRATION 
+     ----------------*/
+
+    .formFlex
+    {
+        gap: 0;
+
+        display: flex;
+        flex-direction: column;
     }
     
 }

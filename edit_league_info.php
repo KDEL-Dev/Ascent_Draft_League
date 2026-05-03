@@ -71,7 +71,7 @@
                     <section class="contentBtnCont">
                         <a id="newMatchBtn" href="admin.php">Return</a>
                     </section>
-                    <form id="editLeagueInfoForm" action="/ascent_draft_league/api/league_information/save_league_info.php" method="post">
+                    <form id="editLeagueInfoForm" action="api/league_information/save_league_info.php" method="post">
                         <div class="editTeamCol">
                             <label for="about">About</label>
                             <textarea name="about" id="about" rows="5" style="width: 100%;"><?= htmlspecialchars($infoResult['about']) ?></textarea>
