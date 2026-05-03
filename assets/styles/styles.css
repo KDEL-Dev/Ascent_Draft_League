@@ -3290,6 +3290,96 @@ footer
         overflow-x: hidden;
     }
 
+
+
+    /* Draft Order Container */
+
+    #draftOrderCont
+    {
+        flex-direction: column;
+        margin: 10px 0;
+    }
+
+    #draftOrderCont header
+    {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.5);
+        border-radius: 20px 20px 0 0;
+        justify-content: center;
+    }
+
+    #draftOrderList
+    {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;      /* 🔑 enables scrolling */
+        gap: 10px;
+        padding: 10px;
+
+        scroll-snap-type: x mandatory; /* optional smooth snapping */
+    }
+
+    #draftOrderList li
+    {
+        flex: 0 0 120px;   /* fixed card width */
+        height: 100px;
+
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 10px;
+
+        scroll-snap-align: start;
+    }
+
+    #draftOrderList li .draftTeam
+    {
+        font-size: 1em;
+        text-align: center;
+        justify-content: center;
+    }
+
+    #draftOrderList li .draftNumber
+    {
+        font-size: 0.9em;
+    }
+
+    /* Button below instead of side */
+    #draftOrderBtnCont
+    {
+        height: auto;
+        padding: 10px;
+    }
+
+    #draftOrderBtnCont button
+    {
+        width: 100%;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    /* Draft Toggles */
+
+    .draftTogglesCont
+    {
+        flex-direction: column;   /* stack groups */
+        gap: 10px;
+        margin: 10px;
+    }
+
+    .draftTogglesCont > section
+    {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 per row */
+        gap: 10px;
+    }
+
+    .draftTogglesCont button
+    {
+        width: 100%;
+        padding: 10px 5px;
+        font-size: 0.9em;
+        text-align: center;
+    }
+
     /* MAIN CONTAINERS */
     .draftCont,
     .draftPickCont,
@@ -3355,7 +3445,8 @@ footer
 
     #previousPickInfo > *
     {
-        min-width: 0; /* 🔑 prevents flex overflow */
+        min-width: 0; 
+        border-radius: 0;
     }
 
     #ppTeamName
