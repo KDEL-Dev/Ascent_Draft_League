@@ -10,12 +10,14 @@
         $stmt = $conn->prepare("
             SELECT 
                 s.id, s.name, s.type1, s.type2, t.tier,
-                CASE WHEN dp.showdown_pkmn IS NOT NULL THEN 1 ELSE 0 END AS drafted
+                CASE WHEN rp.showdown_pkmn IS NOT NULL THEN 1 ELSE 0 END AS drafted
             FROM showdown_pkmn s
             LEFT JOIN pkmn_tier t
                 ON s.id = t.showdown_pkmn_id AND t.season_id = ?
-            LEFT JOIN drafted_pkmn dp
-                ON dp.showdown_pkmn = s.id AND dp.season_id = ?
+            LEFT JOIN roster_pkmn rp
+                ON rp.showdown_pkmn = s.id 
+                AND rp.season_id = ?
+                AND rp.is_active = 1
             WHERE t.tier != 'Uber'
         ");
         $stmt->bind_param("ii", $seasonId, $seasonId);
