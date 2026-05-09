@@ -69,19 +69,18 @@ if (!isset($_SESSION['user_id']))
     // Standings
 
     $standingSql = "
-    SELECT users.team_name, 
-    COUNT(matchup.winner_active_user_id) AS Wins
-    FROM active_users
-    JOIN users
-    ON active_users.user_id = users.id
-    LEFT JOIN matchup
-    ON matchup.winner_active_user_id = active_users.id
-    AND matchup.season_id = ?
-    WHERE active_users.season_id = ?
-    AND competitor= 'yes'
-    GROUP BY active_users.id, users.team_name
-    HAVING wins > 0
-    ORDER BY Wins DESC;
+        SELECT users.team_name, 
+        COUNT(matchup.winner_active_user_id) AS Wins
+        FROM active_users
+        JOIN users
+        ON active_users.user_id = users.id
+        LEFT JOIN matchup
+        ON matchup.winner_active_user_id = active_users.id
+        AND matchup.season_id = ?
+        WHERE active_users.season_id = ?
+        AND competitor= 'yes'
+        GROUP BY active_users.id, users.team_name
+        ORDER BY Wins DESC;
     ";
 
     $standingStmt = $conn->prepare($standingSql);
