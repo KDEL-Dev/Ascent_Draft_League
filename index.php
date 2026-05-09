@@ -10,6 +10,9 @@ if (!isset($_SESSION['user_id']))
 
     $seasonId = $_SESSION['season_id'] ?? null;
 
+    $teamName = $_SESSION['team_name'] ?? 'No Team';
+    $teamMascot = $_SESSION['team_mascot_pkmn'] ?? 'No Mascot';
+
     // News
 
     $news_Sql = "
@@ -25,6 +28,7 @@ if (!isset($_SESSION['user_id']))
     $newsResult = $news_Stmt->get_result();
     $news = $newsResult->fetch_assoc();
 
+  
     // Get latest replay
 
     $sql = "
@@ -150,17 +154,26 @@ if (!isset($_SESSION['user_id']))
                     <section class="playerDashCont">
                         <div class="sectionTitle">Player Dashboard</div>
                         <article class="playerDashContent"> 
-                            Under Construction
-                            <!-- Turning off for now. Javascript dynamically loads this
                             <section id="homeRosterCont">
-                                <section id="homeRosterHeader">Team Name</section>
+                                <section id="homeRosterHeader">
+                                    <section id="homeRosterHeader">
+                                        <?= htmlspecialchars($teamName) ?> <?= htmlspecialchars($teamMascot) ?>
+                                    </section>
+                                </section>
                                 <section id="homeRosterBox">
-                                    <ul id="homePkmnList">
+                                    <ul id="homePkmnListOuUu">
+                                        <!-- Dynamically Added -->
                                         
+                                    </ul>
+                                    <ul id="homePkmnListRuNu">
+                                        <!-- Dynamically Added --> 
                                     </ul>
                                 </section>
                             </section> 
-                            -->
+                            <section id="construction">
+                                <p>Under Construction</p>
+                            </section>
+                           
                         </article>
                     </section>
                 </main>

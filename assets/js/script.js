@@ -874,9 +874,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                     case "OU": case "UUBL": ouPokemon.push(pkmn); break;
                     case "UU": case "RUBL": uuPokemon.push(pkmn); break;
                     case "RU": case "NUBL": ruPokemon.push(pkmn); break;
-                    case "NU": case "PUBL": nuPokemon.push(pkmn); break;
+                    case "NU": case "PUBL": case "PU" : case "ZUBL" : nuPokemon.push(pkmn); break;
                 }
             });
+
+            ouPokemon.sort((a, b) => a.name.localeCompare(b.name));
+            uuPokemon.sort((a, b) => a.name.localeCompare(b.name));
+            ruPokemon.sort((a, b) => a.name.localeCompare(b.name));
+            nuPokemon.sort((a, b) => a.name.localeCompare(b.name));
 
             displaySwapOu(ouPokemon);
             displaySwapUu(uuPokemon);
@@ -1078,7 +1083,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             "OU": "OU", "UUBL": "OU",
             "UU": "UU", "RUBL": "UU",
             "RU": "RU", "NUBL": "RU",
-            "NU": "NU", "PUBL": "NU"
+            "NU": "NU", "PUBL": "NU",
+            "PU": "NU", "ZUBL": "NU", "ZU": "NU"
         };
         return map[tier] || null;
 }
@@ -1221,26 +1227,126 @@ document.addEventListener("DOMContentLoaded", async () => {
     // OVERVIEW PAGE
     // -------------------
 
-    // Turning off function below. This will be a future feature.
-    /*
-        function loadOverviewRoster() {
-            const homeRoster = document.getElementById('homePkmnList');
-            if (!homeRoster) return;
+    try 
+    {
 
-            fetch('api/overview/get_active_user_roster.php')
-            .then(res => res.json())
-            .then(data => {
-                homeRoster.innerHTML = "";
-                data.forEach(pkmn => {
-                    const li = document.createElement("li");
-                    li.textContent = pkmn;
-                    homeRoster.appendChild(li);
-                });
-            })
-            .catch(err => console.error("Failed to load roster:", err));
-        }
-        loadOverviewRoster();
-    */
+        const response = await fetch('api/user/get_user_roster.php');
+        const roster = await response.json();
+
+        const ouUuList = document.getElementById('homePkmnListOuUu');
+        const ruNuList = document.getElementById('homePkmnListRuNu');
+
+        // Clear placeholder content
+        ouUuList.innerHTML = '';
+        ruNuList.innerHTML = '';
+
+        // Tier configuration map
+        const tierMap = {
+
+            OU: {
+                list: ouUuList,
+                colorClass: 'homeOuPkmn'
+            },
+
+            UUBL: {
+                list: ouUuList,
+                colorClass: 'homeOuPkmn'
+            },
+
+            UU: {
+                list: ouUuList,
+                colorClass: 'homeUuPkmn'
+            },
+
+            RUBL: {
+                list: ouUuList,
+                colorClass: 'homeUuPkmn'
+            },
+
+            RU: {
+                list: ruNuList,
+                colorClass: 'homeRuPkmn'
+            },
+
+            NUBL: {
+                list: ruNuList,
+                colorClass: 'homeRuPkmn'
+            },
+
+            NU: {
+                list: ruNuList,
+                colorClass: 'homeNuPkmn'
+            },
+
+            PUBL: {
+                list: ruNuList,
+                colorClass: 'homeNuPkmn'
+            },
+
+            PU: {
+                list: ruNuList,
+                colorClass: 'homeNuPkmn'
+            },
+
+            ZUBL: {
+                list: ruNuList,
+                colorClass: 'homeNuPkmn'
+            },
+
+            ZU: {
+                list: ruNuList,
+                colorClass: 'homeNuPkmn'
+            }
+        };
+
+        const tierOrder = {
+            OU: 1,
+            UUBL: 1,
+            UU: 2,
+            RUBL: 2,
+            RU: 3,
+            NUBL: 3,
+            NU: 4,
+            PUBL: 4,
+            PU: 4,
+            ZUBL: 4,
+            ZU: 4
+        };
+
+        roster.sort((a, b) => {
+            return tierOrder[a.tier.toUpperCase()] - tierOrder[b.tier.toUpperCase()];
+        });
+
+        roster.forEach(pkmn => {
+
+            const tier = pkmn.tier.toUpperCase();
+
+            if (!tierMap[tier]) {
+                console.warn('Unknown tier:', tier);
+                return;
+            }
+
+            const li = document.createElement('li');
+
+            li.textContent = pkmn.name;
+
+            // Add color class
+            li.classList.add(tierMap[tier].colorClass);
+
+            // Add to correct list
+            tierMap[tier].list.appendChild(li);
+
+        });
+
+    } 
+    catch (error) 
+    {
+
+        console.error('Failed to load roster:', error);
+
+    }
+
+
 
     // -------------------
     // LEAGUE INFORMATION

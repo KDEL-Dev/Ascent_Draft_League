@@ -10,7 +10,15 @@
         $stmt = $conn->prepare("
             SELECT 
                 s.id, s.name, s.type1, s.type2, t.tier,
-                CASE WHEN rp.showdown_pkmn IS NOT NULL THEN 1 ELSE 0 END AS drafted
+                CASE 
+                    WHEN EXISTS (
+                        SELECT 1 FROM roster_pkmn rp2
+                        WHERE rp2.showdown_pkmn = s.id
+                        AND rp2.season_id = ?
+                        AND rp2.is_active = 1
+                    )
+                    THEN 1 ELSE 0
+                END AS drafted
             FROM showdown_pkmn s
             LEFT JOIN pkmn_tier t
                 ON s.id = t.showdown_pkmn_id AND t.season_id = ?
@@ -20,7 +28,7 @@
                 AND rp.is_active = 1
             WHERE t.tier != 'Uber'
         ");
-        $stmt->bind_param("ii", $seasonId, $seasonId);
+        $stmt->bind_param("iii", $seasonId, $seasonId, $seasonId);
         $stmt->execute();
         $result = $stmt->get_result();
 

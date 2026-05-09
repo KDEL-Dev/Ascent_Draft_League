@@ -703,30 +703,43 @@ main
 .playerDashContent
 {
     /* height: 100%; */
-    flex: 1;
-    min-height: 400px;
+    height: fit-content;
+    padding: 20px;
     
     color: white;
     font-family: "jura";
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 
     display: flex;
-    justify-content: center;
-    align-items: center;;
+    justify-content: space-between;
+    /* align-items: center;; */
 }
 
 #homeRosterCont
 {
-    
+    padding: 20px;
     width: 350px;
 
-    border: white solid 1px;
+    border: rgba(255, 255, 255, 0.2) solid 3px;
     border-radius: 10px;
 }
 
 #homeRosterHeader
 {
+    padding-bottom: 5px;
+
     text-align: center;
-    font-size: 2em;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+#homeRosterBox
+{
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+    display: flex;
+    justify-content: space-evenly;
+    
     
 }
 
@@ -735,28 +748,67 @@ main
     margin: 0;
     padding: 15px;
 
-    
+    display: flex;
+    flex-direction: column;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(6,auto);
 
 }
 
 #homeRosterBox li
 {
+    min-width: 125px;
     padding: 5px;
+    margin: 5px 0;
     
     list-style: none;
-    font-size: 1.25em;
-
-    border: 1px solid white;
+    
+    text-align: center;
+    border-radius: 10px;
 }
 
-#homeRosterBox li:nth-child(-n + 6)
+
+.homeOuPkmn
 {
-    border-right: none;
+    background-image: linear-gradient(to top, rgb(109, 0, 0), rgb(228, 91, 91));
+    color: white
+}
+
+.homeUuPkmn
+{
+    background-image: linear-gradient(to top, rgb(117, 76, 0), rgb(245, 189, 85));
+    color: white
+}
+
+.homeRuPkmn
+{
+    background-image: linear-gradient(to top, rgb(119, 119, 0), rgb(221, 221, 100));
+    color: white
+
+}
+
+.homeNuPkmn
+{
+    background-image: linear-gradient(to top, rgb(0, 95, 0), rgb(108, 204, 108));
+    color: white
+
+}
+
+#construction
+{
+    flex: 1;
+    margin-left: 50px;
+    padding-left: 20px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+
+    font-size: 3em;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 aside

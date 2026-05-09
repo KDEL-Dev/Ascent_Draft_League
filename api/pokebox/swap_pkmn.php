@@ -93,7 +93,9 @@
             "OU" => "OU", "UUBL" => "OU",
             "UU" => "UU", "RUBL" => "UU",
             "RU" => "RU", "NUBL" => "RU",
-            "NU" => "NU", "PUBL" => "NU"
+            "NU" => "NU", "PUBL" => "NU",
+            "PU" => "NU", "ZUBL" => "NU", "ZU" => "NU"
+            
         ];
         return $groups[$tier] ?? null;
     }
