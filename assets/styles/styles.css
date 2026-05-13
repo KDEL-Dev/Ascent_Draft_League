@@ -822,7 +822,6 @@ aside
 #replayCont
 {
     margin: 30px 20px;
-    /* padding: 20px; */
     width: 250px;
     min-height: 150px;
 
@@ -831,12 +830,10 @@ aside
     font-family: "zen dots";
     
     border-radius: 10px;
-    /* border: 4px solid rgba(255, 255, 255, .1); */
     border: #094D33 solid 4px;
 
     display: flex;
     align-items: center;
-    /* justify-content: center; */
     flex-direction: column;
 }
 
@@ -2738,9 +2735,15 @@ footer
     font-weight: bold;
 }
 
+.statsBoxTblBody td:nth-child(4)
+{
+    /* background-color: rgb(163, 98, 98); */
+    font-weight: bold;
+}
+
 .statsBoxTblBody td:last-child
 {
-    background-color: rgb(80, 80, 80);
+    /* background-color: rgb(80, 80, 80); */
     font-weight: bold;
 }
 

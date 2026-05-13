@@ -138,7 +138,12 @@ while ($row = $result->fetch_assoc()) {
                                                 </h2>
                                                     <section class="replayCont">
                                                     <a href="<?= htmlspecialchars($match['replay_link'] ?? '#') ?>" target="_blank">
-                                                        <h3>Watch Replay</h3>
+                                                        
+                                                            
+
+                                                            <h3>Watch Replay</h3>
+
+                                                            
                                                     </a>
                                                 </section>
                                             </section>

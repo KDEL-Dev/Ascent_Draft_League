@@ -104,7 +104,7 @@
 
                                         <thead>
                                             <tr>
-                                                <th colspan="4" class="statsNameBox">
+                                                <th colspan="5" class="statsNameBox">
                                                     <?= htmlspecialchars($teamName . ' ' . $teamData['mascot']); ?>
                                                 </th>
                                             </tr>
@@ -112,6 +112,7 @@
                                                 <th style="width: 55%;">Pokemon</th>
                                                 <th style="width: 15%;">Kills</th>
                                                 <th style="width: 15%;">Deaths</th>
+                                                <th style="width: 15%;"> +/-</th>
                                                 <th style="width: 15%;">Usage</th>
                                             </tr>
                                         </thead>
@@ -122,6 +123,7 @@
                                                     <td><?= htmlspecialchars($pkmn['pokemon_name']); ?></td>
                                                     <td><?= $pkmn['total_kills']; ?></td>
                                                     <td><?= $pkmn['total_deaths']; ?></td>
+                                                    <td><?= $pkmn['total_kills'] - $pkmn['total_deaths'] ?></td>
                                                     <td><?= $pkmn['total_used']; ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
