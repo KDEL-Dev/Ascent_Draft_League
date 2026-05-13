@@ -2778,7 +2778,7 @@ footer
     flex: 1;
 
     border-collapse: collapse;
-    /* font-size: 1.25em; */
+    font-size: 1.1em;
     table-layout: fixed;
     visibility: hidden;
 }
@@ -2801,7 +2801,7 @@ footer
 
 #standingsBody td:first-child
 {
-    font-weight: normal;
+    font-weight: bold;
 }
 
 #standingsBody td:nth-child(3)
@@ -2810,9 +2810,18 @@ footer
 
 }
 
-#standingsBody td:last-child
+#standingsBody td:nth-child(4)
 {
     background-color: rgb(100, 25, 25);
+}
+
+.plus-score {
+    color: #00ff00; /* Bright Green */
+    font-weight: bold;
+}
+
+.minus-score {
+    color: #ff4d4d; /* Soft Red */
 }
 
 #noMatches

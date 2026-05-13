@@ -1884,11 +1884,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             data.forEach(team => {
                 const tr = document.createElement("tr");
+
+                // Convert the differential to an integer
+                const diff = parseInt(team.differential || 0);
+
+                // Format the display: add a '+' sign for positive numbers
+                const diffDisplay = diff > 0 ? `+${diff}` : diff;
+
+                // Optional: Determine a class for coloring (positive/negative)
+                const diffClass = diff > 0 ? 'plus-score' : (diff < 0 ? 'minus-score' : '');
+
                 tr.innerHTML = `
                     <td>${rank++}</td>
-                    <td>${team.team_name}</td>
+                    <td>${team.team_name} ${team.team_mascot_pkmn}</td>
                     <td>${team.wins}</td>
                     <td>${team.losses}</td>
+                    <td class="${diffClass}">${diffDisplay}</td>
                 `;
                 tbody.appendChild(tr);
             });
