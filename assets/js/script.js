@@ -1236,109 +1236,115 @@ document.addEventListener("DOMContentLoaded", async () => {
         const ouUuList = document.getElementById('homePkmnListOuUu');
         const ruNuList = document.getElementById('homePkmnListRuNu');
 
-        // Clear placeholder content
-        ouUuList.innerHTML = '';
-        ruNuList.innerHTML = '';
+        if(ouUuList && ruNuList)
+        {
 
-        // Tier configuration map
-        const tierMap = {
+        
 
-            OU: {
-                list: ouUuList,
-                colorClass: 'homeOuPkmn'
-            },
+            // Clear placeholder content
+            ouUuList.innerHTML = '';
+            ruNuList.innerHTML = '';
 
-            UUBL: {
-                list: ouUuList,
-                colorClass: 'homeOuPkmn'
-            },
+            // Tier configuration map
+            const tierMap = {
 
-            UU: {
-                list: ouUuList,
-                colorClass: 'homeUuPkmn'
-            },
+                OU: {
+                    list: ouUuList,
+                    colorClass: 'homeOuPkmn'
+                },
 
-            RUBL: {
-                list: ouUuList,
-                colorClass: 'homeUuPkmn'
-            },
+                UUBL: {
+                    list: ouUuList,
+                    colorClass: 'homeOuPkmn'
+                },
 
-            RU: {
-                list: ruNuList,
-                colorClass: 'homeRuPkmn'
-            },
+                UU: {
+                    list: ouUuList,
+                    colorClass: 'homeUuPkmn'
+                },
 
-            NUBL: {
-                list: ruNuList,
-                colorClass: 'homeRuPkmn'
-            },
+                RUBL: {
+                    list: ouUuList,
+                    colorClass: 'homeUuPkmn'
+                },
 
-            NU: {
-                list: ruNuList,
-                colorClass: 'homeNuPkmn'
-            },
+                RU: {
+                    list: ruNuList,
+                    colorClass: 'homeRuPkmn'
+                },
 
-            PUBL: {
-                list: ruNuList,
-                colorClass: 'homeNuPkmn'
-            },
+                NUBL: {
+                    list: ruNuList,
+                    colorClass: 'homeRuPkmn'
+                },
 
-            PU: {
-                list: ruNuList,
-                colorClass: 'homeNuPkmn'
-            },
+                NU: {
+                    list: ruNuList,
+                    colorClass: 'homeNuPkmn'
+                },
 
-            ZUBL: {
-                list: ruNuList,
-                colorClass: 'homeNuPkmn'
-            },
+                PUBL: {
+                    list: ruNuList,
+                    colorClass: 'homeNuPkmn'
+                },
 
-            ZU: {
-                list: ruNuList,
-                colorClass: 'homeNuPkmn'
-            }
-        };
+                PU: {
+                    list: ruNuList,
+                    colorClass: 'homeNuPkmn'
+                },
 
-        const tierOrder = {
-            OU: 1,
-            UUBL: 1,
-            UU: 2,
-            RUBL: 2,
-            RU: 3,
-            NUBL: 3,
-            NU: 4,
-            PUBL: 4,
-            PU: 4,
-            ZUBL: 4,
-            ZU: 4
-        };
+                ZUBL: {
+                    list: ruNuList,
+                    colorClass: 'homeNuPkmn'
+                },
 
-        roster.sort((a, b) => {
-            return tierOrder[a.tier.toUpperCase()] - tierOrder[b.tier.toUpperCase()];
-        });
+                ZU: {
+                    list: ruNuList,
+                    colorClass: 'homeNuPkmn'
+                }
+            };
 
-        roster.forEach(pkmn => {
+            const tierOrder = {
+                OU: 1,
+                UUBL: 1,
+                UU: 2,
+                RUBL: 2,
+                RU: 3,
+                NUBL: 3,
+                NU: 4,
+                PUBL: 4,
+                PU: 4,
+                ZUBL: 4,
+                ZU: 4
+            };
 
-            const tier = pkmn.tier.toUpperCase();
+            roster.sort((a, b) => {
+                return tierOrder[a.tier.toUpperCase()] - tierOrder[b.tier.toUpperCase()];
+            });
 
-            if (!tierMap[tier]) {
-                console.warn('Unknown tier:', tier);
-                return;
-            }
+            roster.forEach(pkmn => {
 
-            const li = document.createElement('li');
+                const tier = pkmn.tier.toUpperCase();
 
-            li.textContent = pkmn.name;
+                if (!tierMap[tier]) {
+                    console.warn('Unknown tier:', tier);
+                    return;
+                }
 
-            // Add color class
-            li.classList.add(tierMap[tier].colorClass);
+                const li = document.createElement('li');
 
-            // Add to correct list
-            tierMap[tier].list.appendChild(li);
+                li.textContent = pkmn.name;
 
-        });
+                // Add color class
+                li.classList.add(tierMap[tier].colorClass);
 
-    } 
+                // Add to correct list
+                tierMap[tier].list.appendChild(li);
+
+            });
+
+        } 
+    } // Added bracket here because of thing above
     catch (error) 
     {
 
@@ -1349,10 +1355,74 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // -------------------
+// OVERVIEW PAGE
+// -------------------
+
+// SAFETY GUARD: Only run roster loading if these lists exist on the page
+const ouUuList = document.getElementById('homePkmnListOuUu');
+const ruNuList = document.getElementById('homePkmnListRuNu');
+
+if (ouUuList && ruNuList) {
+    try 
+    {
+        const response = await fetch('api/user/get_user_roster.php');
+        const roster = await response.json();
+
+        // Clear placeholder content
+        ouUuList.innerHTML = '';
+        ruNuList.innerHTML = '';
+
+        // Tier configuration map
+        const tierMap = {
+            OU: { list: ouUuList, colorClass: 'homeOuPkmn' },
+            UUBL: { list: ouUuList, colorClass: 'homeOuPkmn' },
+            UU: { list: ouUuList, colorClass: 'homeUuPkmn' },
+            RUBL: { list: ouUuList, colorClass: 'homeUuPkmn' },
+            RU: { list: ruNuList, colorClass: 'homeRuPkmn' },
+            NUBL: { list: ruNuList, colorClass: 'homeRuPkmn' },
+            NU: { list: ruNuList, colorClass: 'homeNuPkmn' },
+            PUBL: { list: ruNuList, colorClass: 'homeNuPkmn' },
+            PU: { list: ruNuList, colorClass: 'homeNuPkmn' },
+            ZUBL: { list: ruNuList, colorClass: 'homeNuPkmn' },
+            ZU: { list: ruNuList, colorClass: 'homeNuPkmn' }
+        };
+
+        const tierOrder = {
+            OU: 1, UUBL: 1, UU: 2, RUBL: 2, RU: 3, NUBL: 3, NU: 4, PUBL: 4, PU: 4, ZUBL: 4, ZU: 4
+        };
+
+        roster.sort((a, b) => {
+            return tierOrder[a.tier.toUpperCase()] - tierOrder[b.tier.toUpperCase()];
+        });
+
+        roster.forEach(pkmn => {
+            const tier = pkmn.tier.toUpperCase();
+
+            if (!tierMap[tier]) {
+                console.warn('Unknown tier:', tier);
+                return;
+            }
+
+            const li = document.createElement('li');
+            li.textContent = pkmn.name;
+
+            // Add color class
+            li.classList.add(tierMap[tier].colorClass);
+
+            // Add to correct list
+            tierMap[tier].list.appendChild(li);
+        });
+    } 
+    catch (error) 
+    {
+        console.error('Failed to load roster:', error);
+    }
+}
+
+
+    // -------------------
     // LEAGUE INFORMATION
     // -------------------
-
-    
 
     const updateLeagueInfoBtn = document.getElementById("updateLeagueInfoBtn");
     const modal = document.getElementById("editLeagueInfoModal");
@@ -1428,7 +1498,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadActiveTeams() {
         const teamOne = document.getElementById('teamOneSelect');
         const teamTwo = document.getElementById('teamTwoSelect');
-        if (!teamOne || !teamTwo) return;
+        if (!teamOne || !teamTwo) return; // Safely aborts if we aren't on the matchup page
 
         try {
             const res = await fetch('api/matchup/get_active_teams.php');
@@ -1452,8 +1522,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const loadBtn = document.getElementById('loadSelectedTeamsBtn');
     if (loadBtn) 
-        {
-            loadBtn.addEventListener('click', async () => {
+    {
+        loadBtn.addEventListener('click', async () => {
 
             const team1Select = document.getElementById('teamOneSelect');
             const team2Select = document.getElementById('teamTwoSelect');
@@ -1486,7 +1556,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return alert("Select both teams");
             }
 
-    
+
             const title1 = document.getElementById("team1Title");
             const title2 = document.getElementById("team2Title");
 
@@ -1495,7 +1565,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             try 
             {
-                
                 const res1 = await fetch(`api/matchup/get_team_roster.php?active_user_id=${team1Id}`);
                 const team1Pkmn = await res1.json();
 
@@ -1653,8 +1722,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             });
 
-            // console.log("Replay link being sent:", replayLink);
-
             try 
             {
                 const res = await fetch('api/matchup/submit_matchup.php', {
@@ -1678,21 +1745,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-
-
-
-
-
-
-        // DELETE MATCHUP
-
-        document.addEventListener("click", async (e) => {
+    // DELETE MATCHUP
+    document.addEventListener("click", async (e) => {
         if (!e.target.classList.contains("deleteMatchBtn")) return;
 
         const matchId = e.target.dataset.matchId;
-
         if (!matchId) return;
-
         if (!confirm("Are you sure you want to delete this matchup?")) return;
 
         try 
@@ -1707,7 +1765,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (data.status === "success") {
                 alert("Matchup deleted successfully!");
-                // Remove the matchup from DOM
                 const container = e.target.closest(".editDeleteMatchCont");
                 if (container) container.remove();
             } else {
@@ -1721,20 +1778,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-
-
-
-        // EDIT MATCHUP
+    // EDIT MATCHUP
     document.addEventListener("click", (e) => {
         if (!e.target.classList.contains("editMatchBtn")) return;
 
         const matchId = e.target.dataset.matchId;
         if (!matchId) return;
 
-        // redirect to edit page
         window.location.href = `edit_matchup.php?matchup_id=${matchId}`;
     });
-
 
     async function loadEditMatchup() {
         if (typeof matchupId === "undefined") return;
@@ -1748,11 +1800,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-
-
             document.getElementById("replayLink").value = data.matchup.replay_link;
 
-            // Set winner radio
             if (data.matchup.winner_active_user_id == data.matchup.player1_active_user_id) {
                 document.querySelector('input[name="winner"][value="team1"]').checked = true;
             } else {
@@ -1767,7 +1816,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
     function renderEditTable(containerId, team) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -1776,32 +1824,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         team.forEach(p => {
             const tr = document.createElement("tr");
-
             tr.innerHTML = `
                 <td>${p.pokemon_name}</td>
                 <td><input type="number" name="kills[${p.roster_pkmn_id}]" value="${p.kills}"></td>
                 <td><input type="number" name="deaths[${p.roster_pkmn_id}]" value="${p.deaths}"></td>
             `;
-
             container.appendChild(tr);
         });
     }
-
     loadEditMatchup();
 
-    // -----------------------------
-    //      EDIT MATCHUP FORM
-    // -----------------------------
-
+    // EDIT MATCHUP FORM
     const editForm = document.getElementById('edit_matchup_form');
-
     if (editForm) 
     {
         editForm.addEventListener('submit', async e => {
             e.preventDefault();
 
             const formData = new FormData(editForm);
-
             const winner = document.querySelector('input[name="winner"]:checked');
 
             if (!winner) {
@@ -1855,15 +1895,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     //      STANDINGS
     // ------------------
 
-    
-
-
     async function loadStandings() {
         const tbody = document.getElementById("standingsBody");
         const standingsCont = document.getElementById("standingsCont");
         const standingsTable = document.getElementById("standingsTable");
         
-        if (!tbody) return;
+        if (!tbody) return; 
 
         try {
             const res = await fetch('api/standings/get_standings.php');
@@ -1871,12 +1908,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             tbody.innerHTML = "";
 
-            if (!data || data.length === 0) 
-            {
-                standingsCont.innerHTML = 
-                        `<p id="noMatches">
-                            No matches have been played yet
-                        </p>`;
+            if (!data || data.length === 0) {
+                if (standingsCont) standingsCont.innerHTML = `<p id="noMatches">No matches have been played yet</p>`;
                 return;
             }
 
@@ -1884,19 +1917,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             data.forEach(team => {
                 const tr = document.createElement("tr");
-
-                // Convert the differential to an integer
                 const diff = parseInt(team.differential || 0);
-
-                // Format the display: add a '+' sign for positive numbers
                 const diffDisplay = diff > 0 ? `+${diff}` : diff;
-
-                // Optional: Determine a class for coloring (positive/negative)
                 const diffClass = diff > 0 ? 'plus-score' : (diff < 0 ? 'minus-score' : '');
+                
+                // Format remaining list into clean text lines for the CSS tooltip
+                // Locate this section inside your data.forEach loop and swap it out:
+                const remainingArray = team.remaining_opponents || [];
+
+                // 1. Clean the data: remove any leftover '\n' or 'vs' strings, and trim spaces
+                const cleanRemainingArray = remainingArray.map(opp => {
+                    return opp.replace(/\\n|\n/g, '')  // Strips any literal or real newlines
+                            .replace(/^vs\s+/i, '')  // Strips "vs " from the start of the name
+                            .trim();                 // Cleans up any leftover edge spaces
+                });
+
+                // 2. Join them with a clean comma space
+                const remainingText = cleanRemainingArray.length > 0 
+                    ? cleanRemainingArray.join(', ')
+                    : "All matches completed! ";
 
                 tr.innerHTML = `
                     <td>${rank++}</td>
-                    <td>${team.team_name} ${team.team_mascot_pkmn}</td>
+                    <td>
+                        <span class="team-tooltip-target" data-remaining="${remainingText}">
+                            ${team.team_name} ${team.team_mascot_pkmn || ''}
+                        </span>
+                    </td>
                     <td>${team.wins}</td>
                     <td>${team.losses}</td>
                     <td class="${diffClass}">${diffDisplay}</td>
@@ -1904,14 +1951,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tbody.appendChild(tr);
             });
 
-            standingsTable.style.visibility = "visible"
-
-        } catch (err) {
+            if (standingsTable) standingsTable.style.visibility = "visible";
+        } 
+        catch (err) 
+        {
             console.error("Failed to load standings:", err);
         }
     }
 
-    await loadStandings();
+// Call it to boot
+loadStandings();
 
        
     // -------------

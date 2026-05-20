@@ -70,5 +70,17 @@
     </div>
 
 </div>
+
+<!-- Remaining Matches Modal -->
+<div id="matchesModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <span id="closeModalBtn" class="modal-close">&times;</span>
+        <h3 id="modalTeamTitle">Remaining Matches</h3>
+        <ul id="remainingMatchesList">
+            <!-- Dynamically populated via JS -->
+        </ul>
+    </div>
+</div>
+
 </body>
 </html>

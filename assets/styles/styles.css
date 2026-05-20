@@ -2832,7 +2832,71 @@ footer
     background-color: #000000;
 }
 
+/* TESTING MATCHES REMAINING */
 
+/* Container for the team name to handle positioning */
+.team-tooltip-target {
+    position: relative;
+    cursor: help;
+    font-weight: 600;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3); /* Soft indicator that it's hoverable */
+    padding-bottom: 2px;
+    display: inline-block;
+}
+
+/* The hover window box (Merged into a single clean block) */
+.team-tooltip-target::after {
+    content: "Remaining: " attr(data-remaining);
+    position: absolute;
+    bottom: 125%; /* Positions it directly above the team name */
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    
+    /* Presentation Styling */
+    white-space: normal;  /* Lets comma-separated items wrap beautifully */
+    background: #1a1c23;   /* Deep charcoal slate */
+    color: #f3f4f6;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.4;
+    width: 240px;         /* Explicit width gives it a nice clean window shape */
+    text-align: center;   /* Centers the comma list nicely */
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Animation controls */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 99;
+}
+
+/* Small directional arrow pointing to the team name */
+.team-tooltip-target::before {
+    content: "";
+    position: absolute;
+    bottom: 112%; /* Adjusted slightly to sit perfectly flush under the box */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #1a1c23 transparent transparent transparent;
+    
+    /* Matched animation controls for a perfectly synchronized fade-in */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+/* Hover Trigger State */
+.team-tooltip-target:hover::after,
+.team-tooltip-target:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
 
 
 /**************************************
