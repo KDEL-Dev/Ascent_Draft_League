@@ -26,7 +26,10 @@
             'UUBL' => 'OU',
             'RUBL' => 'UU',
             'NUBL' => 'RU', // NUBL was accidentally adding to RU
-            'PUBL' => 'NU'
+            'PUBL' => 'NU',
+            'PU' => 'NU',
+            'ZUBL' => 'NU',
+            'ZU' => 'NU'
             // add more as needed
         ];
         

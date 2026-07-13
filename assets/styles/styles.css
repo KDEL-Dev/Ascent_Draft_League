@@ -3561,12 +3561,11 @@ footer
         margin: 10px 0;
     }
 
-    /* 🔥 PREVIOUS PICK FIX (MAIN ISSUE) */
     #previousPickInfo
     {
         height: auto;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
         gap: 10px;
         padding: 10px;
     }
